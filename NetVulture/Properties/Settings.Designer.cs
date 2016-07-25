@@ -58,5 +58,40 @@ namespace NetVulture.Properties {
                 this["AutoStartTimer"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AlertingEnabled {
+            get {
+                return ((bool)(this["AlertingEnabled"]));
+            }
+            set {
+                this["AlertingEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SenderAddress {
+            get {
+                return ((string)(this["SenderAddress"]));
+            }
+            set {
+                this["SenderAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection TargetAddresses {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["TargetAddresses"]));
+            }
+            set {
+                this["TargetAddresses"] = value;
+            }
+        }
     }
 }

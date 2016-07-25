@@ -19,6 +19,13 @@ namespace NetVulture
             _tbxOutputDir.Text = Properties.Settings.Default.OutputDir;
             _tbxInterval.Text = Properties.Settings.Default.Interval.ToString();
             _chkBxAutoStartTimer.Checked = Properties.Settings.Default.AutoStartTimer;
+            _chkBxAlertingEnabled.Checked = Properties.Settings.Default.AlertingEnabled;
+            _tbxSenderAddress.Text = Properties.Settings.Default.SenderAddress;
+
+            foreach (string str in Properties.Settings.Default.TargetAddresses)
+            {
+                _tbxTargetAddresses.Text += str;
+            }
         }
 
         private void _btnSelectDir_Click(object sender, EventArgs e)
@@ -39,6 +46,16 @@ namespace NetVulture
             Properties.Settings.Default.OutputDir = _tbxOutputDir.Text;
             Properties.Settings.Default.Interval = Convert.ToInt32(_tbxInterval.Text);
             Properties.Settings.Default.AutoStartTimer = _chkBxAutoStartTimer.Checked;
+            Properties.Settings.Default.AlertingEnabled = _chkBxAlertingEnabled.Checked;
+            Properties.Settings.Default.SenderAddress = _tbxSenderAddress.Text;
+
+            System.Collections.Specialized.StringCollection sc = new System.Collections.Specialized.StringCollection();
+            foreach (string line in _tbxTargetAddresses.Lines)
+            {
+                sc.Add(line);
+            }
+
+            Properties.Settings.Default.TargetAddresses = sc;
             Properties.Settings.Default.Save();
         }
     }
