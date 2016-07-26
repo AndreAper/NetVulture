@@ -40,6 +40,7 @@
             this._tbxListInput.Location = new System.Drawing.Point(12, 38);
             this._tbxListInput.Multiline = true;
             this._tbxListInput.Name = "_tbxListInput";
+            this._tbxListInput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this._tbxListInput.Size = new System.Drawing.Size(383, 187);
             this._tbxListInput.TabIndex = 0;
             // 

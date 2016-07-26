@@ -38,12 +38,10 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this._chkBxAlertingEnabled = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this._tbxSenderAddress = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this._tbxTargetAddresses = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this._tbxTargetAddresses = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this._chkBxAlertingEnabled = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -87,7 +85,7 @@
             // _btnClose
             // 
             this._btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this._btnClose.Location = new System.Drawing.Point(602, 409);
+            this._btnClose.Location = new System.Drawing.Point(602, 364);
             this._btnClose.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this._btnClose.Name = "_btnClose";
             this._btnClose.Size = new System.Drawing.Size(113, 30);
@@ -162,18 +160,48 @@
             // 
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this._tbxTargetAddresses);
-            this.groupBox3.Controls.Add(this._tbxSenderAddress);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this._chkBxAlertingEnabled);
-            this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Location = new System.Drawing.Point(14, 186);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Size = new System.Drawing.Size(701, 215);
+            this.groupBox3.Size = new System.Drawing.Size(701, 170);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Alerting service";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.DimGray;
+            this.label5.Location = new System.Drawing.Point(10, 81);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(131, 17);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "One address per line";
+            // 
+            // _tbxTargetAddresses
+            // 
+            this._tbxTargetAddresses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._tbxTargetAddresses.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._tbxTargetAddresses.Location = new System.Drawing.Point(170, 55);
+            this._tbxTargetAddresses.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this._tbxTargetAddresses.Multiline = true;
+            this._tbxTargetAddresses.Name = "_tbxTargetAddresses";
+            this._tbxTargetAddresses.Size = new System.Drawing.Size(310, 104);
+            this._tbxTargetAddresses.TabIndex = 3;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(9, 57);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(125, 21);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Target addresses";
             // 
             // _chkBxAlertingEnabled
             // 
@@ -187,64 +215,11 @@
             this._chkBxAlertingEnabled.Text = "Alerting Enabled";
             this._chkBxAlertingEnabled.UseVisualStyleBackColor = true;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(10, 60);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(117, 21);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Sender address";
-            // 
-            // _tbxSenderAddress
-            // 
-            this._tbxSenderAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this._tbxSenderAddress.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._tbxSenderAddress.Location = new System.Drawing.Point(171, 58);
-            this._tbxSenderAddress.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this._tbxSenderAddress.Name = "_tbxSenderAddress";
-            this._tbxSenderAddress.Size = new System.Drawing.Size(310, 29);
-            this._tbxSenderAddress.TabIndex = 3;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(10, 95);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(125, 21);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Target addresses";
-            // 
-            // _tbxTargetAddresses
-            // 
-            this._tbxTargetAddresses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this._tbxTargetAddresses.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._tbxTargetAddresses.Location = new System.Drawing.Point(171, 93);
-            this._tbxTargetAddresses.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this._tbxTargetAddresses.Multiline = true;
-            this._tbxTargetAddresses.Name = "_tbxTargetAddresses";
-            this._tbxTargetAddresses.Size = new System.Drawing.Size(310, 104);
-            this._tbxTargetAddresses.TabIndex = 3;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.DimGray;
-            this.label5.Location = new System.Drawing.Point(11, 119);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(131, 17);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "One address per line";
-            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(728, 452);
+            this.ClientSize = new System.Drawing.Size(728, 407);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -277,10 +252,8 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox _tbxTargetAddresses;
-        private System.Windows.Forms.TextBox _tbxSenderAddress;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox _chkBxAlertingEnabled;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;
     }
 }

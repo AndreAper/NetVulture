@@ -33,6 +33,7 @@
             this._lbxJobs = new System.Windows.Forms.ListBox();
             this._pnlJobInfo = new System.Windows.Forms.Panel();
             this._lblLastBatchExec = new System.Windows.Forms.Label();
+            this._btnRemoveBatch = new System.Windows.Forms.Button();
             this._btnExecBatch = new System.Windows.Forms.Button();
             this.dgvResults = new System.Windows.Forms.DataGridView();
             this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -64,12 +65,19 @@
             this._lblOutputDir = new System.Windows.Forms.Label();
             this._collectTimer = new System.Windows.Forms.Timer(this.components);
             this._clock = new System.Windows.Forms.Timer(this.components);
-            this._btnRemoveBatch = new System.Windows.Forms.Button();
+            this._lblCountOfFailedRequests = new System.Windows.Forms.Label();
+            this._lblFirstAlertTime = new System.Windows.Forms.Label();
+            this._lblSecondAlertTime = new System.Windows.Forms.Label();
+            this._lblOverallPingAttempts = new System.Windows.Forms.Label();
+            this._lnkLblResetAttemptCounter = new System.Windows.Forms.LinkLabel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
             this._tlpBody.SuspendLayout();
             this._pnlJobInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
             this._pnlTopMenu.SuspendLayout();
             this._pnlButtom.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // _tlpBody
@@ -91,7 +99,7 @@
             this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
             this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this._tlpBody.Size = new System.Drawing.Size(912, 528);
+            this._tlpBody.Size = new System.Drawing.Size(942, 528);
             this._tlpBody.TabIndex = 0;
             // 
             // _lbxJobs
@@ -117,6 +125,8 @@
             // _pnlJobInfo
             // 
             this._pnlJobInfo.BackColor = System.Drawing.Color.WhiteSmoke;
+            this._pnlJobInfo.Controls.Add(this.panel1);
+            this._pnlJobInfo.Controls.Add(this._lnkLblResetAttemptCounter);
             this._pnlJobInfo.Controls.Add(this._lblLastBatchExec);
             this._pnlJobInfo.Controls.Add(this._btnRemoveBatch);
             this._pnlJobInfo.Controls.Add(this._btnExecBatch);
@@ -130,6 +140,7 @@
             this._pnlJobInfo.Controls.Add(this._tbxBufferSize);
             this._pnlJobInfo.Controls.Add(this._tbxTimeOut);
             this._pnlJobInfo.Controls.Add(this.label7);
+            this._pnlJobInfo.Controls.Add(this.label6);
             this._pnlJobInfo.Controls.Add(this.label8);
             this._pnlJobInfo.Controls.Add(this._tbxJobName);
             this._pnlJobInfo.Controls.Add(this.label1);
@@ -137,7 +148,7 @@
             this._pnlJobInfo.Location = new System.Drawing.Point(178, 41);
             this._pnlJobInfo.Margin = new System.Windows.Forms.Padding(0);
             this._pnlJobInfo.Name = "_pnlJobInfo";
-            this._pnlJobInfo.Size = new System.Drawing.Size(734, 439);
+            this._pnlJobInfo.Size = new System.Drawing.Size(764, 439);
             this._pnlJobInfo.TabIndex = 1;
             this._pnlJobInfo.Visible = false;
             // 
@@ -147,11 +158,29 @@
             this._lblLastBatchExec.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._lblLastBatchExec.ForeColor = System.Drawing.Color.DarkGray;
             this._lblLastBatchExec.Location = new System.Drawing.Point(195, 404);
-            this._lblLastBatchExec.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._lblLastBatchExec.Margin = new System.Windows.Forms.Padding(2);
             this._lblLastBatchExec.Name = "_lblLastBatchExec";
             this._lblLastBatchExec.Size = new System.Drawing.Size(194, 17);
             this._lblLastBatchExec.TabIndex = 0;
             this._lblLastBatchExec.Text = "Last execution of current batch: ";
+            // 
+            // _btnRemoveBatch
+            // 
+            this._btnRemoveBatch.BackColor = System.Drawing.Color.Tomato;
+            this._btnRemoveBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this._btnRemoveBatch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.CornflowerBlue;
+            this._btnRemoveBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnRemoveBatch.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._btnRemoveBatch.ForeColor = System.Drawing.Color.Black;
+            this._btnRemoveBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnRemoveBatch.Location = new System.Drawing.Point(654, 397);
+            this._btnRemoveBatch.Margin = new System.Windows.Forms.Padding(0);
+            this._btnRemoveBatch.Name = "_btnRemoveBatch";
+            this._btnRemoveBatch.Size = new System.Drawing.Size(98, 29);
+            this._btnRemoveBatch.TabIndex = 5;
+            this._btnRemoveBatch.Text = "Remove";
+            this._btnRemoveBatch.UseVisualStyleBackColor = false;
+            this._btnRemoveBatch.Click += new System.EventHandler(this._btnRemoveBatch_Click);
             // 
             // _btnExecBatch
             // 
@@ -189,7 +218,7 @@
             this.dgvResults.Name = "dgvResults";
             this.dgvResults.ReadOnly = true;
             this.dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvResults.Size = new System.Drawing.Size(629, 150);
+            this.dgvResults.Size = new System.Drawing.Size(657, 150);
             this.dgvResults.TabIndex = 4;
             // 
             // Target
@@ -241,7 +270,7 @@
             this._lbxHostList.FormattingEnabled = true;
             this._lbxHostList.ItemHeight = 21;
             this._lbxHostList.Location = new System.Drawing.Point(95, 94);
-            this._lbxHostList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._lbxHostList.Margin = new System.Windows.Forms.Padding(2);
             this._lbxHostList.Name = "_lbxHostList";
             this._lbxHostList.Size = new System.Drawing.Size(266, 128);
             this._lbxHostList.TabIndex = 2;
@@ -252,7 +281,7 @@
             this._tbxJobDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._tbxJobDescription.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._tbxJobDescription.Location = new System.Drawing.Point(95, 61);
-            this._tbxJobDescription.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._tbxJobDescription.Margin = new System.Windows.Forms.Padding(2);
             this._tbxJobDescription.Name = "_tbxJobDescription";
             this._tbxJobDescription.Size = new System.Drawing.Size(266, 29);
             this._tbxJobDescription.TabIndex = 20;
@@ -263,7 +292,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(2, 236);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.label4.Margin = new System.Windows.Forms.Padding(2);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 21);
             this.label4.TabIndex = 0;
@@ -274,7 +303,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(2, 94);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.label3.Margin = new System.Windows.Forms.Padding(2);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(70, 21);
             this.label3.TabIndex = 0;
@@ -285,7 +314,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(2, 63);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.label2.Margin = new System.Windows.Forms.Padding(2);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 21);
             this.label2.TabIndex = 0;
@@ -296,9 +325,9 @@
             this._tbxBufferSize.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._tbxBufferSize.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._tbxBufferSize.Location = new System.Drawing.Point(471, 61);
-            this._tbxBufferSize.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._tbxBufferSize.Margin = new System.Windows.Forms.Padding(2);
             this._tbxBufferSize.Name = "_tbxBufferSize";
-            this._tbxBufferSize.Size = new System.Drawing.Size(253, 29);
+            this._tbxBufferSize.Size = new System.Drawing.Size(281, 29);
             this._tbxBufferSize.TabIndex = 60;
             this._tbxBufferSize.TextChanged += new System.EventHandler(this._tbxBufferSize_TextChanged);
             // 
@@ -307,9 +336,9 @@
             this._tbxTimeOut.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._tbxTimeOut.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._tbxTimeOut.Location = new System.Drawing.Point(471, 28);
-            this._tbxTimeOut.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._tbxTimeOut.Margin = new System.Windows.Forms.Padding(2);
             this._tbxTimeOut.Name = "_tbxTimeOut";
-            this._tbxTimeOut.Size = new System.Drawing.Size(253, 29);
+            this._tbxTimeOut.Size = new System.Drawing.Size(281, 29);
             this._tbxTimeOut.TabIndex = 50;
             this._tbxTimeOut.TextChanged += new System.EventHandler(this._tbxTimeOut_TextChanged);
             // 
@@ -318,7 +347,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(365, 30);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.label7.Margin = new System.Windows.Forms.Padding(2);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(102, 21);
             this.label7.TabIndex = 0;
@@ -329,7 +358,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.Location = new System.Drawing.Point(365, 63);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.label8.Margin = new System.Windows.Forms.Padding(2);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(84, 21);
             this.label8.TabIndex = 0;
@@ -340,7 +369,7 @@
             this._tbxJobName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._tbxJobName.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._tbxJobName.Location = new System.Drawing.Point(95, 28);
-            this._tbxJobName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._tbxJobName.Margin = new System.Windows.Forms.Padding(2);
             this._tbxJobName.Name = "_tbxJobName";
             this._tbxJobName.Size = new System.Drawing.Size(266, 29);
             this._tbxJobName.TabIndex = 10;
@@ -351,7 +380,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(2, 30);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.label1.Margin = new System.Windows.Forms.Padding(2);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 21);
             this.label1.TabIndex = 0;
@@ -384,7 +413,7 @@
             this._pnlTopMenu.Location = new System.Drawing.Point(178, 0);
             this._pnlTopMenu.Margin = new System.Windows.Forms.Padding(0);
             this._pnlTopMenu.Name = "_pnlTopMenu";
-            this._pnlTopMenu.Size = new System.Drawing.Size(734, 41);
+            this._pnlTopMenu.Size = new System.Drawing.Size(764, 41);
             this._pnlTopMenu.TabIndex = 3;
             // 
             // _lblClock
@@ -420,7 +449,6 @@
             this._chkBtnTimerEnabled.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this._chkBtnTimerEnabled.UseVisualStyleBackColor = false;
             this._chkBtnTimerEnabled.CheckedChanged += new System.EventHandler(this._chkBtnTimerEnabled_CheckedChanged);
-            this._chkBtnTimerEnabled.Click += new System.EventHandler(this._chkBtnTimerEnabled_Click);
             // 
             // _btnOpenSettings
             // 
@@ -490,7 +518,7 @@
             this._pnlButtom.Location = new System.Drawing.Point(178, 480);
             this._pnlButtom.Margin = new System.Windows.Forms.Padding(0);
             this._pnlButtom.Name = "_pnlButtom";
-            this._pnlButtom.Size = new System.Drawing.Size(734, 48);
+            this._pnlButtom.Size = new System.Drawing.Size(764, 48);
             this._pnlButtom.TabIndex = 4;
             // 
             // _lblLastCollect
@@ -499,7 +527,7 @@
             this._lblLastCollect.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._lblLastCollect.ForeColor = System.Drawing.Color.DarkGray;
             this._lblLastCollect.Location = new System.Drawing.Point(2, 20);
-            this._lblLastCollect.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._lblLastCollect.Margin = new System.Windows.Forms.Padding(2);
             this._lblLastCollect.Name = "_lblLastCollect";
             this._lblLastCollect.Size = new System.Drawing.Size(97, 17);
             this._lblLastCollect.TabIndex = 0;
@@ -511,7 +539,7 @@
             this._lblOutputDir.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._lblOutputDir.ForeColor = System.Drawing.Color.DarkGray;
             this._lblOutputDir.Location = new System.Drawing.Point(3, 2);
-            this._lblOutputDir.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this._lblOutputDir.Margin = new System.Windows.Forms.Padding(2);
             this._lblOutputDir.Name = "_lblOutputDir";
             this._lblOutputDir.Size = new System.Drawing.Size(55, 17);
             this._lblOutputDir.TabIndex = 0;
@@ -528,29 +556,94 @@
             this._clock.Interval = 1000;
             this._clock.Tick += new System.EventHandler(this._clock_Tick);
             // 
-            // _btnRemoveBatch
+            // _lblCountOfFailedRequests
             // 
-            this._btnRemoveBatch.BackColor = System.Drawing.Color.Tomato;
-            this._btnRemoveBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this._btnRemoveBatch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.CornflowerBlue;
-            this._btnRemoveBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnRemoveBatch.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._btnRemoveBatch.ForeColor = System.Drawing.Color.Black;
-            this._btnRemoveBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnRemoveBatch.Location = new System.Drawing.Point(626, 397);
-            this._btnRemoveBatch.Margin = new System.Windows.Forms.Padding(0);
-            this._btnRemoveBatch.Name = "_btnRemoveBatch";
-            this._btnRemoveBatch.Size = new System.Drawing.Size(98, 29);
-            this._btnRemoveBatch.TabIndex = 5;
-            this._btnRemoveBatch.Text = "Remove";
-            this._btnRemoveBatch.UseVisualStyleBackColor = false;
-            this._btnRemoveBatch.Click += new System.EventHandler(this._btnRemoveBatch_Click);
+            this._lblCountOfFailedRequests.AutoSize = true;
+            this._lblCountOfFailedRequests.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblCountOfFailedRequests.ForeColor = System.Drawing.Color.Black;
+            this._lblCountOfFailedRequests.Location = new System.Drawing.Point(2, 2);
+            this._lblCountOfFailedRequests.Margin = new System.Windows.Forms.Padding(2);
+            this._lblCountOfFailedRequests.Name = "_lblCountOfFailedRequests";
+            this._lblCountOfFailedRequests.Size = new System.Drawing.Size(133, 21);
+            this._lblCountOfFailedRequests.TabIndex = 0;
+            this._lblCountOfFailedRequests.Text = "Failed Requests: 0";
+            // 
+            // _lblFirstAlertTime
+            // 
+            this._lblFirstAlertTime.AutoSize = true;
+            this._lblFirstAlertTime.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblFirstAlertTime.ForeColor = System.Drawing.Color.Black;
+            this._lblFirstAlertTime.Location = new System.Drawing.Point(2, 27);
+            this._lblFirstAlertTime.Margin = new System.Windows.Forms.Padding(2);
+            this._lblFirstAlertTime.Name = "_lblFirstAlertTime";
+            this._lblFirstAlertTime.Size = new System.Drawing.Size(114, 21);
+            this._lblFirstAlertTime.TabIndex = 0;
+            this._lblFirstAlertTime.Text = "First Alert Pass:";
+            // 
+            // _lblSecondAlertTime
+            // 
+            this._lblSecondAlertTime.AutoSize = true;
+            this._lblSecondAlertTime.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblSecondAlertTime.ForeColor = System.Drawing.Color.Black;
+            this._lblSecondAlertTime.Location = new System.Drawing.Point(2, 52);
+            this._lblSecondAlertTime.Margin = new System.Windows.Forms.Padding(2);
+            this._lblSecondAlertTime.Name = "_lblSecondAlertTime";
+            this._lblSecondAlertTime.Size = new System.Drawing.Size(135, 21);
+            this._lblSecondAlertTime.TabIndex = 0;
+            this._lblSecondAlertTime.Text = "Second Alert Pass:";
+            // 
+            // _lblOverallPingAttempts
+            // 
+            this._lblOverallPingAttempts.AutoSize = true;
+            this._lblOverallPingAttempts.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblOverallPingAttempts.ForeColor = System.Drawing.Color.Black;
+            this._lblOverallPingAttempts.Location = new System.Drawing.Point(2, 77);
+            this._lblOverallPingAttempts.Margin = new System.Windows.Forms.Padding(2);
+            this._lblOverallPingAttempts.Name = "_lblOverallPingAttempts";
+            this._lblOverallPingAttempts.Size = new System.Drawing.Size(143, 21);
+            this._lblOverallPingAttempts.TabIndex = 0;
+            this._lblOverallPingAttempts.Text = "Overall Attempts: 0";
+            // 
+            // _lnkLblResetAttemptCounter
+            // 
+            this._lnkLblResetAttemptCounter.AutoSize = true;
+            this._lnkLblResetAttemptCounter.Location = new System.Drawing.Point(430, 209);
+            this._lnkLblResetAttemptCounter.Name = "_lnkLblResetAttemptCounter";
+            this._lnkLblResetAttemptCounter.Size = new System.Drawing.Size(35, 13);
+            this._lnkLblResetAttemptCounter.TabIndex = 61;
+            this._lnkLblResetAttemptCounter.TabStop = true;
+            this._lnkLblResetAttemptCounter.Text = "Reset";
+            this._lnkLblResetAttemptCounter.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this._lnkLblResetAttemptCounter_LinkClicked);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this._lblCountOfFailedRequests);
+            this.panel1.Controls.Add(this._lblFirstAlertTime);
+            this.panel1.Controls.Add(this._lblSecondAlertTime);
+            this.panel1.Controls.Add(this._lblOverallPingAttempts);
+            this.panel1.Location = new System.Drawing.Point(471, 95);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(281, 127);
+            this.panel1.TabIndex = 62;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(365, 94);
+            this.label6.Margin = new System.Windows.Forms.Padding(2);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(69, 42);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Alerting \r\nService";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(912, 528);
+            this.ClientSize = new System.Drawing.Size(942, 528);
             this.Controls.Add(this._tlpBody);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -565,6 +658,8 @@
             this._pnlTopMenu.ResumeLayout(false);
             this._pnlButtom.ResumeLayout(false);
             this._pnlButtom.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -607,6 +702,13 @@
         private System.Windows.Forms.Label _lblClock;
         private System.Windows.Forms.Timer _clock;
         private System.Windows.Forms.Button _btnRemoveBatch;
+        private System.Windows.Forms.Label _lblSecondAlertTime;
+        private System.Windows.Forms.Label _lblFirstAlertTime;
+        private System.Windows.Forms.Label _lblCountOfFailedRequests;
+        private System.Windows.Forms.Label _lblOverallPingAttempts;
+        private System.Windows.Forms.LinkLabel _lnkLblResetAttemptCounter;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label6;
     }
 }
 

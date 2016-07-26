@@ -20,11 +20,15 @@ namespace NetVulture
             _tbxInterval.Text = Properties.Settings.Default.Interval.ToString();
             _chkBxAutoStartTimer.Checked = Properties.Settings.Default.AutoStartTimer;
             _chkBxAlertingEnabled.Checked = Properties.Settings.Default.AlertingEnabled;
-            _tbxSenderAddress.Text = Properties.Settings.Default.SenderAddress;
 
-            foreach (string str in Properties.Settings.Default.TargetAddresses)
+            System.Collections.Specialized.StringCollection _scTargetCollection = Properties.Settings.Default.TargetAddresses;
+
+            if (_scTargetCollection != null && _scTargetCollection.Count > 0)
             {
-                _tbxTargetAddresses.Text += str;
+                foreach (string str in Properties.Settings.Default.TargetAddresses)
+                {
+                    _tbxTargetAddresses.Text += str;
+                }
             }
         }
 
@@ -47,7 +51,6 @@ namespace NetVulture
             Properties.Settings.Default.Interval = Convert.ToInt32(_tbxInterval.Text);
             Properties.Settings.Default.AutoStartTimer = _chkBxAutoStartTimer.Checked;
             Properties.Settings.Default.AlertingEnabled = _chkBxAlertingEnabled.Checked;
-            Properties.Settings.Default.SenderAddress = _tbxSenderAddress.Text;
 
             System.Collections.Specialized.StringCollection sc = new System.Collections.Specialized.StringCollection();
             foreach (string line in _tbxTargetAddresses.Lines)

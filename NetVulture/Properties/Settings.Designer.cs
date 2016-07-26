@@ -73,18 +73,6 @@ namespace NetVulture.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SenderAddress {
-            get {
-                return ((string)(this["SenderAddress"]));
-            }
-            set {
-                this["SenderAddress"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::System.Collections.Specialized.StringCollection TargetAddresses {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["TargetAddresses"]));

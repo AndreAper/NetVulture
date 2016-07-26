@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,15 +10,26 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.IO;
 using System.Net.NetworkInformation;
+using System.Net.Mail;
+using System.Net;
+using System.Diagnostics;
 
 namespace NetVulture
 {
     public partial class frmMain : Form
     {
         private List<NVBatch> _batchList;
+
+        /// <summary>
+        /// {Batch Name} {Target DNS or IP} {PingReply}
+        /// </summary>
+        private List<Tuple<string, string, PingReply>> _failedRequests;
         private string _outputDir;
-        private DateTime _lastExecutionTime;
+        private DateTime _lastExecutionTime, _timeOfLastFirstAlert, _timeOfLastSecondAlert;
         private BackgroundWorker _backWorker;
+        private System.Collections.Specialized.StringCollection _addressList;
+        private bool _firstAlertPassed = false, _secondAlertPassed = false;
+        private int _overallPingAttempts = 0;
 
         private List<NVBatch> Deserialize()
         {
@@ -70,6 +79,69 @@ namespace NetVulture
             _outputDir = Properties.Settings.Default.OutputDir;
             _lblOutputDir.Text = "Output: " + _outputDir;
             _lblClock.Text = DateTime.Now.ToString();
+        }
+
+        private void SendAlertMessage()
+        {
+            /*
+             * E-Mail Address: monitoring.bbs@gmail.com
+             * Username: monitoring.bbs@gmail.com
+             * Password: Moni2015@
+             * 
+             * Server: smtp.gmail.com
+             * Port: 587
+             */
+
+            if (_failedRequests.Count > 0)
+            {
+                if (_addressList.Count > 0)
+                {
+                    SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                    client.EnableSsl = true;
+                    client.Timeout = 10000;
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("monitoring.bbs@gmail.com", "Moni2015@");
+
+                    MailMessage mm = new MailMessage();
+                    mm.From = new MailAddress("monitoring.bbs@gmail.com");
+
+                    foreach (string adr in _addressList)
+                    {
+                        mm.To.Add(new MailAddress(adr));
+                    }
+
+                    mm.Subject = "NetVulture Alterting Service";
+
+                    StringBuilder sbResults = new StringBuilder("WARNING: The followed hosts are not available.");
+                    sbResults.AppendLine(Environment.NewLine);
+
+                    foreach (var item in _failedRequests)
+                    {
+                        //{BATCHNAME}       {TARGTE_DNS_IP}     {STAUS}
+                        sbResults.AppendLine(item.Item1 + "\t\t" + item.Item2 + "\t\t" + item.Item3.Status.ToString());
+                        sbResults.AppendLine(Environment.NewLine);
+                    }
+
+                    mm.Body = sbResults.ToString();
+                    mm.BodyEncoding = UTF8Encoding.UTF8;
+                    mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+
+                    try
+                    {
+                        //HACK: Kommentar entfernen zum Senden der Mail
+                        //client.Send(mm);
+                        Debug.Print("Sending mail...");
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+
+
+                    //SMS
+                } 
+            }
         }
 
         private void Serialize()
@@ -249,7 +321,7 @@ namespace NetVulture
                                 jsArrayElements[i] = "['" + data[0] + "','" + data[1] + "','" + data[2] + "','" + data[3] + "','" + data[4] + "']";
                             }
 
-                            await swJs.WriteAsync("var " + job.Name + "[" + string.Join(",", jsArrayElements) + "];");
+                            await swJs.WriteAsync("var " + job.Name + " = [" + string.Join(",", jsArrayElements) + "];");
                         }
                     }                   
                 }
@@ -261,6 +333,7 @@ namespace NetVulture
         {
             InitializeComponent();
             _batchList = Deserialize();
+            _addressList = Properties.Settings.Default.TargetAddresses;
 
             _backWorker = new BackgroundWorker();
             _backWorker.DoWork += _backWorker_DoWork;
@@ -274,8 +347,46 @@ namespace NetVulture
             if (_backWorker.IsBusy == false)
             {
                 await WriteOutput();
+
+                if (_failedRequests.Count == 0)
+                {
+                    _firstAlertPassed = false;
+                    _secondAlertPassed = false;
+                    _overallPingAttempts = 0;
+                }
+                else
+                {
+                    _lblCountOfFailedRequests.Text = "Failed Requests: " + _failedRequests.Count.ToString();
+
+                    _overallPingAttempts++;
+
+                    _lblOverallPingAttempts.Text = "Overall Attempts: " + _overallPingAttempts.ToString();
+
+                    if (_firstAlertPassed == false)
+                    {
+                        SendAlertMessage();
+                        _lblFirstAlertTime.Text = "First Alert Pass: " + DateTime.Now.ToString();
+                        _timeOfLastFirstAlert = DateTime.Now;
+                        _firstAlertPassed = true;
+                    }
+                    else
+                    {
+                        if (_overallPingAttempts == 10)
+                        {
+                            if (_secondAlertPassed == false)
+                            {
+                                SendAlertMessage();
+                                _secondAlertPassed = true;
+                                _timeOfLastSecondAlert = DateTime.Now;
+                                _lblSecondAlertTime.Text = "Second Alert Pass: " + DateTime.Now.ToString();
+                            }
+                        }
+                    }
+                }
+
                 _lblLastCollect.Text = "Last Execution: " + _lastExecutionTime.ToString();
                 _btnCollect.Enabled = true;
+                _btnCollect.BackColor = Color.Transparent;
                 _btnExecBatch.Enabled = true;
                 ShowJobInfo(); 
             }
@@ -289,9 +400,12 @@ namespace NetVulture
                 _btnCollect.Invoke((MethodInvoker) delegate 
                 {
                     _btnCollect.Enabled = false;
+                    _btnCollect.BackColor = Color.DodgerBlue;
                     _btnExecBatch.Enabled = false;               
                 });
-            } 
+            }
+
+            _failedRequests = new List<Tuple<string, string, PingReply>>();
 
             if (arg == -1)
             {
@@ -315,6 +429,11 @@ namespace NetVulture
                                     {
                                         pr = p.Send(_batchList[i].HostList[j]);
                                         _batchList[i].Results.Add(pr);
+
+                                        if (pr.Status != IPStatus.Success)
+                                        {
+                                            _failedRequests.Add(new Tuple<string, string, PingReply>(_batchList[i].Name, _batchList[i].HostList[j], pr));
+                                        }
                                     }
                                     catch (Exception ex)
                                     {
@@ -324,6 +443,8 @@ namespace NetVulture
                                         }
                                     }
                                 }
+
+
                             }
                         }
                         else
@@ -359,6 +480,11 @@ namespace NetVulture
                             {
                                 pr = p.Send(_batchList[arg].HostList[j]);
                                 _batchList[arg].Results.Add(pr);
+
+                                if (pr.Status != IPStatus.Success)
+                                {
+                                    _failedRequests.Add(new Tuple<string, string, PingReply>(_batchList[arg].Name, _batchList[arg].HostList[j], pr));
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -498,7 +624,11 @@ namespace NetVulture
             if (_chkBtnTimerEnabled.Checked)
             {
                 _chkBtnTimerEnabled.Text = "Timer Enabled";
-                _backWorker.RunWorkerAsync(-1);
+
+                if (String.IsNullOrEmpty(_outputDir))
+                {
+                    _outputDir = "output";
+                }
             }
             else
             {
@@ -506,6 +636,16 @@ namespace NetVulture
             }
 
             ShowJobInfo();
+        }
+
+        private void _lnkLblResetAttemptCounter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            _firstAlertPassed = false;
+            _secondAlertPassed = false;
+            _overallPingAttempts = 0;
+            _lblOverallPingAttempts.Text = "Overall Attempts: " + _overallPingAttempts.ToString();
+            _lblFirstAlertTime.Text = "First Alert Pass: ";
+            _lblSecondAlertTime.Text = "Second Alert Pass: ";
         }
 
         private void _btnHome_Click(object sender, EventArgs e)
@@ -516,25 +656,15 @@ namespace NetVulture
         private void _clock_Tick(object sender, EventArgs e)
         {
             _lblClock.Text = DateTime.Now.ToString();
-        }
 
-        private void _chkBtnTimerEnabled_Click(object sender, EventArgs e)
-        {
-            if (String.IsNullOrEmpty(_outputDir))
+            if (_timeOfLastFirstAlert.Day == DateTime.Now.AddDays(-1).Day)
             {
-                _chkBtnTimerEnabled.Checked = false;
-            }
-            else
-            {
-                if (_backWorker.IsBusy == false)
-                {
-                    _chkBtnTimerEnabled.Checked = true;
-                    _backWorker.RunWorkerAsync(-1);
-                }
-                else
-                {
-                    _chkBtnTimerEnabled.Checked = false;
-                }
+                _firstAlertPassed = false;
+                _secondAlertPassed = false;
+                _overallPingAttempts = 0;
+                _lblOverallPingAttempts.Text = "Overall Attempts: " + _overallPingAttempts.ToString();
+                _lblFirstAlertTime.Text = "First Alert Pass: ";
+                _lblSecondAlertTime.Text = "Second Alert Pass: ";
             }
         }
 
