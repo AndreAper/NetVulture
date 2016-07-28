@@ -34,7 +34,8 @@ namespace NetVulture
 
             foreach (string item in _tbxListInput.Lines)
             {
-                _lst.Add(item);
+                string str = item.Replace(" ", string.Empty);
+                _lst.Add(str);
             }
         }
     }

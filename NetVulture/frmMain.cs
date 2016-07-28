@@ -344,6 +344,13 @@ namespace NetVulture
                     _firstAlertPassed = false;
                     _secondAlertPassed = false;
                     _overallPingAttempts = 0;
+
+                    _lblCountOfFailedRequests.Text = "Failed Requests: none";
+                    _lblFirstAlertTime.Text = "First Alert Pass:";
+                    _lblSecondAlertTime.Text = "Second Alert Pass:";
+                    _lblOverallPingAttempts.Text = "Overall Attempts:";
+
+                    //TODO: Sende SMS/E-Mail wenn alles wieder IO!!!!
                 }
                 else
                 {

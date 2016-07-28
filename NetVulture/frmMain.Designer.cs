@@ -32,7 +32,7 @@
             this._tlpBody = new System.Windows.Forms.TableLayoutPanel();
             this._lbxJobs = new System.Windows.Forms.ListBox();
             this._pnlJobInfo = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this._pnlAlertingService = new System.Windows.Forms.Panel();
             this._lblCountOfFailedRequests = new System.Windows.Forms.Label();
             this._lblFirstAlertTime = new System.Windows.Forms.Label();
             this._lblSecondAlertTime = new System.Windows.Forms.Label();
@@ -74,7 +74,7 @@
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this._tlpBody.SuspendLayout();
             this._pnlJobInfo.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this._pnlAlertingService.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
             this._pnlTopMenu.SuspendLayout();
             this._pnlButtom.SuspendLayout();
@@ -125,7 +125,7 @@
             // _pnlJobInfo
             // 
             this._pnlJobInfo.BackColor = System.Drawing.Color.WhiteSmoke;
-            this._pnlJobInfo.Controls.Add(this.panel1);
+            this._pnlJobInfo.Controls.Add(this._pnlAlertingService);
             this._pnlJobInfo.Controls.Add(this._lnkLblResetAttemptCounter);
             this._pnlJobInfo.Controls.Add(this._lblLastBatchExec);
             this._pnlJobInfo.Controls.Add(this._btnRemoveBatch);
@@ -152,18 +152,18 @@
             this._pnlJobInfo.TabIndex = 1;
             this._pnlJobInfo.Visible = false;
             // 
-            // panel1
+            // _pnlAlertingService
             // 
-            this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this._lblCountOfFailedRequests);
-            this.panel1.Controls.Add(this._lblFirstAlertTime);
-            this.panel1.Controls.Add(this._lblSecondAlertTime);
-            this.panel1.Controls.Add(this._lblOverallPingAttempts);
-            this.panel1.Location = new System.Drawing.Point(471, 95);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(281, 127);
-            this.panel1.TabIndex = 62;
+            this._pnlAlertingService.BackColor = System.Drawing.Color.White;
+            this._pnlAlertingService.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._pnlAlertingService.Controls.Add(this._lblCountOfFailedRequests);
+            this._pnlAlertingService.Controls.Add(this._lblFirstAlertTime);
+            this._pnlAlertingService.Controls.Add(this._lblSecondAlertTime);
+            this._pnlAlertingService.Controls.Add(this._lblOverallPingAttempts);
+            this._pnlAlertingService.Location = new System.Drawing.Point(471, 95);
+            this._pnlAlertingService.Name = "_pnlAlertingService";
+            this._pnlAlertingService.Size = new System.Drawing.Size(281, 127);
+            this._pnlAlertingService.TabIndex = 62;
             // 
             // _lblCountOfFailedRequests
             // 
@@ -655,8 +655,8 @@
             this._tlpBody.PerformLayout();
             this._pnlJobInfo.ResumeLayout(false);
             this._pnlJobInfo.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this._pnlAlertingService.ResumeLayout(false);
+            this._pnlAlertingService.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).EndInit();
             this._pnlTopMenu.ResumeLayout(false);
             this._pnlButtom.ResumeLayout(false);
@@ -703,7 +703,7 @@
         private System.Windows.Forms.Label _lblCountOfFailedRequests;
         private System.Windows.Forms.Label _lblOverallPingAttempts;
         private System.Windows.Forms.LinkLabel _lnkLblResetAttemptCounter;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel _pnlAlertingService;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Target;
         private System.Windows.Forms.DataGridViewTextBoxColumn Address;
