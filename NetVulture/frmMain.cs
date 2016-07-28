@@ -564,6 +564,7 @@ namespace NetVulture
         {
             _batchList.Add(new NVBatch());
             UpdateForm();
+            _lbxJobs.SelectedIndex = (_lbxJobs.Items.Count - 1);
         }
 
         private void _tbxJobName_TextChanged(object sender, EventArgs e)
@@ -637,6 +638,11 @@ namespace NetVulture
             _lblOverallPingAttempts.Text = "Overall Attempts: " + _overallPingAttempts.ToString();
             _lblFirstAlertTime.Text = "First Alert Pass: ";
             _lblSecondAlertTime.Text = "Second Alert Pass: ";
+        }
+
+        private void _tbxJobName_Leave(object sender, EventArgs e)
+        {
+            UpdateForm();
         }
 
         private void _btnHome_Click(object sender, EventArgs e)

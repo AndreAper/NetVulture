@@ -32,15 +32,16 @@
             this._tlpBody = new System.Windows.Forms.TableLayoutPanel();
             this._lbxJobs = new System.Windows.Forms.ListBox();
             this._pnlJobInfo = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this._lblCountOfFailedRequests = new System.Windows.Forms.Label();
+            this._lblFirstAlertTime = new System.Windows.Forms.Label();
+            this._lblSecondAlertTime = new System.Windows.Forms.Label();
+            this._lblOverallPingAttempts = new System.Windows.Forms.Label();
+            this._lnkLblResetAttemptCounter = new System.Windows.Forms.LinkLabel();
             this._lblLastBatchExec = new System.Windows.Forms.Label();
             this._btnRemoveBatch = new System.Windows.Forms.Button();
             this._btnExecBatch = new System.Windows.Forms.Button();
             this.dgvResults = new System.Windows.Forms.DataGridView();
-            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Buffer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RoundTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this._lnkLblChangeHostList = new System.Windows.Forms.LinkLabel();
             this._lbxHostList = new System.Windows.Forms.ListBox();
             this._tbxJobDescription = new System.Windows.Forms.TextBox();
@@ -50,6 +51,7 @@
             this._tbxBufferSize = new System.Windows.Forms.TextBox();
             this._tbxTimeOut = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this._tbxJobName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -65,19 +67,17 @@
             this._lblOutputDir = new System.Windows.Forms.Label();
             this._collectTimer = new System.Windows.Forms.Timer(this.components);
             this._clock = new System.Windows.Forms.Timer(this.components);
-            this._lblCountOfFailedRequests = new System.Windows.Forms.Label();
-            this._lblFirstAlertTime = new System.Windows.Forms.Label();
-            this._lblSecondAlertTime = new System.Windows.Forms.Label();
-            this._lblOverallPingAttempts = new System.Windows.Forms.Label();
-            this._lnkLblResetAttemptCounter = new System.Windows.Forms.LinkLabel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label6 = new System.Windows.Forms.Label();
+            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RoundTrip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this._tlpBody.SuspendLayout();
             this._pnlJobInfo.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
             this._pnlTopMenu.SuspendLayout();
             this._pnlButtom.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // _tlpBody
@@ -152,6 +152,78 @@
             this._pnlJobInfo.TabIndex = 1;
             this._pnlJobInfo.Visible = false;
             // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this._lblCountOfFailedRequests);
+            this.panel1.Controls.Add(this._lblFirstAlertTime);
+            this.panel1.Controls.Add(this._lblSecondAlertTime);
+            this.panel1.Controls.Add(this._lblOverallPingAttempts);
+            this.panel1.Location = new System.Drawing.Point(471, 95);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(281, 127);
+            this.panel1.TabIndex = 62;
+            // 
+            // _lblCountOfFailedRequests
+            // 
+            this._lblCountOfFailedRequests.AutoSize = true;
+            this._lblCountOfFailedRequests.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblCountOfFailedRequests.ForeColor = System.Drawing.Color.Black;
+            this._lblCountOfFailedRequests.Location = new System.Drawing.Point(2, 2);
+            this._lblCountOfFailedRequests.Margin = new System.Windows.Forms.Padding(2);
+            this._lblCountOfFailedRequests.Name = "_lblCountOfFailedRequests";
+            this._lblCountOfFailedRequests.Size = new System.Drawing.Size(133, 21);
+            this._lblCountOfFailedRequests.TabIndex = 0;
+            this._lblCountOfFailedRequests.Text = "Failed Requests: 0";
+            // 
+            // _lblFirstAlertTime
+            // 
+            this._lblFirstAlertTime.AutoSize = true;
+            this._lblFirstAlertTime.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblFirstAlertTime.ForeColor = System.Drawing.Color.Black;
+            this._lblFirstAlertTime.Location = new System.Drawing.Point(2, 27);
+            this._lblFirstAlertTime.Margin = new System.Windows.Forms.Padding(2);
+            this._lblFirstAlertTime.Name = "_lblFirstAlertTime";
+            this._lblFirstAlertTime.Size = new System.Drawing.Size(114, 21);
+            this._lblFirstAlertTime.TabIndex = 0;
+            this._lblFirstAlertTime.Text = "First Alert Pass:";
+            // 
+            // _lblSecondAlertTime
+            // 
+            this._lblSecondAlertTime.AutoSize = true;
+            this._lblSecondAlertTime.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblSecondAlertTime.ForeColor = System.Drawing.Color.Black;
+            this._lblSecondAlertTime.Location = new System.Drawing.Point(2, 52);
+            this._lblSecondAlertTime.Margin = new System.Windows.Forms.Padding(2);
+            this._lblSecondAlertTime.Name = "_lblSecondAlertTime";
+            this._lblSecondAlertTime.Size = new System.Drawing.Size(135, 21);
+            this._lblSecondAlertTime.TabIndex = 0;
+            this._lblSecondAlertTime.Text = "Second Alert Pass:";
+            // 
+            // _lblOverallPingAttempts
+            // 
+            this._lblOverallPingAttempts.AutoSize = true;
+            this._lblOverallPingAttempts.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblOverallPingAttempts.ForeColor = System.Drawing.Color.Black;
+            this._lblOverallPingAttempts.Location = new System.Drawing.Point(2, 77);
+            this._lblOverallPingAttempts.Margin = new System.Windows.Forms.Padding(2);
+            this._lblOverallPingAttempts.Name = "_lblOverallPingAttempts";
+            this._lblOverallPingAttempts.Size = new System.Drawing.Size(143, 21);
+            this._lblOverallPingAttempts.TabIndex = 0;
+            this._lblOverallPingAttempts.Text = "Overall Attempts: 0";
+            // 
+            // _lnkLblResetAttemptCounter
+            // 
+            this._lnkLblResetAttemptCounter.AutoSize = true;
+            this._lnkLblResetAttemptCounter.Location = new System.Drawing.Point(430, 209);
+            this._lnkLblResetAttemptCounter.Name = "_lnkLblResetAttemptCounter";
+            this._lnkLblResetAttemptCounter.Size = new System.Drawing.Size(35, 13);
+            this._lnkLblResetAttemptCounter.TabIndex = 61;
+            this._lnkLblResetAttemptCounter.TabStop = true;
+            this._lnkLblResetAttemptCounter.Text = "Reset";
+            this._lnkLblResetAttemptCounter.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this._lnkLblResetAttemptCounter_LinkClicked);
+            // 
             // _lblLastBatchExec
             // 
             this._lblLastBatchExec.AutoSize = true;
@@ -211,8 +283,8 @@
             this.dgvResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Target,
             this.Address,
-            this.Buffer,
-            this.RoundTime,
+            this.RoundTrip,
+            this.Time,
             this.Status});
             this.dgvResults.Location = new System.Drawing.Point(95, 236);
             this.dgvResults.Name = "dgvResults";
@@ -220,36 +292,6 @@
             this.dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvResults.Size = new System.Drawing.Size(657, 150);
             this.dgvResults.TabIndex = 4;
-            // 
-            // Target
-            // 
-            this.Target.HeaderText = "Target";
-            this.Target.Name = "Target";
-            this.Target.ReadOnly = true;
-            // 
-            // Address
-            // 
-            this.Address.HeaderText = "Address";
-            this.Address.Name = "Address";
-            this.Address.ReadOnly = true;
-            // 
-            // Buffer
-            // 
-            this.Buffer.HeaderText = "Buffer";
-            this.Buffer.Name = "Buffer";
-            this.Buffer.ReadOnly = true;
-            // 
-            // RoundTime
-            // 
-            this.RoundTime.HeaderText = "RoundTime";
-            this.RoundTime.Name = "RoundTime";
-            this.RoundTime.ReadOnly = true;
-            // 
-            // Status
-            // 
-            this.Status.HeaderText = "Status";
-            this.Status.Name = "Status";
-            this.Status.ReadOnly = true;
             // 
             // _lnkLblChangeHostList
             // 
@@ -353,6 +395,17 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Timeout (ms)";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(365, 94);
+            this.label6.Margin = new System.Windows.Forms.Padding(2);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(69, 42);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Alerting \r\nService";
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -374,6 +427,7 @@
             this._tbxJobName.Size = new System.Drawing.Size(266, 29);
             this._tbxJobName.TabIndex = 10;
             this._tbxJobName.TextChanged += new System.EventHandler(this._tbxJobName_TextChanged);
+            this._tbxJobName.Leave += new System.EventHandler(this._tbxJobName_Leave);
             // 
             // label1
             // 
@@ -556,88 +610,35 @@
             this._clock.Interval = 1000;
             this._clock.Tick += new System.EventHandler(this._clock_Tick);
             // 
-            // _lblCountOfFailedRequests
+            // Target
             // 
-            this._lblCountOfFailedRequests.AutoSize = true;
-            this._lblCountOfFailedRequests.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblCountOfFailedRequests.ForeColor = System.Drawing.Color.Black;
-            this._lblCountOfFailedRequests.Location = new System.Drawing.Point(2, 2);
-            this._lblCountOfFailedRequests.Margin = new System.Windows.Forms.Padding(2);
-            this._lblCountOfFailedRequests.Name = "_lblCountOfFailedRequests";
-            this._lblCountOfFailedRequests.Size = new System.Drawing.Size(133, 21);
-            this._lblCountOfFailedRequests.TabIndex = 0;
-            this._lblCountOfFailedRequests.Text = "Failed Requests: 0";
+            this.Target.HeaderText = "Target";
+            this.Target.Name = "Target";
+            this.Target.ReadOnly = true;
             // 
-            // _lblFirstAlertTime
+            // Address
             // 
-            this._lblFirstAlertTime.AutoSize = true;
-            this._lblFirstAlertTime.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblFirstAlertTime.ForeColor = System.Drawing.Color.Black;
-            this._lblFirstAlertTime.Location = new System.Drawing.Point(2, 27);
-            this._lblFirstAlertTime.Margin = new System.Windows.Forms.Padding(2);
-            this._lblFirstAlertTime.Name = "_lblFirstAlertTime";
-            this._lblFirstAlertTime.Size = new System.Drawing.Size(114, 21);
-            this._lblFirstAlertTime.TabIndex = 0;
-            this._lblFirstAlertTime.Text = "First Alert Pass:";
+            this.Address.HeaderText = "Address";
+            this.Address.Name = "Address";
+            this.Address.ReadOnly = true;
             // 
-            // _lblSecondAlertTime
+            // RoundTrip
             // 
-            this._lblSecondAlertTime.AutoSize = true;
-            this._lblSecondAlertTime.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblSecondAlertTime.ForeColor = System.Drawing.Color.Black;
-            this._lblSecondAlertTime.Location = new System.Drawing.Point(2, 52);
-            this._lblSecondAlertTime.Margin = new System.Windows.Forms.Padding(2);
-            this._lblSecondAlertTime.Name = "_lblSecondAlertTime";
-            this._lblSecondAlertTime.Size = new System.Drawing.Size(135, 21);
-            this._lblSecondAlertTime.TabIndex = 0;
-            this._lblSecondAlertTime.Text = "Second Alert Pass:";
+            this.RoundTrip.HeaderText = "RoundTrip (ms)";
+            this.RoundTrip.Name = "RoundTrip";
+            this.RoundTrip.ReadOnly = true;
             // 
-            // _lblOverallPingAttempts
+            // Time
             // 
-            this._lblOverallPingAttempts.AutoSize = true;
-            this._lblOverallPingAttempts.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblOverallPingAttempts.ForeColor = System.Drawing.Color.Black;
-            this._lblOverallPingAttempts.Location = new System.Drawing.Point(2, 77);
-            this._lblOverallPingAttempts.Margin = new System.Windows.Forms.Padding(2);
-            this._lblOverallPingAttempts.Name = "_lblOverallPingAttempts";
-            this._lblOverallPingAttempts.Size = new System.Drawing.Size(143, 21);
-            this._lblOverallPingAttempts.TabIndex = 0;
-            this._lblOverallPingAttempts.Text = "Overall Attempts: 0";
+            this.Time.HeaderText = "Time";
+            this.Time.Name = "Time";
+            this.Time.ReadOnly = true;
             // 
-            // _lnkLblResetAttemptCounter
+            // Status
             // 
-            this._lnkLblResetAttemptCounter.AutoSize = true;
-            this._lnkLblResetAttemptCounter.Location = new System.Drawing.Point(430, 209);
-            this._lnkLblResetAttemptCounter.Name = "_lnkLblResetAttemptCounter";
-            this._lnkLblResetAttemptCounter.Size = new System.Drawing.Size(35, 13);
-            this._lnkLblResetAttemptCounter.TabIndex = 61;
-            this._lnkLblResetAttemptCounter.TabStop = true;
-            this._lnkLblResetAttemptCounter.Text = "Reset";
-            this._lnkLblResetAttemptCounter.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this._lnkLblResetAttemptCounter_LinkClicked);
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this._lblCountOfFailedRequests);
-            this.panel1.Controls.Add(this._lblFirstAlertTime);
-            this.panel1.Controls.Add(this._lblSecondAlertTime);
-            this.panel1.Controls.Add(this._lblOverallPingAttempts);
-            this.panel1.Location = new System.Drawing.Point(471, 95);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(281, 127);
-            this.panel1.TabIndex = 62;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(365, 94);
-            this.label6.Margin = new System.Windows.Forms.Padding(2);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(69, 42);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "Alerting \r\nService";
+            this.Status.HeaderText = "Status";
+            this.Status.Name = "Status";
+            this.Status.ReadOnly = true;
             // 
             // frmMain
             // 
@@ -654,12 +655,12 @@
             this._tlpBody.PerformLayout();
             this._pnlJobInfo.ResumeLayout(false);
             this._pnlJobInfo.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).EndInit();
             this._pnlTopMenu.ResumeLayout(false);
             this._pnlButtom.ResumeLayout(false);
             this._pnlButtom.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -677,11 +678,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.LinkLabel _lnkLblChangeHostList;
         private System.Windows.Forms.DataGridView dgvResults;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Target;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Address;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Buffer;
-        private System.Windows.Forms.DataGridViewTextBoxColumn RoundTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Panel _pnlTopMenu;
@@ -709,6 +705,11 @@
         private System.Windows.Forms.LinkLabel _lnkLblResetAttemptCounter;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Target;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Address;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RoundTrip;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Time;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
     }
 }
 
