@@ -129,9 +129,7 @@ namespace NetVulture
 
                     try
                     {
-                        //HACK: Kommentar entfernen zum Senden der Mail
-                        //client.Send(mm);
-                        Debug.Print("Sending mail...");
+                        client.Send(mm);
                     }
                     catch (Exception)
                     {
@@ -255,16 +253,10 @@ namespace NetVulture
                     string csvFile = Path.Combine(_outputDir, job.Name + ".csv");
                     string jsFile = Path.Combine(_outputDir, job.Name + ".js");
 
-                    System.Diagnostics.Debug.Print("Write Batch with name : " + job.Name);
-
                     if (job.Results != null && job.Results.Count > 0)
                     {
                         using (StreamWriter swCsv = new StreamWriter(csvFile))
                         {
-                            System.Diagnostics.Debug.Print("If job.Results null? : " + (job.Results == null).ToString());
-                            System.Diagnostics.Debug.Print("Count of elements in job.Results sequence : " + job.Results.Count.ToString());
-                            System.Diagnostics.Debug.Print("Count of elements in job.HostList sequence : " + job.HostList.Count.ToString());
-
                             for (int i = 0; i < job.Results.Count; i++)
                             {
                                 PingReply pr = job.Results[i];
@@ -287,7 +279,6 @@ namespace NetVulture
                                     data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), "Unknown" };
                                 }
 
-                                System.Diagnostics.Debug.Print("Write pingreply object " + i.ToString() + " of " + job.Results.Count.ToString() + " with data " + string.Join(",", data));
                                 await swCsv.WriteLineAsync(string.Join(",", data));
                             }
                         }
