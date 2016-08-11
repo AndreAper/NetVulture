@@ -81,7 +81,7 @@ namespace NetVulture
             _lblClock.Text = DateTime.Now.ToString();
         }
 
-        private void SendAlertMessage()
+        private void SendEmail()
         {
             /*
              * E-Mail Address: monitoring.bbs@gmail.com
@@ -138,8 +138,17 @@ namespace NetVulture
 
 
                     //SMS
+                }
+                else
+                {
+                    return;
                 } 
             }
+            else
+            {
+                return;
+            }
+            
         }
 
         private void Serialize()
@@ -236,6 +245,44 @@ namespace NetVulture
             else
             {
                 _pnlJobInfo.Visible = false;
+            }
+        }
+
+        private void UpdateResultsOutput()
+        {
+            if (_lbxJobs.SelectedIndex != -1)
+            {
+                NVBatch job = _batchList.ElementAt(_lbxJobs.SelectedIndex);
+
+                if (job.Results != null)
+                {
+                    if (job.Results.Count > 0)
+                    {
+                        dgvResults.Rows.Clear();
+
+                        for (int i = 0; i < job.Results.Count; i++)
+                        {
+                            PingReply pr = job.Results[i];
+
+                            string[] data;
+
+                            if (pr.Address == null)
+                            {
+                                data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), pr.Status.ToString() };
+                            }
+                            else
+                            {
+                                data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString() };
+                            }
+
+                            dgvResults.Rows.Add(data);
+                        }
+                    }
+                }
+                else
+                {
+                    dgvResults.Rows.Clear();
+                } 
             }
         }
 
@@ -362,7 +409,7 @@ namespace NetVulture
 
                     if (_firstAlertPassed == false)
                     {
-                        SendAlertMessage();
+                        SendEmail();
                         _lblFirstAlertTime.Text = "First Alert Pass: " + DateTime.Now.ToString();
                         _timeOfLastFirstAlert = DateTime.Now;
                         _firstAlertPassed = true;
@@ -373,7 +420,7 @@ namespace NetVulture
                         {
                             if (_secondAlertPassed == false)
                             {
-                                SendAlertMessage();
+                                SendEmail();
                                 _secondAlertPassed = true;
                                 _timeOfLastSecondAlert = DateTime.Now;
                                 _lblSecondAlertTime.Text = "Second Alert Pass: " + DateTime.Now.ToString();
@@ -432,6 +479,8 @@ namespace NetVulture
                                         {
                                             _failedRequests.Add(new Tuple<string, string, PingReply>(_batchList[i].Name, _batchList[i].HostList[j], pr));
                                         }
+
+                                        Debug.Print("Ping Task for target " + _batchList[i].HostList[j] + " started.");
                                     }
                                     catch (Exception ex)
                                     {
@@ -440,14 +489,16 @@ namespace NetVulture
                                             _batchList[i].Results.Add(pr);
                                         }
                                     }
+                                    finally
+                                    {
+                                        if (this.InvokeRequired) this.Invoke(new MethodInvoker(UpdateResultsOutput));
+                                    }
                                 }
-
-
                             }
                         }
                         else
                         {
-                            throw new NullReferenceException("Property HostList is null!");
+                            MessageBox.Show("No hosts defined", "No hosts", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         }
                     }
                 } 
