@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ * TODO: Methode frmSettings.SendSMS() löst ObjectDisposedException aus wenn keine Verbindung mit Host hergestellt werden kann.
+ * TODO: Jeden Host 4 mal anpingen und TimedOut auf 1000ms setzen damit "package lost" berücksichtigt wird.
+ * TODO: Alle nicht erfolgreichen Echo-Anfragen in einer History speichern.
+ * TODO: E-Mail Parameter einstellbar über frmSettings.
+ * 
+ */ 
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +21,8 @@ using System.Net.NetworkInformation;
 using System.Net.Mail;
 using System.Net;
 using System.Diagnostics;
+using Renci.SshNet;
+using System.Threading;
 
 namespace NetVulture
 {
@@ -24,12 +34,13 @@ namespace NetVulture
         /// {Batch Name} {Target DNS or IP} {PingReply}
         /// </summary>
         private List<Tuple<string, string, PingReply>> _failedRequests;
-        private string _outputDir;
+        private string _outputDir, _smsGwAddress, _smsGwUser, _smsGwPassword;
         private DateTime _lastExecutionTime, _timeOfLastFirstAlert, _timeOfLastSecondAlert;
         private BackgroundWorker _backWorker;
-        private System.Collections.Specialized.StringCollection _addressList;
+        private System.Collections.Specialized.StringCollection _addressList, _mobileNumberList;
         private bool _firstAlertPassed = false, _secondAlertPassed = false;
         private int _overallPingAttempts = 0;
+        private bool _isEmailAlertingEnabled, _isSmsAlertingEnabled;
 
         private List<NVBatch> Deserialize()
         {
@@ -79,77 +90,113 @@ namespace NetVulture
             _outputDir = Properties.Settings.Default.OutputDir;
             _lblOutputDir.Text = "Output: " + _outputDir;
             _lblClock.Text = DateTime.Now.ToString();
-        }
 
-        private void SendEmail()
-        {
-            /*
-             * E-Mail Address: monitoring.bbs@gmail.com
-             * Username: monitoring.bbs@gmail.com
-             * Password: Moni2015@
-             * 
-             * Server: smtp.gmail.com
-             * Port: 587
-             */
+            _isEmailAlertingEnabled = Properties.Settings.Default.EmailAlertingEnabled;
 
-            if (_failedRequests.Count > 0)
+            if (_isEmailAlertingEnabled)
             {
-                if (_addressList.Count > 0)
-                {
-                    SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-                    client.EnableSsl = true;
-                    client.Timeout = 10000;
-                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    client.UseDefaultCredentials = false;
-                    client.Credentials = new NetworkCredential("monitoring.bbs@gmail.com", "Moni2015@");
-
-                    MailMessage mm = new MailMessage();
-                    mm.From = new MailAddress("monitoring.bbs@gmail.com");
-
-                    foreach (string adr in _addressList)
-                    {
-                        mm.To.Add(new MailAddress(adr));
-                    }
-
-                    mm.Subject = "NetVulture Alterting Service";
-
-                    StringBuilder sbResults = new StringBuilder("WARNING: The followed hosts are not available.");
-                    sbResults.AppendLine(Environment.NewLine);
-
-                    foreach (var item in _failedRequests)
-                    {
-                        //{BATCHNAME}       {TARGTE_DNS_IP}     {STAUS}
-                        sbResults.AppendLine(item.Item1 + "\t\t" + item.Item2 + "\t\t" + item.Item3.Status.ToString());
-                        sbResults.AppendLine(Environment.NewLine);
-                    }
-
-                    mm.Body = sbResults.ToString();
-                    mm.BodyEncoding = UTF8Encoding.UTF8;
-                    mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
-
-                    try
-                    {
-                        client.Send(mm);
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-
-
-                    //SMS
-                }
-                else
-                {
-                    return;
-                } 
+                _lblEmailAlertingStatus.Text = "Email Alerting Status: Enabled";
+                _addressList = Properties.Settings.Default.TargetAddresses;
             }
             else
             {
-                return;
+                _lblEmailAlertingStatus.Text = "Email Alerting Status: Disabled";
             }
-            
+
+            _isSmsAlertingEnabled = Properties.Settings.Default.SmsAlertingEnabled;
+
+            if (_isSmsAlertingEnabled)
+            {
+                _lblSmsAlertingStatus.Text = "SMS Alerting Status: Enabled";
+                _mobileNumberList = Properties.Settings.Default.MobileNumbers;
+
+                _smsGwAddress = Properties.Settings.Default.GatewayAddress;
+                _smsGwUser = Properties.Settings.Default.GatewayUser;
+                _smsGwPassword = Properties.Settings.Default.GatewayPassword;
+            }
+            else
+            {
+                _lblSmsAlertingStatus.Text = "SMS Alerting Status: Disabled";
+            }
         }
+
+        /// <summary>
+        /// Send email using smtp client.
+        /// </summary>
+        private void SendEmail()
+        { 
+            /* 
+             * E-Mail Address: monitoring.bbs@gmail.com 
+             * Username: monitoring.bbs@gmail.com 
+             * Password: Moni2015@ 
+             *  
+             * Server: smtp.gmail.com 
+             * Port: 587 
+             */ 
+
+ 
+            if (_failedRequests.Count > 0) 
+            { 
+                if (_addressList.Count > 0) 
+                { 
+                    SmtpClient client = new SmtpClient("smtp.gmail.com", 587); 
+                    client.EnableSsl = true; 
+                    client.Timeout = 10000; 
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network; 
+                    client.UseDefaultCredentials = false; 
+                    client.Credentials = new NetworkCredential("monitoring.bbs@gmail.com", "Moni2015@"); 
+
+ 
+                    MailMessage mm = new MailMessage(); 
+                    mm.From = new MailAddress("monitoring.bbs@gmail.com"); 
+
+ 
+                    foreach (string adr in _addressList) 
+                    { 
+                        mm.To.Add(new MailAddress(adr)); 
+                    } 
+
+ 
+                    mm.Subject = "NetVulture Alterting Service"; 
+
+ 
+                    StringBuilder sbResults = new StringBuilder("WARNING: The followed hosts are not available."); 
+                    sbResults.AppendLine(Environment.NewLine); 
+
+ 
+                    foreach (var item in _failedRequests) 
+                    { 
+                        //{BATCHNAME}       {TARGTE_DNS_IP}     {STAUS} 
+                        sbResults.AppendLine(item.Item1 + "\t\t" + item.Item2 + "\t\t" + item.Item3.Status.ToString()); 
+                        sbResults.AppendLine(Environment.NewLine); 
+                    } 
+
+ 
+                    mm.Body = sbResults.ToString(); 
+                    mm.BodyEncoding = UTF8Encoding.UTF8; 
+                    mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure; 
+
+ 
+                    try 
+                    { 
+                        client.Send(mm); 
+                    } 
+                    catch (Exception) 
+                    { 
+                        throw; 
+                    }
+                } 
+                else 
+                { 
+                    return; 
+                }  
+            } 
+            else 
+            { 
+                return; 
+            } 
+             
+        } 
 
         private void Serialize()
         {
@@ -371,7 +418,6 @@ namespace NetVulture
         {
             InitializeComponent();
             _batchList = Deserialize();
-            _addressList = Properties.Settings.Default.TargetAddresses;
 
             _backWorker = new BackgroundWorker();
             _backWorker.DoWork += _backWorker_DoWork;

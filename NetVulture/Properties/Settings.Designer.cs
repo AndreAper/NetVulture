@@ -81,5 +81,79 @@ namespace NetVulture.Properties {
                 this["TargetAddresses"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EmailAlertingEnabled {
+            get {
+                return ((bool)(this["EmailAlertingEnabled"]));
+            }
+            set {
+                this["EmailAlertingEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SmsAlertingEnabled {
+            get {
+                return ((bool)(this["SmsAlertingEnabled"]));
+            }
+            set {
+                this["SmsAlertingEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>015222687191</string>\r\n  <string>015771412853</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection MobileNumbers {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["MobileNumbers"]));
+            }
+            set {
+                this["MobileNumbers"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GatewayAddress {
+            get {
+                return ((string)(this["GatewayAddress"]));
+            }
+            set {
+                this["GatewayAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GatewayUser {
+            get {
+                return ((string)(this["GatewayUser"]));
+            }
+            set {
+                this["GatewayUser"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GatewayPassword {
+            get {
+                return ((string)(this["GatewayPassword"]));
+            }
+            set {
+                this["GatewayPassword"] = value;
+            }
+        }
     }
 }

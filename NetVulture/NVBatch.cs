@@ -19,7 +19,6 @@ namespace NetVulture
         private DateTime _lastExec;
         private int _timeOut = 5000, _bufferSize = 32;
 
-
         [XmlElement(ElementName = "Name")]
         public string Name { get { return _name; } set { _name = value; } }
 

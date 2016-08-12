@@ -42,6 +42,11 @@
             this._btnRemoveBatch = new System.Windows.Forms.Button();
             this._btnExecBatch = new System.Windows.Forms.Button();
             this.dgvResults = new System.Windows.Forms.DataGridView();
+            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RoundTrip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this._lnkLblChangeHostList = new System.Windows.Forms.LinkLabel();
             this._lbxHostList = new System.Windows.Forms.ListBox();
             this._tbxJobDescription = new System.Windows.Forms.TextBox();
@@ -64,14 +69,11 @@
             this._btnCollect = new System.Windows.Forms.Button();
             this._pnlButtom = new System.Windows.Forms.Panel();
             this._lblLastCollect = new System.Windows.Forms.Label();
+            this._lblSmsAlertingStatus = new System.Windows.Forms.Label();
+            this._lblEmailAlertingStatus = new System.Windows.Forms.Label();
             this._lblOutputDir = new System.Windows.Forms.Label();
             this._collectTimer = new System.Windows.Forms.Timer(this.components);
             this._clock = new System.Windows.Forms.Timer(this.components);
-            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RoundTrip = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this._tlpBody.SuspendLayout();
             this._pnlJobInfo.SuspendLayout();
             this._pnlAlertingService.SuspendLayout();
@@ -292,6 +294,36 @@
             this.dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvResults.Size = new System.Drawing.Size(657, 150);
             this.dgvResults.TabIndex = 4;
+            // 
+            // Target
+            // 
+            this.Target.HeaderText = "Target";
+            this.Target.Name = "Target";
+            this.Target.ReadOnly = true;
+            // 
+            // Address
+            // 
+            this.Address.HeaderText = "Address";
+            this.Address.Name = "Address";
+            this.Address.ReadOnly = true;
+            // 
+            // RoundTrip
+            // 
+            this.RoundTrip.HeaderText = "RoundTrip (ms)";
+            this.RoundTrip.Name = "RoundTrip";
+            this.RoundTrip.ReadOnly = true;
+            // 
+            // Time
+            // 
+            this.Time.HeaderText = "Time";
+            this.Time.Name = "Time";
+            this.Time.ReadOnly = true;
+            // 
+            // Status
+            // 
+            this.Status.HeaderText = "Status";
+            this.Status.Name = "Status";
+            this.Status.ReadOnly = true;
             // 
             // _lnkLblChangeHostList
             // 
@@ -567,6 +599,8 @@
             // _pnlButtom
             // 
             this._pnlButtom.Controls.Add(this._lblLastCollect);
+            this._pnlButtom.Controls.Add(this._lblSmsAlertingStatus);
+            this._pnlButtom.Controls.Add(this._lblEmailAlertingStatus);
             this._pnlButtom.Controls.Add(this._lblOutputDir);
             this._pnlButtom.Dock = System.Windows.Forms.DockStyle.Fill;
             this._pnlButtom.Location = new System.Drawing.Point(178, 480);
@@ -586,6 +620,30 @@
             this._lblLastCollect.Size = new System.Drawing.Size(97, 17);
             this._lblLastCollect.TabIndex = 0;
             this._lblLastCollect.Text = "Last Execution: ";
+            // 
+            // _lblSmsAlertingStatus
+            // 
+            this._lblSmsAlertingStatus.AutoSize = true;
+            this._lblSmsAlertingStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblSmsAlertingStatus.ForeColor = System.Drawing.Color.DarkGray;
+            this._lblSmsAlertingStatus.Location = new System.Drawing.Point(306, 20);
+            this._lblSmsAlertingStatus.Margin = new System.Windows.Forms.Padding(2);
+            this._lblSmsAlertingStatus.Name = "_lblSmsAlertingStatus";
+            this._lblSmsAlertingStatus.Size = new System.Drawing.Size(125, 17);
+            this._lblSmsAlertingStatus.TabIndex = 0;
+            this._lblSmsAlertingStatus.Text = "SMS Alerting Status:";
+            // 
+            // _lblEmailAlertingStatus
+            // 
+            this._lblEmailAlertingStatus.AutoSize = true;
+            this._lblEmailAlertingStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblEmailAlertingStatus.ForeColor = System.Drawing.Color.DarkGray;
+            this._lblEmailAlertingStatus.Location = new System.Drawing.Point(306, 2);
+            this._lblEmailAlertingStatus.Margin = new System.Windows.Forms.Padding(2);
+            this._lblEmailAlertingStatus.Name = "_lblEmailAlertingStatus";
+            this._lblEmailAlertingStatus.Size = new System.Drawing.Size(130, 17);
+            this._lblEmailAlertingStatus.TabIndex = 0;
+            this._lblEmailAlertingStatus.Text = "Email Alerting Status:";
             // 
             // _lblOutputDir
             // 
@@ -609,36 +667,6 @@
             this._clock.Enabled = true;
             this._clock.Interval = 1000;
             this._clock.Tick += new System.EventHandler(this._clock_Tick);
-            // 
-            // Target
-            // 
-            this.Target.HeaderText = "Target";
-            this.Target.Name = "Target";
-            this.Target.ReadOnly = true;
-            // 
-            // Address
-            // 
-            this.Address.HeaderText = "Address";
-            this.Address.Name = "Address";
-            this.Address.ReadOnly = true;
-            // 
-            // RoundTrip
-            // 
-            this.RoundTrip.HeaderText = "RoundTrip (ms)";
-            this.RoundTrip.Name = "RoundTrip";
-            this.RoundTrip.ReadOnly = true;
-            // 
-            // Time
-            // 
-            this.Time.HeaderText = "Time";
-            this.Time.Name = "Time";
-            this.Time.ReadOnly = true;
-            // 
-            // Status
-            // 
-            this.Status.HeaderText = "Status";
-            this.Status.Name = "Status";
-            this.Status.ReadOnly = true;
             // 
             // frmMain
             // 
@@ -710,6 +738,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn RoundTrip;
         private System.Windows.Forms.DataGridViewTextBoxColumn Time;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
+        private System.Windows.Forms.Label _lblSmsAlertingStatus;
+        private System.Windows.Forms.Label _lblEmailAlertingStatus;
     }
 }
 
