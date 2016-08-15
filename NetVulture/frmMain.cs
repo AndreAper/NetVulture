@@ -1,5 +1,4 @@
 ﻿/*
- * TODO: Methode frmSettings.SendSMS() löst ObjectDisposedException aus wenn keine Verbindung mit Host hergestellt werden kann.
  * TODO: Jeden Host 4 mal anpingen und TimedOut auf 1000ms setzen damit "package lost" berücksichtigt wird.
  * TODO: Alle nicht erfolgreichen Echo-Anfragen in einer History speichern.
  * TODO: E-Mail Parameter einstellbar über frmSettings.
@@ -34,12 +33,12 @@ namespace NetVulture
         /// {Batch Name} {Target DNS or IP} {PingReply}
         /// </summary>
         private List<Tuple<string, string, PingReply>> _failedRequests;
-        private string _outputDir, _smsGwAddress, _smsGwUser, _smsGwPassword;
+        private string _outputDir, _smsGwAddress, _smsGwUser, _smsGwPassword, _mailUser, _mailPw, _mailServer;
         private DateTime _lastExecutionTime, _timeOfLastFirstAlert, _timeOfLastSecondAlert;
         private BackgroundWorker _backWorker;
         private System.Collections.Specialized.StringCollection _addressList, _mobileNumberList;
         private bool _firstAlertPassed = false, _secondAlertPassed = false;
-        private int _overallPingAttempts = 0;
+        private int _overallPingAttempts = 0, _mailServerPort;
         private bool _isEmailAlertingEnabled, _isSmsAlertingEnabled;
 
         private List<NVBatch> Deserialize()
@@ -97,6 +96,11 @@ namespace NetVulture
             {
                 _lblEmailAlertingStatus.Text = "Email Alerting Status: Enabled";
                 _addressList = Properties.Settings.Default.TargetAddresses;
+
+                _mailUser = Properties.Settings.Default.MailUser;
+                _mailPw = Properties.Settings.Default.MailPassword;
+                _mailServer = Properties.Settings.Default.MailServer;
+                _mailServerPort = Properties.Settings.Default.MailServerPort;
             }
             else
             {
@@ -124,7 +128,7 @@ namespace NetVulture
         /// Send email using smtp client.
         /// </summary>
         private void SendEmail()
-        { 
+        {
             /* 
              * E-Mail Address: monitoring.bbs@gmail.com 
              * Username: monitoring.bbs@gmail.com 
@@ -132,69 +136,68 @@ namespace NetVulture
              *  
              * Server: smtp.gmail.com 
              * Port: 587 
-             */ 
+             */
 
- 
-            if (_failedRequests.Count > 0) 
-            { 
-                if (_addressList.Count > 0) 
-                { 
-                    SmtpClient client = new SmtpClient("smtp.gmail.com", 587); 
-                    client.EnableSsl = true; 
-                    client.Timeout = 10000; 
-                    client.DeliveryMethod = SmtpDeliveryMethod.Network; 
-                    client.UseDefaultCredentials = false; 
-                    client.Credentials = new NetworkCredential("monitoring.bbs@gmail.com", "Moni2015@"); 
+            if (_isEmailAlertingEnabled)
+            {
+                if (_failedRequests.Count > 0)
+                {
+                    if (_addressList.Count > 0)
+                    {
+                        SmtpClient client = new SmtpClient(_mailServer, _mailServerPort);
+                        client.EnableSsl = true;
+                        client.Timeout = 10000;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.UseDefaultCredentials = false;
+                        client.Credentials = new NetworkCredential(_mailUser, _mailPw);
 
- 
-                    MailMessage mm = new MailMessage(); 
-                    mm.From = new MailAddress("monitoring.bbs@gmail.com"); 
+                        MailMessage mm = new MailMessage();
+                        mm.From = new MailAddress(_mailUser);
 
- 
-                    foreach (string adr in _addressList) 
-                    { 
-                        mm.To.Add(new MailAddress(adr)); 
-                    } 
+                        foreach (string adr in _addressList)
+                        {
+                            mm.To.Add(new MailAddress(adr));
+                        }
 
- 
-                    mm.Subject = "NetVulture Alterting Service"; 
 
- 
-                    StringBuilder sbResults = new StringBuilder("WARNING: The followed hosts are not available."); 
-                    sbResults.AppendLine(Environment.NewLine); 
+                        mm.Subject = "NetVulture Alterting Service";
 
- 
-                    foreach (var item in _failedRequests) 
-                    { 
-                        //{BATCHNAME}       {TARGTE_DNS_IP}     {STAUS} 
-                        sbResults.AppendLine(item.Item1 + "\t\t" + item.Item2 + "\t\t" + item.Item3.Status.ToString()); 
-                        sbResults.AppendLine(Environment.NewLine); 
-                    } 
+                        StringBuilder sbResults = new StringBuilder("WARNING: The followed hosts are not available.");
+                        sbResults.AppendLine(Environment.NewLine);
 
- 
-                    mm.Body = sbResults.ToString(); 
-                    mm.BodyEncoding = UTF8Encoding.UTF8; 
-                    mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure; 
 
- 
-                    try 
-                    { 
-                        client.Send(mm); 
-                    } 
-                    catch (Exception) 
-                    { 
-                        throw; 
+                        foreach (var item in _failedRequests)
+                        {
+                            //{BATCHNAME}       {TARGTE_DNS_IP}     {STAUS} 
+                            sbResults.AppendLine(item.Item1 + "\t\t" + item.Item2 + "\t\t" + item.Item3.Status.ToString());
+                            sbResults.AppendLine(Environment.NewLine);
+                        }
+
+
+                        mm.Body = sbResults.ToString();
+                        mm.BodyEncoding = UTF8Encoding.UTF8;
+                        mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+
+
+                        try
+                        {
+                            client.Send(mm);
+                        }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
                     }
-                } 
-                else 
-                { 
-                    return; 
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
                 }  
-            } 
-            else 
-            { 
-                return; 
-            } 
+            }
              
         } 
 
@@ -442,8 +445,6 @@ namespace NetVulture
                     _lblFirstAlertTime.Text = "First Alert Pass:";
                     _lblSecondAlertTime.Text = "Second Alert Pass:";
                     _lblOverallPingAttempts.Text = "Overall Attempts:";
-
-                    //TODO: Sende SMS/E-Mail wenn alles wieder IO!!!!
                 }
                 else
                 {

@@ -155,5 +155,53 @@ namespace NetVulture.Properties {
                 this["GatewayPassword"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("monitoring.bbs@gmail.com")]
+        public string MailUser {
+            get {
+                return ((string)(this["MailUser"]));
+            }
+            set {
+                this["MailUser"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Moni2015@")]
+        public string MailPassword {
+            get {
+                return ((string)(this["MailPassword"]));
+            }
+            set {
+                this["MailPassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("smtp.gmail.com")]
+        public string MailServer {
+            get {
+                return ((string)(this["MailServer"]));
+            }
+            set {
+                this["MailServer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("587")]
+        public int MailServerPort {
+            get {
+                return ((int)(this["MailServerPort"]));
+            }
+            set {
+                this["MailServerPort"] = value;
+            }
+        }
     }
 }

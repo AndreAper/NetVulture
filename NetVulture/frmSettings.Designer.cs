@@ -39,8 +39,16 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this._gbxSmsSettings = new System.Windows.Forms.GroupBox();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this._tbxSmsGatewayPassword = new System.Windows.Forms.TextBox();
+            this._tbxSmsGatewayUser = new System.Windows.Forms.TextBox();
+            this._tbxSmsGatewayAddress = new System.Windows.Forms.TextBox();
+            this._btnSendTestSms = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
             this._cbxBxSmsAlertingEnabled = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
             this._tbxMobileNumbers = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this._gbxEmailSettings = new System.Windows.Forms.GroupBox();
@@ -49,14 +57,15 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this._chkBxAlertingEnabled = new System.Windows.Forms.CheckBox();
-            this._btnSendTestSms = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
-            this._tbxSmsGatewayAddress = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this._tbxSmsGatewayUser = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this._tbxSmsGatewayPassword = new System.Windows.Forms.TextBox();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this._tbxMailUser = new System.Windows.Forms.TextBox();
+            this._tbxMailPassword = new System.Windows.Forms.TextBox();
+            this._tbxMailServer = new System.Windows.Forms.TextBox();
+            this._btnSendTestMail = new System.Windows.Forms.Button();
+            this.label13 = new System.Windows.Forms.Label();
+            this._tbxMailServerPort = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -208,6 +217,58 @@
             this._gbxSmsSettings.TabStop = false;
             this._gbxSmsSettings.Text = "SMS";
             // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(158, 250);
+            this.progressBar.MarqueeAnimationSpeed = 0;
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(121, 32);
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar.TabIndex = 121;
+            // 
+            // _tbxSmsGatewayPassword
+            // 
+            this._tbxSmsGatewayPassword.Location = new System.Drawing.Point(158, 113);
+            this._tbxSmsGatewayPassword.Name = "_tbxSmsGatewayPassword";
+            this._tbxSmsGatewayPassword.PasswordChar = '#';
+            this._tbxSmsGatewayPassword.Size = new System.Drawing.Size(275, 25);
+            this._tbxSmsGatewayPassword.TabIndex = 100;
+            // 
+            // _tbxSmsGatewayUser
+            // 
+            this._tbxSmsGatewayUser.Location = new System.Drawing.Point(158, 82);
+            this._tbxSmsGatewayUser.Name = "_tbxSmsGatewayUser";
+            this._tbxSmsGatewayUser.Size = new System.Drawing.Size(275, 25);
+            this._tbxSmsGatewayUser.TabIndex = 90;
+            // 
+            // _tbxSmsGatewayAddress
+            // 
+            this._tbxSmsGatewayAddress.Location = new System.Drawing.Point(158, 51);
+            this._tbxSmsGatewayAddress.Name = "_tbxSmsGatewayAddress";
+            this._tbxSmsGatewayAddress.Size = new System.Drawing.Size(275, 25);
+            this._tbxSmsGatewayAddress.TabIndex = 80;
+            // 
+            // _btnSendTestSms
+            // 
+            this._btnSendTestSms.Location = new System.Drawing.Point(285, 250);
+            this._btnSendTestSms.Name = "_btnSendTestSms";
+            this._btnSendTestSms.Size = new System.Drawing.Size(147, 32);
+            this._btnSendTestSms.TabIndex = 120;
+            this._btnSendTestSms.Text = "Send Test SMS";
+            this._btnSendTestSms.UseVisualStyleBackColor = true;
+            this._btnSendTestSms.Click += new System.EventHandler(this._btnSendTestSms_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(2, 113);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(141, 21);
+            this.label9.TabIndex = 2;
+            this.label9.Text = "Gateway password";
+            // 
             // _cbxBxSmsAlertingEnabled
             // 
             this._cbxBxSmsAlertingEnabled.AutoSize = true;
@@ -217,6 +278,17 @@
             this._cbxBxSmsAlertingEnabled.TabIndex = 70;
             this._cbxBxSmsAlertingEnabled.Text = "Enabled";
             this._cbxBxSmsAlertingEnabled.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(2, 82);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(104, 21);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "Gateway user";
             // 
             // _tbxMobileNumbers
             // 
@@ -228,6 +300,17 @@
             this._tbxMobileNumbers.Name = "_tbxMobileNumbers";
             this._tbxMobileNumbers.Size = new System.Drawing.Size(275, 100);
             this._tbxMobileNumbers.TabIndex = 110;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(2, 51);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(128, 21);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "Gateway address";
             // 
             // label3
             // 
@@ -253,12 +336,21 @@
             // _gbxEmailSettings
             // 
             this._gbxEmailSettings.Controls.Add(this._chkBxEmailAlertingEnabled);
+            this._gbxEmailSettings.Controls.Add(this._tbxMailServerPort);
+            this._gbxEmailSettings.Controls.Add(this._tbxMailServer);
+            this._gbxEmailSettings.Controls.Add(this._tbxMailPassword);
             this._gbxEmailSettings.Controls.Add(this._tbxTargetAddresses);
+            this._gbxEmailSettings.Controls.Add(this._btnSendTestMail);
+            this._gbxEmailSettings.Controls.Add(this._tbxMailUser);
             this._gbxEmailSettings.Controls.Add(this.label5);
             this._gbxEmailSettings.Controls.Add(this.label4);
+            this._gbxEmailSettings.Controls.Add(this.label13);
+            this._gbxEmailSettings.Controls.Add(this.label12);
+            this._gbxEmailSettings.Controls.Add(this.label10);
+            this._gbxEmailSettings.Controls.Add(this.label11);
             this._gbxEmailSettings.Location = new System.Drawing.Point(6, 57);
             this._gbxEmailSettings.Name = "_gbxEmailSettings";
-            this._gbxEmailSettings.Size = new System.Drawing.Size(438, 159);
+            this._gbxEmailSettings.Size = new System.Drawing.Size(438, 289);
             this._gbxEmailSettings.TabIndex = 8;
             this._gbxEmailSettings.TabStop = false;
             this._gbxEmailSettings.Text = "E-mail";
@@ -277,7 +369,7 @@
             // 
             this._tbxTargetAddresses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._tbxTargetAddresses.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._tbxTargetAddresses.Location = new System.Drawing.Point(158, 53);
+            this._tbxTargetAddresses.Location = new System.Drawing.Point(158, 144);
             this._tbxTargetAddresses.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._tbxTargetAddresses.Multiline = true;
             this._tbxTargetAddresses.Name = "_tbxTargetAddresses";
@@ -288,7 +380,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.DimGray;
-            this.label5.Location = new System.Drawing.Point(3, 75);
+            this.label5.Location = new System.Drawing.Point(3, 166);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(131, 17);
             this.label5.TabIndex = 7;
@@ -298,7 +390,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(2, 51);
+            this.label4.Location = new System.Drawing.Point(2, 142);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(125, 21);
@@ -318,79 +410,87 @@
             this._chkBxAlertingEnabled.UseVisualStyleBackColor = true;
             this._chkBxAlertingEnabled.CheckedChanged += new System.EventHandler(this._chkBxAlertingEnabled_CheckedChanged);
             // 
-            // _btnSendTestSms
+            // label10
             // 
-            this._btnSendTestSms.Location = new System.Drawing.Point(285, 250);
-            this._btnSendTestSms.Name = "_btnSendTestSms";
-            this._btnSendTestSms.Size = new System.Drawing.Size(147, 32);
-            this._btnSendTestSms.TabIndex = 120;
-            this._btnSendTestSms.Text = "Send Test SMS";
-            this._btnSendTestSms.UseVisualStyleBackColor = true;
-            this._btnSendTestSms.Click += new System.EventHandler(this._btnSendTestSms_Click);
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(2, 51);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(42, 21);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "User";
             // 
-            // label7
+            // label11
             // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(2, 51);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(128, 21);
-            this.label7.TabIndex = 2;
-            this.label7.Text = "Gateway address";
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(2, 82);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(76, 21);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "Password";
             // 
-            // _tbxSmsGatewayAddress
+            // label12
             // 
-            this._tbxSmsGatewayAddress.Location = new System.Drawing.Point(158, 51);
-            this._tbxSmsGatewayAddress.Name = "_tbxSmsGatewayAddress";
-            this._tbxSmsGatewayAddress.Size = new System.Drawing.Size(275, 25);
-            this._tbxSmsGatewayAddress.TabIndex = 80;
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(2, 113);
+            this.label12.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(55, 21);
+            this.label12.TabIndex = 2;
+            this.label12.Text = "Server";
             // 
-            // label8
+            // _tbxMailUser
             // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(2, 82);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(104, 21);
-            this.label8.TabIndex = 2;
-            this.label8.Text = "Gateway user";
+            this._tbxMailUser.Location = new System.Drawing.Point(158, 51);
+            this._tbxMailUser.Name = "_tbxMailUser";
+            this._tbxMailUser.Size = new System.Drawing.Size(275, 25);
+            this._tbxMailUser.TabIndex = 80;
             // 
-            // _tbxSmsGatewayUser
+            // _tbxMailPassword
             // 
-            this._tbxSmsGatewayUser.Location = new System.Drawing.Point(158, 82);
-            this._tbxSmsGatewayUser.Name = "_tbxSmsGatewayUser";
-            this._tbxSmsGatewayUser.Size = new System.Drawing.Size(275, 25);
-            this._tbxSmsGatewayUser.TabIndex = 90;
+            this._tbxMailPassword.Location = new System.Drawing.Point(158, 82);
+            this._tbxMailPassword.Name = "_tbxMailPassword";
+            this._tbxMailPassword.PasswordChar = '#';
+            this._tbxMailPassword.Size = new System.Drawing.Size(275, 25);
+            this._tbxMailPassword.TabIndex = 90;
             // 
-            // label9
+            // _tbxMailServer
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(2, 113);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(141, 21);
-            this.label9.TabIndex = 2;
-            this.label9.Text = "Gateway password";
+            this._tbxMailServer.Location = new System.Drawing.Point(158, 113);
+            this._tbxMailServer.Name = "_tbxMailServer";
+            this._tbxMailServer.Size = new System.Drawing.Size(163, 25);
+            this._tbxMailServer.TabIndex = 100;
             // 
-            // _tbxSmsGatewayPassword
+            // _btnSendTestMail
             // 
-            this._tbxSmsGatewayPassword.Location = new System.Drawing.Point(158, 113);
-            this._tbxSmsGatewayPassword.Name = "_tbxSmsGatewayPassword";
-            this._tbxSmsGatewayPassword.PasswordChar = '#';
-            this._tbxSmsGatewayPassword.Size = new System.Drawing.Size(275, 25);
-            this._tbxSmsGatewayPassword.TabIndex = 100;
+            this._btnSendTestMail.Location = new System.Drawing.Point(286, 251);
+            this._btnSendTestMail.Name = "_btnSendTestMail";
+            this._btnSendTestMail.Size = new System.Drawing.Size(147, 32);
+            this._btnSendTestMail.TabIndex = 120;
+            this._btnSendTestMail.Text = "Send Test SMS";
+            this._btnSendTestMail.UseVisualStyleBackColor = true;
             // 
-            // progressBar
+            // label13
             // 
-            this.progressBar.Location = new System.Drawing.Point(158, 250);
-            this.progressBar.MarqueeAnimationSpeed = 0;
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(121, 32);
-            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-            this.progressBar.TabIndex = 121;
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(326, 113);
+            this.label13.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(38, 21);
+            this.label13.TabIndex = 2;
+            this.label13.Text = "Port";
+            // 
+            // _tbxMailServerPort
+            // 
+            this._tbxMailServerPort.Location = new System.Drawing.Point(369, 113);
+            this._tbxMailServerPort.Name = "_tbxMailServerPort";
+            this._tbxMailServerPort.Size = new System.Drawing.Size(63, 25);
+            this._tbxMailServerPort.TabIndex = 100;
             // 
             // frmSettings
             // 
@@ -451,5 +551,14 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.TextBox _tbxMailServer;
+        private System.Windows.Forms.TextBox _tbxMailPassword;
+        private System.Windows.Forms.TextBox _tbxMailUser;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button _btnSendTestMail;
+        private System.Windows.Forms.TextBox _tbxMailServerPort;
+        private System.Windows.Forms.Label label13;
     }
 }

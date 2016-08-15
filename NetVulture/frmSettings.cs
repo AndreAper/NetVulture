@@ -107,6 +107,11 @@ namespace NetVulture
                 {
                     _tbxTargetAddresses.Lines = Properties.Settings.Default.TargetAddresses.Cast<string>().ToArray();
                 }
+
+                _tbxMailUser.Text = Properties.Settings.Default.MailUser;
+                _tbxMailPassword.Text = Properties.Settings.Default.MailPassword;
+                _tbxMailServer.Text = Properties.Settings.Default.MailServer;
+                _tbxMailServerPort.Text = Properties.Settings.Default.MailServerPort.ToString();
             }
 
             if (_chkBxAlertingEnabled.Checked && _cbxBxSmsAlertingEnabled.Checked)
@@ -154,7 +159,20 @@ namespace NetVulture
                     scEmail.Add(line);
                 }
 
-                Properties.Settings.Default.TargetAddresses = scEmail; 
+                Properties.Settings.Default.TargetAddresses = scEmail;
+
+                Properties.Settings.Default.MailUser = _tbxMailUser.Text;
+                Properties.Settings.Default.MailPassword = _tbxMailPassword.Text;
+                Properties.Settings.Default.MailServer = _tbxMailServer.Text;
+
+                if (_tbxMailServerPort.Text.Length > 0)
+                {
+                    Properties.Settings.Default.MailServerPort = Convert.ToInt32(_tbxMailServerPort.Text); 
+                }
+                else
+                {
+                    Properties.Settings.Default.MailServerPort = 0;
+                }
             }
 
             if (_chkBxAlertingEnabled.Checked && _cbxBxSmsAlertingEnabled.Checked)
