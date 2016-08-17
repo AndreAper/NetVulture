@@ -106,11 +106,18 @@ namespace NetVulture
                             if (ipAddress != "0.0.0.0")
                             {
                                 IPAddress addr = System.Net.IPAddress.Parse(ipAddress);
-                                IPHostEntry entry = Dns.GetHostEntry(addr);
-                                dns = entry.HostName;
+
+                                try
+                                {
+                                    IPHostEntry entry = Dns.GetHostEntry(addr);
+                                    dns = entry.HostName;
+
+                                }
+                                catch (System.Net.Sockets.SocketException)
+                                {
+                                    dns = "";
+                                }
                             }
-
-
                         }
 
                         string pingAttempts = "0";
