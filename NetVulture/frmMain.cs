@@ -71,8 +71,6 @@ namespace NetVulture
                         }
                     }
 
-
-
                     if (batch.FailedHosts.Any(x => x.Value == 20))
                     {
                         StringBuilder sbSms = new StringBuilder("ATTENTION:");
@@ -84,8 +82,7 @@ namespace NetVulture
                             sbSms.Append(secondPass.Count() + " of " + batch.HostList.Count + "hosts from batch: " + batch.Name + " are not available after 20 attemps to ping.");
                         }
 
-                        MessageBox.Show("Sending sms...");
-                        //SendSms(sbSms.ToString());
+                        SendSms(sbSms.ToString());
                     }
 
 
@@ -95,8 +92,7 @@ namespace NetVulture
 
             if (_allowSendingMail)
             {
-                MessageBox.Show("Sending mail...");
-                //SendEmail(sbMail.ToString());
+                SendEmail(sbMail.ToString());
             }
         }
 
