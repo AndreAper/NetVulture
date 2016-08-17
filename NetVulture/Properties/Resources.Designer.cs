@@ -65,7 +65,7 @@ namespace NetVulture.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Clock_32 {
             get {
-                object obj = ResourceManager.GetObject("Clock-32", resourceCulture);
+                object obj = ResourceManager.GetObject("Clock_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -75,7 +75,27 @@ namespace NetVulture.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Collect_32 {
             get {
-                object obj = ResourceManager.GetObject("Collect-32", resourceCulture);
+                object obj = ResourceManager.GetObject("Collect_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Details_32 {
+            get {
+                object obj = ResourceManager.GetObject("Details_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap High_Priority_32 {
+            get {
+                object obj = ResourceManager.GetObject("High_Priority_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -85,7 +105,7 @@ namespace NetVulture.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Plus_32 {
             get {
-                object obj = ResourceManager.GetObject("Plus-32", resourceCulture);
+                object obj = ResourceManager.GetObject("Plus_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -95,7 +115,7 @@ namespace NetVulture.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Running_32 {
             get {
-                object obj = ResourceManager.GetObject("Running-32", resourceCulture);
+                object obj = ResourceManager.GetObject("Running_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -105,7 +125,7 @@ namespace NetVulture.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Settings_32 {
             get {
-                object obj = ResourceManager.GetObject("Settings-32", resourceCulture);
+                object obj = ResourceManager.GetObject("Settings_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -115,7 +135,7 @@ namespace NetVulture.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Synchronize_32 {
             get {
-                object obj = ResourceManager.GetObject("Synchronize-32", resourceCulture);
+                object obj = ResourceManager.GetObject("Synchronize_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

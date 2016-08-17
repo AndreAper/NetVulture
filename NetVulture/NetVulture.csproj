@@ -102,23 +102,30 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <None Include="Resources\Running-32.png" />
+    <None Include="Resources\Clock_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Settings-32.png" />
+    <None Include="Resources\Collect_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Synchronize-32.png" />
+    <None Include="Resources\Details_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Plus-32.png" />
+    <None Include="Resources\High_Priority_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Collect-32.png" />
+    <None Include="Resources\Plus_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Clock-32.png" />
+    <None Include="Resources\Running_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Settings_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Synchronize_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
