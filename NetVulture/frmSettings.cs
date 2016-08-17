@@ -44,7 +44,6 @@ namespace NetVulture
                         //Start the connection
                         client.Connect();
 
-                        //TEST: Unterstützt das RPI asynchrones ausführen der shell kommandos???????
                         foreach (string nr in _tbxMobileNumbers.Lines)
                         {
                             SshCommand cmd = client.RunCommand("echo " + _tbxSmsGatewayPassword.Text + " | sudo -S echo \"" + msg + "\" | sudo gammu sendsms TEXT \"" + nr + "\"");
@@ -77,12 +76,6 @@ namespace NetVulture
 
                 }
             }
-        }
-
-        private void SendSmsCompleted()
-        {
-            //TODO: Feedback für erfolgreiches absend
-            MessageBox.Show("SMS successfull send.", "Send sms", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public frmSettings()

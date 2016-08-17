@@ -83,6 +83,16 @@ namespace NetVulture.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CSV_32 {
+            get {
+                object obj = ResourceManager.GetObject("CSV_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Details_32 {
             get {
                 object obj = ResourceManager.GetObject("Details_32", resourceCulture);
@@ -106,6 +116,16 @@ namespace NetVulture.Properties {
         internal static System.Drawing.Bitmap Plus_32 {
             get {
                 object obj = ResourceManager.GetObject("Plus_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Refresh_32 {
+            get {
+                object obj = ResourceManager.GetObject("Refresh_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

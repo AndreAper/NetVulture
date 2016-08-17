@@ -1,8 +1,6 @@
 ﻿/*
  * TODO: Alle nicht erfolgreichen Echo-Anfragen in einer History speichern.
- * TODO: Icon für Fails von allen batches
- * TODO: Form für Ausgabe der Fails als liste.
- * TODO: DNS auslesen über IP
+ * TODO: Logdatei schreiben für SMS Senden, E-mail Senden
  */ 
 
 using System;
@@ -215,7 +213,6 @@ namespace NetVulture
                         //Start the connection
                         client.Connect();
 
-                        //TEST: Unterstützt das RPI asynchrones ausführen der shell kommandos???????
                         foreach (string nr in Properties.Settings.Default.MobileNumbers)
                         {
                             SshCommand cmd = client.RunCommand("echo " + _smsGwPassword + " | sudo -S echo \"" + msg + "\" | sudo gammu sendsms TEXT \"" + nr + "\"");
@@ -660,6 +657,16 @@ namespace NetVulture
             if (_lbxJobs.SelectedIndex != -1)
             {
                 _batchList[_lbxJobs.SelectedIndex].Description = _tbxJobDescription.Text;
+            }
+        }
+
+        private void _btnShowReport_Click(object sender, EventArgs e)
+        {
+            frmReport frm = new frmReport(_batchList);
+
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+
             }
         }
 

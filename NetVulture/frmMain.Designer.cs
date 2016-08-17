@@ -64,9 +64,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this._btnShowReport = new System.Windows.Forms.Button();
             this._lblAppTitle = new System.Windows.Forms.Label();
-            this._lblClock = new System.Windows.Forms.Label();
             this._btnOpenSettings = new System.Windows.Forms.Button();
             this._lblLastCollect = new System.Windows.Forms.Label();
+            this._lblClock = new System.Windows.Forms.Label();
             this._collectTimer = new System.Windows.Forms.Timer(this.components);
             this._clock = new System.Windows.Forms.Timer(this.components);
             this._tlpBody.SuspendLayout();
@@ -552,6 +552,7 @@
             this._btnShowReport.TabIndex = 5;
             this._btnShowReport.Text = "Report";
             this._btnShowReport.UseVisualStyleBackColor = false;
+            this._btnShowReport.Click += new System.EventHandler(this._btnShowReport_Click);
             // 
             // _lblAppTitle
             // 
@@ -568,18 +569,6 @@
             this._lblAppTitle.TabIndex = 2;
             this._lblAppTitle.Text = "NetVulture";
             this._lblAppTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // _lblClock
-            // 
-            this._lblClock.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this._lblClock.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this._lblClock.ForeColor = System.Drawing.Color.White;
-            this._lblClock.Location = new System.Drawing.Point(780, 496);
-            this._lblClock.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this._lblClock.Name = "_lblClock";
-            this._lblClock.Size = new System.Drawing.Size(146, 40);
-            this._lblClock.TabIndex = 61;
-            this._lblClock.Text = "Systemtime";
             // 
             // _btnOpenSettings
             // 
@@ -615,6 +604,18 @@
             this._lblLastCollect.Size = new System.Drawing.Size(97, 17);
             this._lblLastCollect.TabIndex = 0;
             this._lblLastCollect.Text = "Last Execution: ";
+            // 
+            // _lblClock
+            // 
+            this._lblClock.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this._lblClock.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this._lblClock.ForeColor = System.Drawing.Color.White;
+            this._lblClock.Location = new System.Drawing.Point(780, 496);
+            this._lblClock.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this._lblClock.Name = "_lblClock";
+            this._lblClock.Size = new System.Drawing.Size(146, 40);
+            this._lblClock.TabIndex = 61;
+            this._lblClock.Text = "Systemtime";
             // 
             // _collectTimer
             // 
