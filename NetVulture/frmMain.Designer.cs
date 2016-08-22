@@ -29,336 +29,239 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
             this._tlpBody = new System.Windows.Forms.TableLayoutPanel();
             this._lblSmsAlertingStatus = new System.Windows.Forms.Label();
-            this._chkBtnTimerEnabled = new System.Windows.Forms.CheckBox();
             this._lblEmailAlertingStatus = new System.Windows.Forms.Label();
-            this._btnCollect = new System.Windows.Forms.Button();
             this._lblOutputDir = new System.Windows.Forms.Label();
-            this._btnAddBatch = new System.Windows.Forms.Button();
-            this._lbxJobs = new System.Windows.Forms.ListBox();
-            this._pnlJobInfo = new System.Windows.Forms.Panel();
             this._lblCountOfSuccessRequests = new System.Windows.Forms.Label();
             this._lblCountOfFailedRequests = new System.Windows.Forms.Label();
             this._lblLastBatchExec = new System.Windows.Forms.Label();
-            this._btnRemoveBatch = new System.Windows.Forms.Button();
-            this._btnExecBatch = new System.Windows.Forms.Button();
-            this.dgvResults = new System.Windows.Forms.DataGridView();
+            this._dgvResults = new System.Windows.Forms.DataGridView();
             this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RoundTrip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Attempts = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this._lnkLblChangeHostList = new System.Windows.Forms.LinkLabel();
             this._lbxHostList = new System.Windows.Forms.ListBox();
             this._tbxJobDescription = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this._tbxBufferSize = new System.Windows.Forms.TextBox();
-            this._tbxTimeOut = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this._tbxJobName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this._btnShowReport = new System.Windows.Forms.Button();
             this._lblAppTitle = new System.Windows.Forms.Label();
-            this._btnOpenSettings = new System.Windows.Forms.Button();
             this._lblLastCollect = new System.Windows.Forms.Label();
             this._lblClock = new System.Windows.Forms.Label();
             this._collectTimer = new System.Windows.Forms.Timer(this.components);
             this._clock = new System.Windows.Forms.Timer(this.components);
+            this._pnlUnderlineMainMenu = new System.Windows.Forms.Panel();
+            this._flpBatchList = new System.Windows.Forms.FlowLayoutPanel();
+            this._pnlSubMenuBatch = new System.Windows.Forms.Panel();
+            this._chkBtnTimerEnabled = new System.Windows.Forms.CheckBox();
+            this._btnCollect = new System.Windows.Forms.Button();
+            this._btnAddBatch = new System.Windows.Forms.Button();
+            this._btnShowReport = new System.Windows.Forms.Button();
+            this._btnOpenSettings = new System.Windows.Forms.Button();
+            this._btnEditHostList = new System.Windows.Forms.Button();
+            this._btnRunSelectedBatch = new System.Windows.Forms.Button();
+            this._RemoveSelectedBatch = new System.Windows.Forms.Button();
+            this._pnlUnderlinSubmenuForBatch = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this._tlpBody.SuspendLayout();
-            this._pnlJobInfo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._dgvResults)).BeginInit();
+            this._pnlSubMenuBatch.SuspendLayout();
             this.SuspendLayout();
             // 
             // _tlpBody
             // 
-            this._tlpBody.BackColor = System.Drawing.Color.DimGray;
+            this._tlpBody.BackColor = System.Drawing.Color.White;
             this._tlpBody.ColumnCount = 7;
-            this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 178F));
+            this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 342F));
-            this._tlpBody.Controls.Add(this._lblSmsAlertingStatus, 4, 4);
+            this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
             this._tlpBody.Controls.Add(this._chkBtnTimerEnabled, 1, 0);
-            this._tlpBody.Controls.Add(this._lblEmailAlertingStatus, 3, 4);
             this._tlpBody.Controls.Add(this._btnCollect, 4, 0);
-            this._tlpBody.Controls.Add(this._lblOutputDir, 1, 4);
             this._tlpBody.Controls.Add(this._btnAddBatch, 2, 0);
-            this._tlpBody.Controls.Add(this._lbxJobs, 0, 1);
-            this._tlpBody.Controls.Add(this._pnlJobInfo, 1, 1);
+            this._tlpBody.Controls.Add(this._dgvResults, 2, 7);
+            this._tlpBody.Controls.Add(this._tbxJobDescription, 2, 5);
+            this._tlpBody.Controls.Add(this.label4, 1, 7);
             this._tlpBody.Controls.Add(this._btnShowReport, 3, 0);
+            this._tlpBody.Controls.Add(this._lbxHostList, 2, 6);
             this._tlpBody.Controls.Add(this._lblAppTitle, 0, 0);
             this._tlpBody.Controls.Add(this._btnOpenSettings, 5, 0);
-            this._tlpBody.Controls.Add(this._lblLastCollect, 2, 4);
-            this._tlpBody.Controls.Add(this._lblClock, 5, 4);
+            this._tlpBody.Controls.Add(this.label3, 1, 6);
+            this._tlpBody.Controls.Add(this.label2, 1, 5);
+            this._tlpBody.Controls.Add(this._tbxJobName, 2, 4);
+            this._tlpBody.Controls.Add(this.label1, 1, 4);
+            this._tlpBody.Controls.Add(this._pnlUnderlineMainMenu, 0, 1);
+            this._tlpBody.Controls.Add(this._flpBatchList, 0, 2);
+            this._tlpBody.Controls.Add(this._pnlSubMenuBatch, 1, 2);
+            this._tlpBody.Controls.Add(this._pnlUnderlinSubmenuForBatch, 1, 3);
+            this._tlpBody.Controls.Add(this.panel1, 6, 0);
+            this._tlpBody.Controls.Add(this._lblCountOfFailedRequests, 4, 8);
+            this._tlpBody.Controls.Add(this._lblCountOfSuccessRequests, 3, 8);
+            this._tlpBody.Controls.Add(this._lblLastBatchExec, 2, 8);
+            this._tlpBody.Controls.Add(this._lblLastCollect, 1, 9);
+            this._tlpBody.Controls.Add(this._lblEmailAlertingStatus, 2, 9);
+            this._tlpBody.Controls.Add(this._lblSmsAlertingStatus, 3, 9);
+            this._tlpBody.Controls.Add(this._lblClock, 4, 9);
+            this._tlpBody.Controls.Add(this._lblOutputDir, 6, 9);
             this._tlpBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this._tlpBody.Location = new System.Drawing.Point(0, 0);
             this._tlpBody.Name = "_tlpBody";
-            this._tlpBody.RowCount = 5;
+            this._tlpBody.RowCount = 10;
             this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.01295F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 59.45106F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.53599F));
             this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this._tlpBody.Size = new System.Drawing.Size(984, 536);
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this._tlpBody.Size = new System.Drawing.Size(1408, 709);
             this._tlpBody.TabIndex = 0;
             // 
             // _lblSmsAlertingStatus
             // 
+            this._lblSmsAlertingStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lblSmsAlertingStatus.AutoSize = true;
             this._lblSmsAlertingStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblSmsAlertingStatus.ForeColor = System.Drawing.Color.Gainsboro;
-            this._lblSmsAlertingStatus.Location = new System.Drawing.Point(630, 498);
+            this._lblSmsAlertingStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._lblSmsAlertingStatus.Location = new System.Drawing.Point(466, 669);
             this._lblSmsAlertingStatus.Margin = new System.Windows.Forms.Padding(2);
             this._lblSmsAlertingStatus.Name = "_lblSmsAlertingStatus";
-            this._lblSmsAlertingStatus.Size = new System.Drawing.Size(125, 17);
+            this._lblSmsAlertingStatus.Size = new System.Drawing.Size(146, 38);
             this._lblSmsAlertingStatus.TabIndex = 0;
             this._lblSmsAlertingStatus.Text = "SMS Alerting Status:";
             // 
-            // _chkBtnTimerEnabled
-            // 
-            this._chkBtnTimerEnabled.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._chkBtnTimerEnabled.Appearance = System.Windows.Forms.Appearance.Button;
-            this._chkBtnTimerEnabled.BackColor = System.Drawing.Color.Tomato;
-            this._chkBtnTimerEnabled.FlatAppearance.BorderSize = 0;
-            this._chkBtnTimerEnabled.FlatAppearance.CheckedBackColor = System.Drawing.Color.LimeGreen;
-            this._chkBtnTimerEnabled.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._chkBtnTimerEnabled.Font = new System.Drawing.Font("Segoe UI Light", 12F);
-            this._chkBtnTimerEnabled.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this._chkBtnTimerEnabled.Image = global::NetVulture.Properties.Resources.Clock_32;
-            this._chkBtnTimerEnabled.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._chkBtnTimerEnabled.Location = new System.Drawing.Point(178, 0);
-            this._chkBtnTimerEnabled.Margin = new System.Windows.Forms.Padding(0);
-            this._chkBtnTimerEnabled.Name = "_chkBtnTimerEnabled";
-            this._chkBtnTimerEnabled.Size = new System.Drawing.Size(150, 40);
-            this._chkBtnTimerEnabled.TabIndex = 61;
-            this._chkBtnTimerEnabled.Text = "Timer Disabled";
-            this._chkBtnTimerEnabled.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this._chkBtnTimerEnabled.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this._chkBtnTimerEnabled.UseVisualStyleBackColor = false;
-            this._chkBtnTimerEnabled.CheckedChanged += new System.EventHandler(this._chkBtnTimerEnabled_CheckedChanged);
-            // 
             // _lblEmailAlertingStatus
             // 
+            this._lblEmailAlertingStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lblEmailAlertingStatus.AutoSize = true;
             this._lblEmailAlertingStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblEmailAlertingStatus.ForeColor = System.Drawing.Color.Gainsboro;
-            this._lblEmailAlertingStatus.Location = new System.Drawing.Point(480, 498);
+            this._lblEmailAlertingStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._lblEmailAlertingStatus.Location = new System.Drawing.Point(316, 669);
             this._lblEmailAlertingStatus.Margin = new System.Windows.Forms.Padding(2);
             this._lblEmailAlertingStatus.Name = "_lblEmailAlertingStatus";
-            this._lblEmailAlertingStatus.Size = new System.Drawing.Size(130, 17);
+            this._lblEmailAlertingStatus.Size = new System.Drawing.Size(146, 38);
             this._lblEmailAlertingStatus.TabIndex = 0;
             this._lblEmailAlertingStatus.Text = "Email Alerting Status:";
             // 
-            // _btnCollect
-            // 
-            this._btnCollect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._btnCollect.BackColor = System.Drawing.Color.DimGray;
-            this._btnCollect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this._btnCollect.FlatAppearance.BorderSize = 0;
-            this._btnCollect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnCollect.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._btnCollect.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this._btnCollect.Image = global::NetVulture.Properties.Resources.Collect_32;
-            this._btnCollect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnCollect.Location = new System.Drawing.Point(628, 0);
-            this._btnCollect.Margin = new System.Windows.Forms.Padding(0);
-            this._btnCollect.Name = "_btnCollect";
-            this._btnCollect.Size = new System.Drawing.Size(150, 40);
-            this._btnCollect.TabIndex = 5;
-            this._btnCollect.Text = "Collect";
-            this._btnCollect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this._btnCollect.UseVisualStyleBackColor = false;
-            this._btnCollect.Click += new System.EventHandler(this._btnCollect_Click);
-            // 
             // _lblOutputDir
             // 
-            this._lblOutputDir.AutoSize = true;
-            this._lblOutputDir.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblOutputDir.ForeColor = System.Drawing.Color.Gainsboro;
-            this._lblOutputDir.Location = new System.Drawing.Point(180, 498);
-            this._lblOutputDir.Margin = new System.Windows.Forms.Padding(2);
-            this._lblOutputDir.Name = "_lblOutputDir";
-            this._lblOutputDir.Size = new System.Drawing.Size(55, 17);
-            this._lblOutputDir.TabIndex = 0;
-            this._lblOutputDir.Text = "Output: ";
-            // 
-            // _btnAddBatch
-            // 
-            this._btnAddBatch.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this._lblOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._btnAddBatch.BackColor = System.Drawing.Color.DimGray;
-            this._btnAddBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this._btnAddBatch.FlatAppearance.BorderSize = 0;
-            this._btnAddBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnAddBatch.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._btnAddBatch.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this._btnAddBatch.Image = global::NetVulture.Properties.Resources.Plus_32;
-            this._btnAddBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnAddBatch.Location = new System.Drawing.Point(328, 0);
-            this._btnAddBatch.Margin = new System.Windows.Forms.Padding(0);
-            this._btnAddBatch.Name = "_btnAddBatch";
-            this._btnAddBatch.Size = new System.Drawing.Size(150, 40);
-            this._btnAddBatch.TabIndex = 5;
-            this._btnAddBatch.Text = "Add Batch";
-            this._btnAddBatch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this._btnAddBatch.UseVisualStyleBackColor = false;
-            this._btnAddBatch.Click += new System.EventHandler(this._btnAddBatch_Click);
-            // 
-            // _lbxJobs
-            // 
-            this._lbxJobs.BackColor = System.Drawing.Color.Gray;
-            this._lbxJobs.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this._lbxJobs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._lbxJobs.Font = new System.Drawing.Font("Segoe UI Light", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lbxJobs.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this._lbxJobs.FormattingEnabled = true;
-            this._lbxJobs.ItemHeight = 25;
-            this._lbxJobs.Items.AddRange(new object[] {
-            "Host 1",
-            "Host 2"});
-            this._lbxJobs.Location = new System.Drawing.Point(0, 40);
-            this._lbxJobs.Margin = new System.Windows.Forms.Padding(0);
-            this._lbxJobs.Name = "_lbxJobs";
-            this._tlpBody.SetRowSpan(this._lbxJobs, 4);
-            this._lbxJobs.Size = new System.Drawing.Size(178, 496);
-            this._lbxJobs.TabIndex = 0;
-            this._lbxJobs.SelectedIndexChanged += new System.EventHandler(this._lbxJobs_SelectedIndexChanged);
-            // 
-            // _pnlJobInfo
-            // 
-            this._pnlJobInfo.BackColor = System.Drawing.Color.WhiteSmoke;
-            this._tlpBody.SetColumnSpan(this._pnlJobInfo, 6);
-            this._pnlJobInfo.Controls.Add(this._lblCountOfSuccessRequests);
-            this._pnlJobInfo.Controls.Add(this._lblCountOfFailedRequests);
-            this._pnlJobInfo.Controls.Add(this._lblLastBatchExec);
-            this._pnlJobInfo.Controls.Add(this._btnRemoveBatch);
-            this._pnlJobInfo.Controls.Add(this._btnExecBatch);
-            this._pnlJobInfo.Controls.Add(this.dgvResults);
-            this._pnlJobInfo.Controls.Add(this._lnkLblChangeHostList);
-            this._pnlJobInfo.Controls.Add(this._lbxHostList);
-            this._pnlJobInfo.Controls.Add(this._tbxJobDescription);
-            this._pnlJobInfo.Controls.Add(this.label4);
-            this._pnlJobInfo.Controls.Add(this.label3);
-            this._pnlJobInfo.Controls.Add(this.label2);
-            this._pnlJobInfo.Controls.Add(this._tbxBufferSize);
-            this._pnlJobInfo.Controls.Add(this._tbxTimeOut);
-            this._pnlJobInfo.Controls.Add(this.label7);
-            this._pnlJobInfo.Controls.Add(this.label8);
-            this._pnlJobInfo.Controls.Add(this._tbxJobName);
-            this._pnlJobInfo.Controls.Add(this.label1);
-            this._pnlJobInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._pnlJobInfo.Location = new System.Drawing.Point(178, 40);
-            this._pnlJobInfo.Margin = new System.Windows.Forms.Padding(0);
-            this._pnlJobInfo.Name = "_pnlJobInfo";
-            this._tlpBody.SetRowSpan(this._pnlJobInfo, 3);
-            this._pnlJobInfo.Size = new System.Drawing.Size(1092, 456);
-            this._pnlJobInfo.TabIndex = 1;
-            this._pnlJobInfo.Visible = false;
+            this._lblOutputDir.AutoSize = true;
+            this._lblOutputDir.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblOutputDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._lblOutputDir.Location = new System.Drawing.Point(916, 669);
+            this._lblOutputDir.Margin = new System.Windows.Forms.Padding(2);
+            this._lblOutputDir.Name = "_lblOutputDir";
+            this._lblOutputDir.Size = new System.Drawing.Size(490, 38);
+            this._lblOutputDir.TabIndex = 0;
+            this._lblOutputDir.Text = "Output: ";
+            this._lblOutputDir.Click += new System.EventHandler(this._lblOutputDir_Click);
             // 
             // _lblCountOfSuccessRequests
             // 
             this._lblCountOfSuccessRequests.AutoSize = true;
-            this._lblCountOfSuccessRequests.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this._lblCountOfSuccessRequests.Font = new System.Drawing.Font("Segoe UI", 12F);
             this._lblCountOfSuccessRequests.ForeColor = System.Drawing.Color.OliveDrab;
-            this._lblCountOfSuccessRequests.Location = new System.Drawing.Point(217, 395);
+            this._lblCountOfSuccessRequests.Location = new System.Drawing.Point(466, 596);
             this._lblCountOfSuccessRequests.Margin = new System.Windows.Forms.Padding(2);
             this._lblCountOfSuccessRequests.Name = "_lblCountOfSuccessRequests";
-            this._lblCountOfSuccessRequests.Size = new System.Drawing.Size(124, 17);
+            this._lblCountOfSuccessRequests.Size = new System.Drawing.Size(134, 21);
             this._lblCountOfSuccessRequests.TabIndex = 0;
-            this._lblCountOfSuccessRequests.Text = "Success Requests: 0";
+            this._lblCountOfSuccessRequests.Text = "Success Requests:";
             // 
             // _lblCountOfFailedRequests
             // 
             this._lblCountOfFailedRequests.AutoSize = true;
-            this._lblCountOfFailedRequests.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this._lblCountOfFailedRequests.Font = new System.Drawing.Font("Segoe UI", 12F);
             this._lblCountOfFailedRequests.ForeColor = System.Drawing.Color.Crimson;
-            this._lblCountOfFailedRequests.Location = new System.Drawing.Point(217, 413);
+            this._lblCountOfFailedRequests.Location = new System.Drawing.Point(616, 596);
             this._lblCountOfFailedRequests.Margin = new System.Windows.Forms.Padding(2);
             this._lblCountOfFailedRequests.Name = "_lblCountOfFailedRequests";
-            this._lblCountOfFailedRequests.Size = new System.Drawing.Size(113, 17);
+            this._lblCountOfFailedRequests.Size = new System.Drawing.Size(120, 21);
             this._lblCountOfFailedRequests.TabIndex = 0;
-            this._lblCountOfFailedRequests.Text = "Failed Requests: 0";
+            this._lblCountOfFailedRequests.Text = "Failed Requests:";
             // 
             // _lblLastBatchExec
             // 
             this._lblLastBatchExec.AutoSize = true;
-            this._lblLastBatchExec.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblLastBatchExec.ForeColor = System.Drawing.Color.DarkGray;
-            this._lblLastBatchExec.Location = new System.Drawing.Point(388, 413);
+            this._lblLastBatchExec.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this._lblLastBatchExec.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._lblLastBatchExec.Location = new System.Drawing.Point(316, 596);
             this._lblLastBatchExec.Margin = new System.Windows.Forms.Padding(2);
             this._lblLastBatchExec.Name = "_lblLastBatchExec";
-            this._lblLastBatchExec.Size = new System.Drawing.Size(97, 17);
+            this._lblLastBatchExec.Size = new System.Drawing.Size(115, 21);
             this._lblLastBatchExec.TabIndex = 0;
             this._lblLastBatchExec.Text = "Last execution: ";
             // 
-            // _btnRemoveBatch
+            // _dgvResults
             // 
-            this._btnRemoveBatch.BackColor = System.Drawing.Color.Tomato;
-            this._btnRemoveBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this._btnRemoveBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnRemoveBatch.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._btnRemoveBatch.ForeColor = System.Drawing.Color.Black;
-            this._btnRemoveBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnRemoveBatch.Location = new System.Drawing.Point(676, 397);
-            this._btnRemoveBatch.Margin = new System.Windows.Forms.Padding(0);
-            this._btnRemoveBatch.Name = "_btnRemoveBatch";
-            this._btnRemoveBatch.Size = new System.Drawing.Size(98, 29);
-            this._btnRemoveBatch.TabIndex = 5;
-            this._btnRemoveBatch.Text = "Remove";
-            this._btnRemoveBatch.UseVisualStyleBackColor = false;
-            this._btnRemoveBatch.Click += new System.EventHandler(this._btnRemoveBatch_Click);
-            // 
-            // _btnExecBatch
-            // 
-            this._btnExecBatch.BackColor = System.Drawing.Color.Gainsboro;
-            this._btnExecBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this._btnExecBatch.Enabled = false;
-            this._btnExecBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnExecBatch.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._btnExecBatch.ForeColor = System.Drawing.Color.Black;
-            this._btnExecBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnExecBatch.Location = new System.Drawing.Point(117, 397);
-            this._btnExecBatch.Margin = new System.Windows.Forms.Padding(0);
-            this._btnExecBatch.Name = "_btnExecBatch";
-            this._btnExecBatch.Size = new System.Drawing.Size(98, 29);
-            this._btnExecBatch.TabIndex = 5;
-            this._btnExecBatch.Text = "Execute Batch";
-            this._btnExecBatch.UseVisualStyleBackColor = false;
-            this._btnExecBatch.Click += new System.EventHandler(this._btnExecBatch_Click);
-            // 
-            // dgvResults
-            // 
-            this.dgvResults.AllowUserToAddRows = false;
-            this.dgvResults.AllowUserToDeleteRows = false;
-            this.dgvResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvResults.BackgroundColor = System.Drawing.Color.White;
-            this.dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this._dgvResults.AllowUserToAddRows = false;
+            this._dgvResults.AllowUserToDeleteRows = false;
+            this._dgvResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this._dgvResults.BackgroundColor = System.Drawing.Color.White;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle19.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle19.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this._dgvResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle19;
+            this._dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this._dgvResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Target,
             this.Address,
             this.RoundTrip,
             this.Time,
             this.Status,
             this.Attempts});
-            this.dgvResults.Location = new System.Drawing.Point(117, 236);
-            this.dgvResults.Name = "dgvResults";
-            this.dgvResults.ReadOnly = true;
-            this.dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvResults.Size = new System.Drawing.Size(657, 150);
-            this.dgvResults.TabIndex = 4;
+            this._tlpBody.SetColumnSpan(this._dgvResults, 5);
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle20.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle20.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(90)))), ((int)(((byte)(110)))));
+            dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this._dgvResults.DefaultCellStyle = dataGridViewCellStyle20;
+            this._dgvResults.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._dgvResults.Enabled = false;
+            this._dgvResults.Location = new System.Drawing.Point(317, 316);
+            this._dgvResults.Margin = new System.Windows.Forms.Padding(3, 3, 20, 3);
+            this._dgvResults.Name = "_dgvResults";
+            this._dgvResults.ReadOnly = true;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle21.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this._dgvResults.RowHeadersDefaultCellStyle = dataGridViewCellStyle21;
+            this._dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this._dgvResults.Size = new System.Drawing.Size(1071, 275);
+            this._dgvResults.TabIndex = 4;
             // 
             // Target
             // 
@@ -396,47 +299,47 @@
             this.Attempts.Name = "Attempts";
             this.Attempts.ReadOnly = true;
             // 
-            // _lnkLblChangeHostList
-            // 
-            this._lnkLblChangeHostList.AutoSize = true;
-            this._lnkLblChangeHostList.Location = new System.Drawing.Point(69, 188);
-            this._lnkLblChangeHostList.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this._lnkLblChangeHostList.Name = "_lnkLblChangeHostList";
-            this._lnkLblChangeHostList.Size = new System.Drawing.Size(44, 13);
-            this._lnkLblChangeHostList.TabIndex = 30;
-            this._lnkLblChangeHostList.TabStop = true;
-            this._lnkLblChangeHostList.Text = "Change";
-            this._lnkLblChangeHostList.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this._lnkLblChangeHostList_LinkClicked);
-            // 
             // _lbxHostList
             // 
+            this._lbxHostList.BackColor = System.Drawing.Color.White;
             this._lbxHostList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._tlpBody.SetColumnSpan(this._lbxHostList, 2);
+            this._lbxHostList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._lbxHostList.Enabled = false;
             this._lbxHostList.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lbxHostList.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
             this._lbxHostList.FormattingEnabled = true;
             this._lbxHostList.ItemHeight = 21;
-            this._lbxHostList.Location = new System.Drawing.Point(117, 94);
+            this._lbxHostList.Location = new System.Drawing.Point(316, 197);
             this._lbxHostList.Margin = new System.Windows.Forms.Padding(2);
             this._lbxHostList.Name = "_lbxHostList";
-            this._lbxHostList.Size = new System.Drawing.Size(266, 107);
+            this._lbxHostList.Size = new System.Drawing.Size(296, 114);
             this._lbxHostList.TabIndex = 2;
             this._lbxHostList.TabStop = false;
             // 
             // _tbxJobDescription
             // 
+            this._tbxJobDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this._tbxJobDescription.BackColor = System.Drawing.Color.White;
             this._tbxJobDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._tlpBody.SetColumnSpan(this._tbxJobDescription, 5);
+            this._tbxJobDescription.Enabled = false;
             this._tbxJobDescription.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._tbxJobDescription.Location = new System.Drawing.Point(117, 61);
-            this._tbxJobDescription.Margin = new System.Windows.Forms.Padding(2);
+            this._tbxJobDescription.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._tbxJobDescription.Location = new System.Drawing.Point(316, 155);
+            this._tbxJobDescription.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this._tbxJobDescription.Name = "_tbxJobDescription";
-            this._tbxJobDescription.Size = new System.Drawing.Size(266, 29);
+            this._tbxJobDescription.Size = new System.Drawing.Size(1072, 29);
             this._tbxJobDescription.TabIndex = 20;
             this._tbxJobDescription.TextChanged += new System.EventHandler(this._tbxJobDescription_TextChanged);
+            this._tbxJobDescription.Leave += new System.EventHandler(this._tbxJobDescription_Leave);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(24, 236);
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this.label4.Location = new System.Drawing.Point(166, 315);
             this.label4.Margin = new System.Windows.Forms.Padding(2);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 21);
@@ -447,7 +350,8 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(24, 94);
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this.label3.Location = new System.Drawing.Point(166, 197);
             this.label3.Margin = new System.Windows.Forms.Padding(2);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(70, 21);
@@ -456,164 +360,90 @@
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(24, 63);
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this.label2.Location = new System.Drawing.Point(166, 159);
             this.label2.Margin = new System.Windows.Forms.Padding(2);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 21);
             this.label2.TabIndex = 0;
             this.label2.Text = "Description";
             // 
-            // _tbxBufferSize
-            // 
-            this._tbxBufferSize.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this._tbxBufferSize.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._tbxBufferSize.Location = new System.Drawing.Point(493, 61);
-            this._tbxBufferSize.Margin = new System.Windows.Forms.Padding(2);
-            this._tbxBufferSize.Name = "_tbxBufferSize";
-            this._tbxBufferSize.Size = new System.Drawing.Size(281, 29);
-            this._tbxBufferSize.TabIndex = 60;
-            this._tbxBufferSize.TextChanged += new System.EventHandler(this._tbxBufferSize_TextChanged);
-            // 
-            // _tbxTimeOut
-            // 
-            this._tbxTimeOut.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this._tbxTimeOut.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._tbxTimeOut.Location = new System.Drawing.Point(493, 28);
-            this._tbxTimeOut.Margin = new System.Windows.Forms.Padding(2);
-            this._tbxTimeOut.Name = "_tbxTimeOut";
-            this._tbxTimeOut.Size = new System.Drawing.Size(281, 29);
-            this._tbxTimeOut.TabIndex = 50;
-            this._tbxTimeOut.TextChanged += new System.EventHandler(this._tbxTimeOut_TextChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(387, 30);
-            this.label7.Margin = new System.Windows.Forms.Padding(2);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(102, 21);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Timeout (ms)";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(387, 63);
-            this.label8.Margin = new System.Windows.Forms.Padding(2);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(84, 21);
-            this.label8.TabIndex = 0;
-            this.label8.Text = "Buffer Size";
-            // 
             // _tbxJobName
             // 
+            this._tbxJobName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this._tbxJobName.BackColor = System.Drawing.Color.White;
             this._tbxJobName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._tlpBody.SetColumnSpan(this._tbxJobName, 2);
+            this._tbxJobName.Enabled = false;
             this._tbxJobName.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._tbxJobName.Location = new System.Drawing.Point(117, 28);
+            this._tbxJobName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._tbxJobName.Location = new System.Drawing.Point(316, 105);
             this._tbxJobName.Margin = new System.Windows.Forms.Padding(2);
             this._tbxJobName.Name = "_tbxJobName";
-            this._tbxJobName.Size = new System.Drawing.Size(266, 29);
+            this._tbxJobName.Size = new System.Drawing.Size(296, 29);
             this._tbxJobName.TabIndex = 10;
             this._tbxJobName.TextChanged += new System.EventHandler(this._tbxJobName_TextChanged);
             this._tbxJobName.Leave += new System.EventHandler(this._tbxJobName_Leave);
             // 
             // label1
             // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(24, 30);
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this.label1.Location = new System.Drawing.Point(166, 109);
             this.label1.Margin = new System.Windows.Forms.Padding(2);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 21);
             this.label1.TabIndex = 0;
             this.label1.Text = "Name";
             // 
-            // _btnShowReport
-            // 
-            this._btnShowReport.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._btnShowReport.BackColor = System.Drawing.Color.DimGray;
-            this._btnShowReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this._btnShowReport.FlatAppearance.BorderSize = 0;
-            this._btnShowReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnShowReport.Font = new System.Drawing.Font("Segoe UI Light", 12F);
-            this._btnShowReport.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this._btnShowReport.Image = global::NetVulture.Properties.Resources.Details_32;
-            this._btnShowReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnShowReport.Location = new System.Drawing.Point(478, 0);
-            this._btnShowReport.Margin = new System.Windows.Forms.Padding(0);
-            this._btnShowReport.Name = "_btnShowReport";
-            this._btnShowReport.Size = new System.Drawing.Size(150, 40);
-            this._btnShowReport.TabIndex = 5;
-            this._btnShowReport.Text = "Report";
-            this._btnShowReport.UseVisualStyleBackColor = false;
-            this._btnShowReport.Click += new System.EventHandler(this._btnShowReport_Click);
-            // 
             // _lblAppTitle
             // 
             this._lblAppTitle.AutoSize = true;
-            this._lblAppTitle.BackColor = System.Drawing.Color.DimGray;
+            this._lblAppTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
             this._lblAppTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this._lblAppTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblAppTitle.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this._lblAppTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
             this._lblAppTitle.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this._lblAppTitle.Location = new System.Drawing.Point(0, 0);
             this._lblAppTitle.Margin = new System.Windows.Forms.Padding(0);
             this._lblAppTitle.Name = "_lblAppTitle";
-            this._lblAppTitle.Size = new System.Drawing.Size(178, 40);
+            this._lblAppTitle.Size = new System.Drawing.Size(164, 40);
             this._lblAppTitle.TabIndex = 2;
             this._lblAppTitle.Text = "NetVulture";
             this._lblAppTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // _btnOpenSettings
-            // 
-            this._btnOpenSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._btnOpenSettings.BackColor = System.Drawing.Color.DimGray;
-            this._btnOpenSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this._btnOpenSettings.FlatAppearance.BorderSize = 0;
-            this._btnOpenSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnOpenSettings.Font = new System.Drawing.Font("Segoe UI Light", 12F);
-            this._btnOpenSettings.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this._btnOpenSettings.Image = global::NetVulture.Properties.Resources.Settings_32;
-            this._btnOpenSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnOpenSettings.Location = new System.Drawing.Point(778, 0);
-            this._btnOpenSettings.Margin = new System.Windows.Forms.Padding(0);
-            this._btnOpenSettings.Name = "_btnOpenSettings";
-            this._btnOpenSettings.Size = new System.Drawing.Size(150, 40);
-            this._btnOpenSettings.TabIndex = 5;
-            this._btnOpenSettings.Text = "Settings";
-            this._btnOpenSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this._btnOpenSettings.UseVisualStyleBackColor = false;
-            this._btnOpenSettings.Click += new System.EventHandler(this._btnOpenSettings_Click);
-            // 
             // _lblLastCollect
             // 
+            this._lblLastCollect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lblLastCollect.AutoSize = true;
             this._lblLastCollect.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblLastCollect.ForeColor = System.Drawing.Color.Gainsboro;
-            this._lblLastCollect.Location = new System.Drawing.Point(330, 498);
+            this._lblLastCollect.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._lblLastCollect.Location = new System.Drawing.Point(166, 669);
             this._lblLastCollect.Margin = new System.Windows.Forms.Padding(2);
             this._lblLastCollect.Name = "_lblLastCollect";
-            this._lblLastCollect.Size = new System.Drawing.Size(97, 17);
+            this._lblLastCollect.Size = new System.Drawing.Size(146, 38);
             this._lblLastCollect.TabIndex = 0;
             this._lblLastCollect.Text = "Last Execution: ";
             // 
             // _lblClock
             // 
-            this._lblClock.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this._lblClock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._lblClock.AutoSize = true;
             this._lblClock.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this._lblClock.ForeColor = System.Drawing.Color.White;
-            this._lblClock.Location = new System.Drawing.Point(780, 496);
+            this._lblClock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._lblClock.Location = new System.Drawing.Point(616, 667);
             this._lblClock.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this._lblClock.Name = "_lblClock";
-            this._lblClock.Size = new System.Drawing.Size(146, 40);
+            this._lblClock.Size = new System.Drawing.Size(146, 42);
             this._lblClock.TabIndex = 61;
             this._lblClock.Text = "Systemtime";
             // 
@@ -628,21 +458,255 @@
             this._clock.Interval = 1000;
             this._clock.Tick += new System.EventHandler(this._clock_Tick);
             // 
+            // _pnlUnderlineMainMenu
+            // 
+            this._pnlUnderlineMainMenu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._pnlUnderlineMainMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(80)))), ((int)(((byte)(120)))));
+            this._tlpBody.SetColumnSpan(this._pnlUnderlineMainMenu, 7);
+            this._pnlUnderlineMainMenu.Location = new System.Drawing.Point(0, 40);
+            this._pnlUnderlineMainMenu.Margin = new System.Windows.Forms.Padding(0);
+            this._pnlUnderlineMainMenu.Name = "_pnlUnderlineMainMenu";
+            this._pnlUnderlineMainMenu.Size = new System.Drawing.Size(1408, 5);
+            this._pnlUnderlineMainMenu.TabIndex = 62;
+            // 
+            // _flpBatchList
+            // 
+            this._flpBatchList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this._flpBatchList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._flpBatchList.Location = new System.Drawing.Point(0, 45);
+            this._flpBatchList.Margin = new System.Windows.Forms.Padding(0);
+            this._flpBatchList.Name = "_flpBatchList";
+            this._tlpBody.SetRowSpan(this._flpBatchList, 8);
+            this._flpBatchList.Size = new System.Drawing.Size(164, 664);
+            this._flpBatchList.TabIndex = 64;
+            // 
+            // _pnlSubMenuBatch
+            // 
+            this._pnlSubMenuBatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this._tlpBody.SetColumnSpan(this._pnlSubMenuBatch, 6);
+            this._pnlSubMenuBatch.Controls.Add(this._btnEditHostList);
+            this._pnlSubMenuBatch.Controls.Add(this._btnRunSelectedBatch);
+            this._pnlSubMenuBatch.Controls.Add(this._RemoveSelectedBatch);
+            this._pnlSubMenuBatch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._pnlSubMenuBatch.Enabled = false;
+            this._pnlSubMenuBatch.Location = new System.Drawing.Point(164, 45);
+            this._pnlSubMenuBatch.Margin = new System.Windows.Forms.Padding(0);
+            this._pnlSubMenuBatch.Name = "_pnlSubMenuBatch";
+            this._pnlSubMenuBatch.Size = new System.Drawing.Size(1244, 40);
+            this._pnlSubMenuBatch.TabIndex = 32;
+            // 
+            // _chkBtnTimerEnabled
+            // 
+            this._chkBtnTimerEnabled.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._chkBtnTimerEnabled.Appearance = System.Windows.Forms.Appearance.Button;
+            this._chkBtnTimerEnabled.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(0)))), ((int)(((byte)(60)))));
+            this._chkBtnTimerEnabled.FlatAppearance.BorderSize = 0;
+            this._chkBtnTimerEnabled.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(185)))), ((int)(((byte)(40)))));
+            this._chkBtnTimerEnabled.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._chkBtnTimerEnabled.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._chkBtnTimerEnabled.ForeColor = System.Drawing.Color.White;
+            this._chkBtnTimerEnabled.Image = global::NetVulture.Properties.Resources.Clock_32;
+            this._chkBtnTimerEnabled.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._chkBtnTimerEnabled.Location = new System.Drawing.Point(164, 0);
+            this._chkBtnTimerEnabled.Margin = new System.Windows.Forms.Padding(0);
+            this._chkBtnTimerEnabled.Name = "_chkBtnTimerEnabled";
+            this._chkBtnTimerEnabled.Size = new System.Drawing.Size(150, 40);
+            this._chkBtnTimerEnabled.TabIndex = 61;
+            this._chkBtnTimerEnabled.Text = "Timer Disabled";
+            this._chkBtnTimerEnabled.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this._chkBtnTimerEnabled.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._chkBtnTimerEnabled.UseVisualStyleBackColor = false;
+            this._chkBtnTimerEnabled.CheckedChanged += new System.EventHandler(this._chkBtnTimerEnabled_CheckedChanged);
+            // 
+            // _btnCollect
+            // 
+            this._btnCollect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._btnCollect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._btnCollect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this._btnCollect.FlatAppearance.BorderSize = 0;
+            this._btnCollect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnCollect.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._btnCollect.ForeColor = System.Drawing.Color.White;
+            this._btnCollect.Image = global::NetVulture.Properties.Resources.Collect_32;
+            this._btnCollect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnCollect.Location = new System.Drawing.Point(614, 0);
+            this._btnCollect.Margin = new System.Windows.Forms.Padding(0);
+            this._btnCollect.Name = "_btnCollect";
+            this._btnCollect.Size = new System.Drawing.Size(150, 40);
+            this._btnCollect.TabIndex = 5;
+            this._btnCollect.Text = "Collect";
+            this._btnCollect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._btnCollect.UseVisualStyleBackColor = false;
+            this._btnCollect.Click += new System.EventHandler(this._btnCollect_Click);
+            // 
+            // _btnAddBatch
+            // 
+            this._btnAddBatch.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._btnAddBatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._btnAddBatch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this._btnAddBatch.FlatAppearance.BorderSize = 0;
+            this._btnAddBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnAddBatch.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._btnAddBatch.ForeColor = System.Drawing.Color.White;
+            this._btnAddBatch.Image = global::NetVulture.Properties.Resources.Plus_32;
+            this._btnAddBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnAddBatch.Location = new System.Drawing.Point(314, 0);
+            this._btnAddBatch.Margin = new System.Windows.Forms.Padding(0);
+            this._btnAddBatch.Name = "_btnAddBatch";
+            this._btnAddBatch.Size = new System.Drawing.Size(150, 40);
+            this._btnAddBatch.TabIndex = 5;
+            this._btnAddBatch.Text = "Add Batch";
+            this._btnAddBatch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._btnAddBatch.UseVisualStyleBackColor = false;
+            this._btnAddBatch.Click += new System.EventHandler(this._btnAddBatch_Click);
+            // 
+            // _btnShowReport
+            // 
+            this._btnShowReport.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._btnShowReport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._btnShowReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this._btnShowReport.FlatAppearance.BorderSize = 0;
+            this._btnShowReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnShowReport.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._btnShowReport.ForeColor = System.Drawing.Color.White;
+            this._btnShowReport.Image = global::NetVulture.Properties.Resources.Details_32;
+            this._btnShowReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnShowReport.Location = new System.Drawing.Point(464, 0);
+            this._btnShowReport.Margin = new System.Windows.Forms.Padding(0);
+            this._btnShowReport.Name = "_btnShowReport";
+            this._btnShowReport.Size = new System.Drawing.Size(150, 40);
+            this._btnShowReport.TabIndex = 5;
+            this._btnShowReport.Text = "Report";
+            this._btnShowReport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._btnShowReport.UseVisualStyleBackColor = false;
+            this._btnShowReport.Click += new System.EventHandler(this._btnShowReport_Click);
+            // 
+            // _btnOpenSettings
+            // 
+            this._btnOpenSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._btnOpenSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._btnOpenSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this._btnOpenSettings.FlatAppearance.BorderSize = 0;
+            this._btnOpenSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnOpenSettings.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this._btnOpenSettings.ForeColor = System.Drawing.Color.White;
+            this._btnOpenSettings.Image = global::NetVulture.Properties.Resources.Settings_32;
+            this._btnOpenSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnOpenSettings.Location = new System.Drawing.Point(764, 0);
+            this._btnOpenSettings.Margin = new System.Windows.Forms.Padding(0);
+            this._btnOpenSettings.Name = "_btnOpenSettings";
+            this._btnOpenSettings.Size = new System.Drawing.Size(150, 40);
+            this._btnOpenSettings.TabIndex = 5;
+            this._btnOpenSettings.Text = "Settings";
+            this._btnOpenSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._btnOpenSettings.UseVisualStyleBackColor = false;
+            this._btnOpenSettings.Click += new System.EventHandler(this._btnOpenSettings_Click);
+            // 
+            // _btnEditHostList
+            // 
+            this._btnEditHostList.BackColor = System.Drawing.Color.Transparent;
+            this._btnEditHostList.FlatAppearance.BorderSize = 0;
+            this._btnEditHostList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnEditHostList.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._btnEditHostList.Image = global::NetVulture.Properties.Resources.Todo_List_32;
+            this._btnEditHostList.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnEditHostList.Location = new System.Drawing.Point(150, 0);
+            this._btnEditHostList.Margin = new System.Windows.Forms.Padding(0);
+            this._btnEditHostList.Name = "_btnEditHostList";
+            this._btnEditHostList.Size = new System.Drawing.Size(150, 40);
+            this._btnEditHostList.TabIndex = 31;
+            this._btnEditHostList.Text = "Edit Hostlist";
+            this._btnEditHostList.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._btnEditHostList.UseVisualStyleBackColor = false;
+            this._btnEditHostList.Click += new System.EventHandler(this._btnEditHostList_Click);
+            // 
+            // _btnRunSelectedBatch
+            // 
+            this._btnRunSelectedBatch.BackColor = System.Drawing.Color.Transparent;
+            this._btnRunSelectedBatch.FlatAppearance.BorderSize = 0;
+            this._btnRunSelectedBatch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(185)))), ((int)(((byte)(40)))));
+            this._btnRunSelectedBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnRunSelectedBatch.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._btnRunSelectedBatch.Image = global::NetVulture.Properties.Resources.Running_321;
+            this._btnRunSelectedBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnRunSelectedBatch.Location = new System.Drawing.Point(0, 0);
+            this._btnRunSelectedBatch.Margin = new System.Windows.Forms.Padding(0);
+            this._btnRunSelectedBatch.Name = "_btnRunSelectedBatch";
+            this._btnRunSelectedBatch.Size = new System.Drawing.Size(150, 40);
+            this._btnRunSelectedBatch.TabIndex = 31;
+            this._btnRunSelectedBatch.Text = "Run Batch";
+            this._btnRunSelectedBatch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._btnRunSelectedBatch.UseVisualStyleBackColor = false;
+            this._btnRunSelectedBatch.Click += new System.EventHandler(this._btnRunSelectedBatch_Click);
+            // 
+            // _RemoveSelectedBatch
+            // 
+            this._RemoveSelectedBatch.BackColor = System.Drawing.Color.Transparent;
+            this._RemoveSelectedBatch.FlatAppearance.BorderSize = 0;
+            this._RemoveSelectedBatch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(0)))), ((int)(((byte)(60)))));
+            this._RemoveSelectedBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._RemoveSelectedBatch.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._RemoveSelectedBatch.ForeColor = System.Drawing.Color.Black;
+            this._RemoveSelectedBatch.Image = global::NetVulture.Properties.Resources.Delete_32;
+            this._RemoveSelectedBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._RemoveSelectedBatch.Location = new System.Drawing.Point(300, 0);
+            this._RemoveSelectedBatch.Margin = new System.Windows.Forms.Padding(0);
+            this._RemoveSelectedBatch.Name = "_RemoveSelectedBatch";
+            this._RemoveSelectedBatch.Size = new System.Drawing.Size(150, 40);
+            this._RemoveSelectedBatch.TabIndex = 31;
+            this._RemoveSelectedBatch.Text = "Remove";
+            this._RemoveSelectedBatch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._RemoveSelectedBatch.UseVisualStyleBackColor = false;
+            this._RemoveSelectedBatch.Click += new System.EventHandler(this._RemoveSelectedBatch_Click);
+            // 
+            // _pnlUnderlinSubmenuForBatch
+            // 
+            this._pnlUnderlinSubmenuForBatch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._pnlUnderlinSubmenuForBatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(227)))), ((int)(((byte)(227)))), ((int)(((byte)(227)))));
+            this._tlpBody.SetColumnSpan(this._pnlUnderlinSubmenuForBatch, 6);
+            this._pnlUnderlinSubmenuForBatch.Location = new System.Drawing.Point(164, 85);
+            this._pnlUnderlinSubmenuForBatch.Margin = new System.Windows.Forms.Padding(0);
+            this._pnlUnderlinSubmenuForBatch.Name = "_pnlUnderlinSubmenuForBatch";
+            this._pnlUnderlinSubmenuForBatch.Size = new System.Drawing.Size(1244, 2);
+            this._pnlUnderlinSubmenuForBatch.TabIndex = 62;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(914, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(494, 40);
+            this.panel1.TabIndex = 65;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 536);
+            this.ClientSize = new System.Drawing.Size(1408, 709);
             this.Controls.Add(this._tlpBody);
             this.MinimumSize = new System.Drawing.Size(1000, 575);
             this.Name = "frmMain";
             this.Text = "NetVulture";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
+            this.Resize += new System.EventHandler(this.frmMain_Resize);
             this._tlpBody.ResumeLayout(false);
             this._tlpBody.PerformLayout();
-            this._pnlJobInfo.ResumeLayout(false);
-            this._pnlJobInfo.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._dgvResults)).EndInit();
+            this._pnlSubMenuBatch.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -650,34 +714,25 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel _tlpBody;
-        private System.Windows.Forms.ListBox _lbxJobs;
-        private System.Windows.Forms.Panel _pnlJobInfo;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox _tbxJobName;
         private System.Windows.Forms.TextBox _tbxJobDescription;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox _lbxHostList;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.LinkLabel _lnkLblChangeHostList;
-        private System.Windows.Forms.DataGridView dgvResults;
+        private System.Windows.Forms.DataGridView _dgvResults;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label _lblAppTitle;
         private System.Windows.Forms.Button _btnCollect;
         private System.Windows.Forms.Button _btnOpenSettings;
         private System.Windows.Forms.Label _lblOutputDir;
         private System.Windows.Forms.Button _btnAddBatch;
-        private System.Windows.Forms.Button _btnExecBatch;
-        private System.Windows.Forms.TextBox _tbxTimeOut;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox _tbxBufferSize;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Timer _collectTimer;
         private System.Windows.Forms.Label _lblLastCollect;
         private System.Windows.Forms.CheckBox _chkBtnTimerEnabled;
         private System.Windows.Forms.Label _lblLastBatchExec;
         private System.Windows.Forms.Label _lblClock;
         private System.Windows.Forms.Timer _clock;
-        private System.Windows.Forms.Button _btnRemoveBatch;
         private System.Windows.Forms.Label _lblCountOfFailedRequests;
         private System.Windows.Forms.Label _lblSmsAlertingStatus;
         private System.Windows.Forms.Label _lblEmailAlertingStatus;
@@ -689,6 +744,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Time;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
         private System.Windows.Forms.DataGridViewTextBoxColumn Attempts;
+        private System.Windows.Forms.Panel _pnlUnderlineMainMenu;
+        private System.Windows.Forms.FlowLayoutPanel _flpBatchList;
+        private System.Windows.Forms.Button _btnRunSelectedBatch;
+        private System.Windows.Forms.Panel _pnlSubMenuBatch;
+        private System.Windows.Forms.Button _RemoveSelectedBatch;
+        private System.Windows.Forms.Button _btnEditHostList;
+        private System.Windows.Forms.Panel _pnlUnderlinSubmenuForBatch;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

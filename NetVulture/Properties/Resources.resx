@@ -118,34 +118,46 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="High_Priority_32_Black" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\High_Priority_32_Black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Running_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Running_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Plus_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Plus_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="High_Priority_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\High_Priority_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Details_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Details_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Delete_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Delete_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Refresh_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Refresh_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Synchronize_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Synchronize_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Clock_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Clock_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Collect_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Collect_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Synchronize_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Synchronize_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Plus_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Plus_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Running_321" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Running_321.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="High_Priority_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\High_Priority_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Settings_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Settings_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CSV_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CSV_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Collect_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Collect_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Todo_List_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Todo_List_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

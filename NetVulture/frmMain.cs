@@ -1,6 +1,7 @@
 ﻿/*
  * TODO: Alle nicht erfolgreichen Echo-Anfragen in einer History speichern.
- * TODO: Logdatei schreiben für SMS Senden, E-mail Senden
+ * TODO: Report nach csv exportieren.
+ * TODO: SendSMS und SendMail in frmMain implementieren.
  */ 
 
 using System;
@@ -26,6 +27,8 @@ namespace NetVulture
     public partial class frmMain : Form
     {
         private List<NVBatch> _batchList;
+        private NVBatch _selectedBatch;
+
         private string _outputDir, _smsGwAddress, _smsGwUser, _smsGwPassword, _mailUser, _mailPw, _mailServer;
         private DateTime _lastExecutionTime;
         private BackgroundWorker _backWorker;
@@ -33,19 +36,10 @@ namespace NetVulture
         private int _mailServerPort;
         private bool _isEmailAlertingEnabled, _isSmsAlertingEnabled;
 
-        private void CheckAndAlert()
+        private void CheckAlert()
         {
             StringBuilder sbMail = new StringBuilder("ATTENTION: The followed hosts are not available.");
             bool _allowSendingMail = false;
-
-            if (_batchList.Any(x => x.FailedHosts.Count > 0))
-            {
-                _lblAppTitle.Image = Properties.Resources.High_Priority_32;
-            }
-            else
-            {
-                _lblAppTitle.Image = null;
-            }
 
             foreach (NVBatch batch in _batchList)
             {
@@ -82,9 +76,9 @@ namespace NetVulture
                             sbSms.Append(secondPass.Count() + " of " + batch.HostList.Count + "hosts from batch: " + batch.Name + " are not available after 20 attemps to ping.");
                         }
 
+                        Task.Run(()=> WriteError("Message Dispatcher", "void CheckAlert()", "Sending SMS successfully"));
                         SendSms(sbSms.ToString());
                     }
-
 
                 }
             }
@@ -92,6 +86,7 @@ namespace NetVulture
 
             if (_allowSendingMail)
             {
+                Task.Run(() => WriteError("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully"));
                 SendEmail(sbMail.ToString());
             }
         }
@@ -123,31 +118,9 @@ namespace NetVulture
 
         private void UpdateForm()
         {
-            int slctdBatch = _lbxJobs.SelectedIndex;
-
-            _lbxJobs.Items.Clear();
-
-            if (_batchList != null && _batchList.Count > 0)
-            {
-                foreach (NVBatch job in _batchList)
-                {
-                    if (String.IsNullOrEmpty(job.Name))
-                    {
-                        job.Name = "- Unsaved Batch -";
-                    }
-
-                    _lbxJobs.Items.Add(job.Name);
-                }
-                _lbxJobs.SelectedIndex = slctdBatch;
-            }
-            else
-            {
-                _pnlJobInfo.Visible = false;
-            }
+            //Get the saved settings from configuration file
             _outputDir = Properties.Settings.Default.OutputDir;
             _lblOutputDir.Text = "Output: " + Environment.NewLine + _outputDir;
-            _lblClock.Text = "Systemtime\r\n" + DateTime.Now.ToString();
-
             _isEmailAlertingEnabled = Properties.Settings.Default.EmailAlertingEnabled;
 
             if (_isEmailAlertingEnabled)
@@ -179,6 +152,138 @@ namespace NetVulture
             else
             {
                 _lblSmsAlertingStatus.Text = "SMS Alerting Status:" + Environment.NewLine + "Disabled";
+            }
+
+            //List all Batches to the FlowLayoutPanel.
+            if (_batchList != null && _batchList.Count > 0)
+            {
+                _flpBatchList.Controls.Clear();
+
+                foreach (NVBatch job in _batchList)
+                {
+                    Button b = new Button();
+                    b.BackColor = Color.Transparent;
+                    b.TextAlign = ContentAlignment.MiddleLeft;
+                    b.Text = job.Name;
+                    b.FlatStyle = FlatStyle.Flat;
+                    b.FlatAppearance.BorderSize = 0;
+                    b.FlatAppearance.MouseOverBackColor = Color.FromArgb(205, 215, 220);
+                    b.Font = new Font("Segoe UI Light", 12);
+                    b.ForeColor = Color.FromArgb(0, 50, 75);
+                    b.ImageAlign = ContentAlignment.MiddleRight;
+                    b.Margin = new Padding(0);
+                    b.Width = _flpBatchList.Width;
+                    b.Height = 40;
+                    b.UseVisualStyleBackColor = false;
+                    b.TextImageRelation = TextImageRelation.Overlay;
+                    b.Click += BatchList_Click;
+
+                    if (job.FailedHosts.Count > 0)
+                    {
+                        b.Image = Properties.Resources.High_Priority_32_Black;
+                    }
+                    else
+                    {
+                        b.Image = null;
+                    }
+
+                    _flpBatchList.Controls.Add(b);
+                }
+
+                //TODO: Von hier aus noch ShowBatch() aufrufen? Zum anzeigen des zu letzt gewählte Batch??????
+            }
+        }
+
+        private void BatchList_Click(object sender, EventArgs e)
+        {
+            foreach (Button btn in _flpBatchList.Controls.Cast<Button>())
+            {
+                btn.BackColor = Color.Transparent;
+            }
+
+            Button b = (Button)sender;
+            b.BackColor = Color.FromArgb(205, 215, 220);
+            _selectedBatch = _batchList.Single(x => x.Name == b.Text);
+            DisplayBatch();
+        }
+
+        /// <summary>
+        /// Show the batch that selcted from main batch list.
+        /// </summary>
+        private void DisplayBatch()
+        {
+            if (_selectedBatch != null)
+            {
+                _tbxJobName.Text = _selectedBatch.Name;
+                _tbxJobDescription.Text = _selectedBatch.Description;
+                _lblLastBatchExec.Text = "Last execution:\r\n" + _selectedBatch.LastExecution.ToString();
+
+                if (_selectedBatch.HostList != null && _selectedBatch.HostList.Count > 0)
+                {
+                    _lbxHostList.Items.Clear();
+                    _lbxHostList.Items.AddRange(_selectedBatch.HostList.ToArray());
+
+                    if (_selectedBatch.Results != null && _selectedBatch.Results.Count > 0)
+                    {
+                        _dgvResults.Rows.Clear();
+
+                        for (int i = 0; i < _selectedBatch.Results.Count; i++)
+                        {
+                            PingReply pr = _selectedBatch.Results[i];
+
+                            string[] data;
+
+                            if (pr == null)
+                            {
+                                data = new string[] { _selectedBatch.HostList[i], "", "", _selectedBatch.LastExecution.ToString(), "Unknown", "" };
+                            }
+                            else
+                            {
+                                int attempts = 0;
+
+                                if (pr.Status != IPStatus.Success)
+                                {
+                                    attempts = _selectedBatch.FailedHosts[_selectedBatch.HostList[i]];
+                                }
+
+                                data = new string[] { _selectedBatch.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), _selectedBatch.LastExecution.ToString(), pr.Status.ToString(), attempts.ToString() };
+                            }
+
+                            _dgvResults.Rows.Add(data);
+                        }
+                    }
+                    else
+                    {
+                        _dgvResults.Rows.Clear();
+                    }
+
+                    if (_selectedBatch.FailedHosts.Count == 0)
+                    {
+                        _lblCountOfFailedRequests.Text = "Failed Requests:\r\n0";
+                        _lblCountOfSuccessRequests.Text = "Success Requests:\r\n0";
+                    }
+                    else
+                    {
+                        _lblCountOfFailedRequests.Text = "Failed Requests:\r\n" + _selectedBatch.Results.Where(x => x.Status != IPStatus.Success).Count().ToString();
+                        _lblCountOfSuccessRequests.Text = "Success Requests:\r\n" + _selectedBatch.Results.Where(x => x.Status == IPStatus.Success).Count().ToString();
+                    }
+
+                    _pnlSubMenuBatch.Enabled = true;
+                    _tbxJobName.Enabled = true;
+                    _tbxJobDescription.Enabled = true;
+                    _lbxHostList.Enabled = true;
+                    _dgvResults.Enabled = true;
+                }
+                else
+                {
+                    _pnlSubMenuBatch.Enabled = false;
+                    _tbxJobName.Enabled = false;
+                    _tbxJobDescription.Enabled = false;
+                    _lbxHostList.Enabled = false;
+                    _dgvResults.Enabled = false;
+
+                    _lbxHostList.Items.Clear();
+                } 
             }
         }
 
@@ -297,6 +402,9 @@ namespace NetVulture
              
         } 
 
+        /// <summary>
+        /// Serializing the batch list and write to application root directory.
+        /// </summary>
         private void Serialize()
         {
             if (_batchList != null && _batchList.Count > 0)
@@ -316,119 +424,12 @@ namespace NetVulture
             }
         }
 
-        private void ShowJobInfo()
+        /// <summary>
+        /// Transferring the selected batch instance to the batch list.
+        /// </summary>
+        private void TransferBatch()
         {
-            if (_lbxJobs.SelectedIndex != -1)
-            {
-                _pnlJobInfo.Visible = true;
-
-                NVBatch job = _batchList.ElementAt(_lbxJobs.SelectedIndex);
-
-                _tbxJobName.Text = job.Name;
-                _tbxJobDescription.Text = job.Description;
-                _tbxTimeOut.Text = job.Timeout.ToString();
-                _tbxBufferSize.Text = job.Buffersize.ToString();
-                _lblLastBatchExec.Text = "Last execution: " + job.LastExecution.ToString();
-
-                if (job.HostList != null && job.HostList.Count > 0)
-                {
-                    _lbxHostList.Items.Clear();
-                    _lbxHostList.Items.AddRange(job.HostList.ToArray());
-                    _btnExecBatch.Enabled = true;
-
-                    if (job.Results != null && job.Results.Count > 0)
-                    {
-                        dgvResults.Rows.Clear();
-
-                        for (int i = 0; i < job.Results.Count; i++)
-                        {
-                            PingReply pr = job.Results[i];
-
-                            string[] data;
-
-                            if (pr.Address == null)
-                            {
-                                data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), pr.Status.ToString(), "-1"};
-                            }
-                            else
-                            {
-                                int attempts = 0;
-
-                                if (pr.Status != IPStatus.Success)
-                                {
-                                    attempts = job.FailedHosts[pr.Address.ToString()];
-                                }
-                                data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString(), attempts.ToString() };
-                            }
-
-                            dgvResults.Rows.Add(data);
-                        }
-                    }
-                    else
-                    {
-                        dgvResults.Rows.Clear();
-                    }
-
-                    if (job.FailedHosts.Count == 0)
-                    {
-                        _lblCountOfFailedRequests.Text = "Failed Requests: 0";
-                        _lblCountOfSuccessRequests.Text = "Success Requests: 0";
-                    }
-                    else
-                    {
-                        _lblCountOfFailedRequests.Text = "Failed Requests: " + job.Results.Where(x => x.Status != IPStatus.Success).Count().ToString();
-                        _lblCountOfSuccessRequests.Text = "Success Requests: " + job.Results.Where(x => x.Status == IPStatus.Success).Count().ToString();
-                    }
-                }
-                else
-                {
-                    _lbxHostList.Items.Clear();
-                    _btnExecBatch.Enabled = false;
-                }
-            }
-            else
-            {
-                _pnlJobInfo.Visible = false;
-            }
-        }
-
-        private void UpdateResultsOutput()
-        {
-            if (_lbxJobs.SelectedIndex != -1)
-            {
-                NVBatch job = _batchList.ElementAt(_lbxJobs.SelectedIndex);
-
-                if (job.Results != null)
-                {
-                    if (job.Results.Count > 0)
-                    {
-                        dgvResults.Rows.Clear();
-
-                        for (int i = 0; i < job.Results.Count; i++)
-                        {
-                            PingReply pr = job.Results[i];
-
-                            string[] data;
-
-                            if (pr.Address == null)
-                            {
-                                data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), pr.Status.ToString(), "-1" };
-                            }
-                            else
-                            {
-                                
-                                data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString(), "1"};
-                            }
-
-                            dgvResults.Rows.Add(data);
-                        }
-                    }
-                }
-                else
-                {
-                    dgvResults.Rows.Clear();
-                } 
-            }
+            _batchList[_batchList.IndexOf(_batchList.Single(x => x.Name == _selectedBatch.Name))] = _selectedBatch;
         }
 
         private async Task WriteOutput()
@@ -512,6 +513,28 @@ namespace NetVulture
 
         }
 
+        private async Task WriteError(string type, string src, string msg)
+        {
+            try
+            {
+                string file = "Log.log";
+
+                //Create file if not exists
+                if (!File.Exists(file)) File.Create(file);
+
+                using (StreamWriter sw = new StreamWriter(file, true))
+                {
+                    await sw.WriteLineAsync("Type: " + type + " # Soruce: " + src + " # Time: " + DateTime.Now.ToString() + " # Message: " + msg);
+                }
+
+                Debug.Print("Type: " + type + " # Soruce: " + src + " # Time: " + DateTime.Now.ToString() + " # Message: " + msg);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public frmMain()
         {
             InitializeComponent();
@@ -527,16 +550,15 @@ namespace NetVulture
         private async void _backWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             await WriteOutput();
-            CheckAndAlert();
+            CheckAlert();
 
             _lblLastCollect.Text = "Last Execution: " + Environment.NewLine + _lastExecutionTime.ToString();
             _btnCollect.Enabled = true;
-            _btnCollect.BackColor = Color.Transparent;
-            _btnExecBatch.Enabled = true;
-            _pnlJobInfo.Enabled = true;
+            _btnCollect.BackColor = Color.FromArgb(0, 50, 75);
             _lastExecutionTime = DateTime.Now;
 
-            ShowJobInfo();
+            UpdateForm();
+            DisplayBatch();
         }
 
         private void _backWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -544,10 +566,7 @@ namespace NetVulture
             int arg = (int)e.Argument;
 
             if (this.InvokeRequired) { this.Invoke((MethodInvoker) delegate {
-                    _pnlJobInfo.Enabled = false;
-                    _btnCollect.Enabled = false;
-                    _btnCollect.BackColor = Color.DodgerBlue;
-                    _btnExecBatch.Enabled = false;               
+                    _btnCollect.BackColor = Color.FromArgb(255, 155, 50);             
                 });
             }
 
@@ -567,37 +586,13 @@ namespace NetVulture
             }
         }
 
-        private void _lbxJobs_SelectedIndexChanged(object sender, EventArgs e)
+        private void _btnCollect_Click(object sender, EventArgs e)
         {
-            ShowJobInfo();
-        }
-
-        private void _lnkLblChangeHostList_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (_lbxJobs.SelectedIndex != -1)
+            if (_backWorker.IsBusy)
             {
-                frmManageHosts frm = null;
-
-                if (_batchList[_lbxJobs.SelectedIndex].HostList != null)
-                {
-                    frm = new frmManageHosts(_batchList[_lbxJobs.SelectedIndex].HostList);
-                }
-                else
-                {
-                    frm = new frmManageHosts();
-                }
-
-                if (frm.ShowDialog() == DialogResult.OK)
-                {
-                    _batchList[_lbxJobs.SelectedIndex].HostList = frm.HostList;
-                    ShowJobInfo();
-                }
+                MessageBox.Show("The collect process is already running...");
             }
-        }
-
-        private void _btnExecBatch_Click(object sender, EventArgs e)
-        {
-            if (_lbxJobs.SelectedIndex != -1)
+            else
             {
                 if (String.IsNullOrEmpty(_outputDir))
                 {
@@ -605,21 +600,8 @@ namespace NetVulture
                 }
                 else
                 {
-                    _backWorker.RunWorkerAsync(_lbxJobs.SelectedIndex);
-                    ShowJobInfo();
+                    _backWorker.RunWorkerAsync(-1);
                 }
-            }
-        }
-
-        private void _btnCollect_Click(object sender, EventArgs e)
-        {
-            if (String.IsNullOrEmpty(_outputDir))
-            {
-                MessageBox.Show("No output directory selcted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                _backWorker.RunWorkerAsync(-1);
             }
         }
 
@@ -637,23 +619,80 @@ namespace NetVulture
         {
             _batchList.Add(new NVBatch());
             UpdateForm();
-            _lbxJobs.SelectedIndex = (_lbxJobs.Items.Count - 1);
         }
 
         private void _tbxJobName_TextChanged(object sender, EventArgs e)
         {
-            if (_lbxJobs.SelectedIndex != -1)
+            _selectedBatch.Name = _tbxJobName.Text;
+        }
+
+        private void _tbxJobDescription_Leave(object sender, EventArgs e)
+        {
+            TransferBatch();
+            UpdateForm();
+        }
+
+        private void _RemoveSelectedBatch_Click(object sender, EventArgs e)
+        {
+            DialogResult res = MessageBox.Show("Do you want to remove this batch?", "Remove Batch", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (res == System.Windows.Forms.DialogResult.Yes)
             {
-                _batchList[_lbxJobs.SelectedIndex].Name = _tbxJobName.Text;
+                _batchList.Remove(_selectedBatch);
+                UpdateForm();
+            }
+        }
+
+        private void _btnRunSelectedBatch_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(_outputDir))
+            {
+                MessageBox.Show("No output directory selcted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                _backWorker.RunWorkerAsync(_batchList.IndexOf(_batchList.Single(x => x.Name == _selectedBatch.Name)));
+                DisplayBatch();
+            }
+        }
+
+        private void frmMain_Resize(object sender, EventArgs e)
+        {
+            foreach (Button btn in _flpBatchList.Controls.Cast<Button>())
+            {
+                btn.Width = _flpBatchList.Width;
+            }
+        }
+
+        private void _lblOutputDir_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", _outputDir);
+        }
+
+        private void _btnEditHostList_Click(object sender, EventArgs e)
+        {
+            frmManageHosts frm = null;
+
+            if (_selectedBatch.HostList != null)
+            {
+                frm = new frmManageHosts(_selectedBatch.HostList);
+            }
+            else
+            {
+                frm = new frmManageHosts();
+            }
+
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                _selectedBatch.HostList = frm.HostList;
+                TransferBatch();
+                DisplayBatch();
             }
         }
 
         private void _tbxJobDescription_TextChanged(object sender, EventArgs e)
         {
-            if (_lbxJobs.SelectedIndex != -1)
-            {
-                _batchList[_lbxJobs.SelectedIndex].Description = _tbxJobDescription.Text;
-            }
+            _selectedBatch.Description = _tbxJobDescription.Text;
         }
 
         private void _btnShowReport_Click(object sender, EventArgs e)
@@ -663,22 +702,6 @@ namespace NetVulture
             if (frm.ShowDialog() == DialogResult.OK)
             {
 
-            }
-        }
-
-        private void _tbxTimeOut_TextChanged(object sender, EventArgs e)
-        {
-            if (_lbxJobs.SelectedIndex != -1)
-            {
-                _batchList[_lbxJobs.SelectedIndex].Timeout = Convert.ToInt32(_tbxTimeOut.Text);
-            }
-        }
-
-        private void _tbxBufferSize_TextChanged(object sender, EventArgs e)
-        {
-            if (_lbxJobs.SelectedIndex != -1)
-            {
-                _batchList[_lbxJobs.SelectedIndex].Buffersize = Convert.ToInt32(_tbxBufferSize.Text);
             }
         }
 
@@ -710,31 +733,18 @@ namespace NetVulture
                 _chkBtnTimerEnabled.Text = "Timer Disabled";
             }
 
-            ShowJobInfo();
+            DisplayBatch();
         }
 
         private void _tbxJobName_Leave(object sender, EventArgs e)
         {
+            TransferBatch();
             UpdateForm();
         }
 
         private void _clock_Tick(object sender, EventArgs e)
         {
             _lblClock.Text = "Systemtime\r\n" + DateTime.Now.ToString();
-        }
-
-        private void _btnRemoveBatch_Click(object sender, EventArgs e)
-        {
-            if (_lbxJobs.SelectedIndex != -1)
-            {
-                DialogResult res = MessageBox.Show("Do you want to remove this batch?", "Remove Batch", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (res == System.Windows.Forms.DialogResult.Yes)
-                {
-                    _batchList.RemoveAt(_lbxJobs.SelectedIndex); 
-                    UpdateForm();
-                }
-            }
         }
     }
 }

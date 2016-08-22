@@ -25,9 +25,13 @@ namespace NetVulture
             Ping p = new Ping();
             PingReply pr = null;
 
+            IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
+            IcmpV4Statistics statistics = properties.GetIcmpV4Statistics();
+            System.Diagnostics.Debug.Print("  TimeExceeded ........................ Sent: {0,-10}   Received: {1,-10}", statistics.TimeExceededMessagesSent, statistics.TimeExceededMessagesReceived);
+
             try
             {
-                pr = await p.SendPingAsync(address);
+                pr = await p.SendPingAsync(address, 1000);
 
                 if (pr.Status == System.Net.NetworkInformation.IPStatus.Success)
                 {

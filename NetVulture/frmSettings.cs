@@ -20,7 +20,7 @@ namespace NetVulture
         /// <summary>
         /// Sending short messages to each registered mobile number.
         /// </summary>
-        private async void SendSms(string msg)
+        private async Task SendSms(string msg)
         {
             if (_cbxBxSmsAlertingEnabled.Checked)
             {
@@ -46,12 +46,10 @@ namespace NetVulture
 
                         foreach (string nr in _tbxMobileNumbers.Lines)
                         {
-                            SshCommand cmd = client.RunCommand("echo " + _tbxSmsGatewayPassword.Text + " | sudo -S echo \"" + msg + "\" | sudo gammu sendsms TEXT \"" + nr + "\"");
-#if DEBUG
-                            Debug.Print("Execute Command : " + cmd.CommandText);
-#endif
-                            StreamReader reader = new StreamReader(cmd.OutputStream);
-                            string text = reader.ReadToEnd();
+                            //_tbxSmsGatewayPassword.Text
+                            SshCommand cmd = client.RunCommand(string.Format("echo {0} | sudo -S echo '{1}' | sudo gammu sendsms TEXT '{2}'", _tbxSmsGatewayPassword.Text, msg, nr));
+
+                            //SshCommand cmd = client.RunCommand(string.Format("echo '{0}' | gammu sendsms TEXT '{1}'", msg, nr));
                         }
                     }
                 }
@@ -63,17 +61,59 @@ namespace NetVulture
                 {
                     MessageBox.Show("Host is not available or connection is interrupted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                catch (ObjectDisposedException)
-                {
-
-                }
                 catch (Exception)
                 {
                     throw;
                 }
-                finally
-                {
+            }
+        }
 
+        /// <summary>
+        /// Sending mail message to registered address.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        private async Task SendMail(string msg)
+        {
+            if (_chkBxEmailAlertingEnabled.Checked)
+            {
+                SshClient client = null;
+                List<Task> taskList = new List<Task>();
+
+                Ping p = new Ping();
+                PingReply pr = await p.SendPingAsync(_tbxMailServer.Text);
+
+                if (pr.Status != IPStatus.Success)
+                {
+                    MessageBox.Show("Host is not available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                try
+                {
+                    //Set up the SSH connection
+                    using (client = new SshClient(_tbxMailServer.Text, _tbxMailUser.Text, _tbxMailPassword.Text))
+                    {
+                        //Start the connection
+                        client.Connect();
+
+                        foreach (string address in _tbxTargetAddresses.Lines)
+                        {
+                            SshCommand cmd = client.RunCommand(string.Format("echo '{0}' | ssmtp -vvv {1}", msg, address));
+                        }
+                    }
+                }
+                catch (ArgumentException)
+                {
+                    MessageBox.Show("Missing one or more connection parameters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (System.Net.Sockets.SocketException)
+                {
+                    MessageBox.Show("Host is not available or connection is interrupted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception)
+                {
+                    throw;
                 }
             }
         }
@@ -196,11 +236,43 @@ namespace NetVulture
         {
             if (_tbxMobileNumbers.Lines.Count() > 0)
             {
-                SendSms("WARNING: This is a test message!"); 
+                _btnSendTestSms.Enabled = false;
+                _btnSendTestSms.Text = "Send messages...";
+                Task task = Task.Run(() => SendSms("NetVulture Test Message"));
+
+                task.ContinueWith((t) => {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        _btnSendTestSms.Enabled = true;
+                        _btnSendTestSms.Text = "Send Test SMS";
+                    });
+                });
             }
             else
             {
                 MessageBox.Show("No targets defined", "Send sms", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void _btnSendTestMail_Click(object sender, EventArgs e)
+        {
+            if (_tbxTargetAddresses.Lines.Count() > 0)
+            {
+                _btnSendTestMail.Enabled = false;
+                _btnSendTestMail.Text = "Send messages...";
+                Task task = Task.Run(() => SendMail("This is a test message!"));
+
+                task.ContinueWith((t) => {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        _btnSendTestMail.Enabled = true;
+                        _btnSendTestMail.Text = "Send Test Mail";
+                    });
+                });
+            }
+            else
+            {
+                MessageBox.Show("No targets defined", "Send mail", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

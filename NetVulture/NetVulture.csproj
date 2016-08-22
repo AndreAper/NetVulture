@@ -33,6 +33,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Renci.SshNet">
       <HintPath>..\..\..\..\Downloads\SSH.NET-develop\src\Renci.SshNet\bin\Debug\Renci.SshNet.dll</HintPath>
     </Reference>
@@ -49,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,6 +144,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CSV_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\High_Priority_32_Black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Running_321.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Delete_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Todo_List_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

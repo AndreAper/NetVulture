@@ -75,7 +75,8 @@ namespace NetVulture
         {
             _results = new List<PingReply>();
             _failedHosts = new Dictionary<string, int>();
-            _timeOut = 50000;
+            _name = "New Batch";
+            _timeOut = 1000;
             _bufferSize = 32;
         }
 
@@ -91,39 +92,151 @@ namespace NetVulture
                     _results.Clear();
                     _lastExec = DateTime.Now;
 
-                    for (int j = 0; j < _hostList.Count; j++)
+                    for (int j = 0; j < _hostList.Count; j = j+1)
                     {
                         Ping p = new Ping();
                         PingReply pr = null;
 
                         try
                         {
-                            pr = await p.SendPingAsync(_hostList[j]);
+                            pr = await p.SendPingAsync(_hostList[j], _timeOut, new byte[_bufferSize]);
                             _results.Add(pr);
 
                             if (pr.Status != IPStatus.Success)
                             {
-                                if (_failedHosts.Any(x => x.Key == pr.Address.ToString()))
+                                if (_failedHosts.Any(x => x.Key == _hostList[j]))
                                 {
-                                    _failedHosts[pr.Address.ToString()] += 1;
+                                    _failedHosts[_hostList[j]]++;
                                 }
                                 else
                                 {
-                                    _failedHosts.Add(pr.Address.ToString(), 0);
+                                    _failedHosts.Add(_hostList[j], 0);
                                 }
                             }
+
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
-                            if (ex is System.Net.Sockets.SocketException)
+                            _results.Add(pr);
+
+                            if (_failedHosts.Any(x => x.Key == _hostList[j]))
                             {
-                                _results.Add(pr);
+                                _failedHosts[_hostList[j]]++;
+                            }
+                            else
+                            {
+                                _failedHosts.Add(_hostList[j], 0);
                             }
                         }
-                        finally
+
+
+                        p.Dispose();
+                    }
+                }
+            }
+        }
+
+        public async Task Capture(int timeOut)
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                if (_hostList != null && _hostList.Count > 0)
+                {
+                    _results.Clear();
+                    _lastExec = DateTime.Now;
+
+                    for (int j = 0; j < _hostList.Count; j = j + 1)
+                    {
+                        Ping p = new Ping();
+                        PingReply pr = null;
+
+                        try
                         {
-                            p.Dispose();
+                            pr = await p.SendPingAsync(_hostList[j], timeOut, new byte[_bufferSize]);
+                            _results.Add(pr);
+
+                            if (pr.Status != IPStatus.Success)
+                            {
+                                if (_failedHosts.Any(x => x.Key == _hostList[j]))
+                                {
+                                    _failedHosts[_hostList[j]]++;
+                                }
+                                else
+                                {
+                                    _failedHosts.Add(_hostList[j], 0);
+                                }
+                            }
+
                         }
+                        catch (Exception)
+                        {
+                            _results.Add(pr);
+
+                            if (_failedHosts.Any(x => x.Key == _hostList[j]))
+                            {
+                                _failedHosts[_hostList[j]]++;
+                            }
+                            else
+                            {
+                                _failedHosts.Add(_hostList[j], 0);
+                            }
+                        }
+
+
+                        p.Dispose();
+                    }
+                }
+            }
+        }
+
+        public async Task Capture(int timeOut, int bufferSize)
+        {
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                if (_hostList != null && _hostList.Count > 0)
+                {
+                    _results.Clear();
+                    _lastExec = DateTime.Now;
+
+                    for (int j = 0; j < _hostList.Count; j = j + 1)
+                    {
+                        Ping p = new Ping();
+                        PingReply pr = null;
+
+                        try
+                        {
+                            pr = await p.SendPingAsync(_hostList[j], timeOut, new byte[bufferSize]);
+                            _results.Add(pr);
+
+                            if (pr.Status != IPStatus.Success)
+                            {
+                                if (_failedHosts.Any(x => x.Key == _hostList[j]))
+                                {
+                                    _failedHosts[_hostList[j]]++;
+                                }
+                                else
+                                {
+                                    _failedHosts.Add(_hostList[j], 0);
+                                }
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+                            _results.Add(pr);
+
+                            if (_failedHosts.Any(x => x.Key == _hostList[j]))
+                            {
+                                _failedHosts[_hostList[j]]++;
+                            }
+                            else
+                            {
+                                _failedHosts.Add(_hostList[j], 0);
+                            }
+                        }
+
+
+                        p.Dispose();
                     }
                 }
             }
