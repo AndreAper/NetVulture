@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="Renci.SshNet">
       <HintPath>..\..\..\..\Downloads\SSH.NET-develop\src\Renci.SshNet\bin\Debug\Renci.SshNet.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
