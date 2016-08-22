@@ -2,6 +2,9 @@
  * TODO: Alle nicht erfolgreichen Echo-Anfragen in einer History speichern.
  * TODO: Report nach csv exportieren.
  * TODO: SendSMS und SendMail in frmMain implementieren.
+ * TODO: Reportbutton bei aktiver Pingausführen weil die ResultList nicht übergeben werden kann da sie NULL ist.
+ * TODO: Enumeration "HostMode" implermentieren mit den elementen "Active, Maintenance, Fault, AwaitNewReply"
+ * TODO: Vor senden der Email via SSH die Internetverbindung auf dem Gateway aktivieren und Google.com anpingen. 
  */ 
 
 using System;
@@ -220,9 +223,6 @@ namespace NetVulture
 
                 if (_selectedBatch.HostList != null && _selectedBatch.HostList.Count > 0)
                 {
-                    _lbxHostList.Items.Clear();
-                    _lbxHostList.Items.AddRange(_selectedBatch.HostList.ToArray());
-
                     if (_selectedBatch.Results != null && _selectedBatch.Results.Count > 0)
                     {
                         _dgvResults.Rows.Clear();
@@ -255,6 +255,11 @@ namespace NetVulture
                     else
                     {
                         _dgvResults.Rows.Clear();
+
+                        for (int i = 0; i < _selectedBatch.HostList.Count; i++)
+                        {
+                            _dgvResults.Rows.Add(_selectedBatch.HostList[i], "", "", "", "", "");
+                        }
                     }
 
                     if (_selectedBatch.FailedHosts.Count == 0)
@@ -271,7 +276,6 @@ namespace NetVulture
                     _pnlSubMenuBatch.Enabled = true;
                     _tbxJobName.Enabled = true;
                     _tbxJobDescription.Enabled = true;
-                    _lbxHostList.Enabled = true;
                     _dgvResults.Enabled = true;
                 }
                 else
@@ -279,10 +283,9 @@ namespace NetVulture
                     _pnlSubMenuBatch.Enabled = false;
                     _tbxJobName.Enabled = false;
                     _tbxJobDescription.Enabled = false;
-                    _lbxHostList.Enabled = false;
                     _dgvResults.Enabled = false;
 
-                    _lbxHostList.Items.Clear();
+                    _dgvResults.Rows.Clear();
                 } 
             }
         }

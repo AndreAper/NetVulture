@@ -53,15 +53,15 @@
             this._gbxEmailSettings = new System.Windows.Forms.GroupBox();
             this._chkBxEmailAlertingEnabled = new System.Windows.Forms.CheckBox();
             this._tbxMailServerPort = new System.Windows.Forms.TextBox();
-            this._tbxMailServer = new System.Windows.Forms.TextBox();
             this._tbxMailPassword = new System.Windows.Forms.TextBox();
             this._tbxTargetAddresses = new System.Windows.Forms.TextBox();
+            this._tbxMailServer = new System.Windows.Forms.TextBox();
             this._btnSendTestMail = new System.Windows.Forms.Button();
             this._tbxMailUser = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this._chkBxAlertingEnabled = new System.Windows.Forms.CheckBox();
@@ -363,13 +363,6 @@
             this._tbxMailServerPort.Size = new System.Drawing.Size(63, 25);
             this._tbxMailServerPort.TabIndex = 100;
             // 
-            // _tbxMailServer
-            // 
-            this._tbxMailServer.Location = new System.Drawing.Point(158, 47);
-            this._tbxMailServer.Name = "_tbxMailServer";
-            this._tbxMailServer.Size = new System.Drawing.Size(245, 25);
-            this._tbxMailServer.TabIndex = 100;
-            // 
             // _tbxMailPassword
             // 
             this._tbxMailPassword.Location = new System.Drawing.Point(158, 109);
@@ -390,6 +383,13 @@
             this._tbxTargetAddresses.Size = new System.Drawing.Size(357, 100);
             this._tbxTargetAddresses.TabIndex = 60;
             // 
+            // _tbxMailServer
+            // 
+            this._tbxMailServer.Location = new System.Drawing.Point(158, 47);
+            this._tbxMailServer.Name = "_tbxMailServer";
+            this._tbxMailServer.Size = new System.Drawing.Size(245, 25);
+            this._tbxMailServer.TabIndex = 100;
+            // 
             // _btnSendTestMail
             // 
             this._btnSendTestMail.Location = new System.Drawing.Point(367, 250);
@@ -407,6 +407,17 @@
             this._tbxMailUser.Size = new System.Drawing.Size(356, 25);
             this._tbxMailUser.TabIndex = 80;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(2, 47);
+            this.label12.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(55, 21);
+            this.label12.TabIndex = 2;
+            this.label12.Text = "Server";
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -416,17 +427,6 @@
             this.label5.Size = new System.Drawing.Size(131, 17);
             this.label5.TabIndex = 7;
             this.label5.Text = "One address per line";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(2, 142);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(125, 21);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Target addresses";
             // 
             // label13
             // 
@@ -439,16 +439,16 @@
             this.label13.TabIndex = 2;
             this.label13.Text = "Port";
             // 
-            // label12
+            // label4
             // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(2, 47);
-            this.label12.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(55, 21);
-            this.label12.TabIndex = 2;
-            this.label12.Text = "Server";
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(2, 142);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(125, 21);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Target addresses";
             // 
             // label10
             // 
@@ -489,7 +489,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1087, 507);
+            this.ClientSize = new System.Drawing.Size(1090, 507);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
