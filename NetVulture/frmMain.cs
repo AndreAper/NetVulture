@@ -38,6 +38,7 @@ namespace NetVulture
         private System.Collections.Specialized.StringCollection _addressList, _mobileNumberList;
         private int _mailServerPort;
         private bool _isEmailAlertingEnabled, _isSmsAlertingEnabled;
+        private StringBuilder _sbMailAlertingProtocoll, _sbSmsAlertingProtocoll;
 
         private void CheckAlert()
         {
@@ -70,27 +71,39 @@ namespace NetVulture
 
                     if (batch.FailedHosts.Any(x => x.Value == 20))
                     {
-                        StringBuilder sbSms = new StringBuilder("ATTENTION:");
+                        StringBuilder sbSms = new StringBuilder("ATTENTION ");
 
                         IEnumerable<KeyValuePair<string, int>> secondPass = batch.FailedHosts.Where(x => x.Value == 20);
 
                         if (secondPass.Count() > 0)
                         {
-                            sbSms.Append(secondPass.Count() + " of " + batch.HostList.Count + "hosts from batch: " + batch.Name + " are not available after 20 attemps to ping.");
+                            sbSms.Append(secondPass.Count() + " of " + batch.HostList.Count + " hosts from batch " + batch.Name + " are not available after 20 attemps to ping.");
                         }
 
-                        Task.Run(()=> WriteError("Message Dispatcher", "void CheckAlert()", "Sending SMS successfully"));
-                        SendSms(sbSms.ToString());
+                        Task sender = Task.Run(() => SendSms(sbSms.ToString()));
+                        sender.ContinueWith((t) => {
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                WriteReport();
+                                WriteError("Message Dispatcher", "void CheckAlert()", "Sending SMS successfully");
+                            });
+                        });
                     }
 
                 }
             }
 
-
             if (_allowSendingMail)
             {
-                Task.Run(() => WriteError("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully"));
-                SendEmail(sbMail.ToString());
+                Task sender = Task.Run(() => SendMail(sbMail.ToString()));
+
+                sender.ContinueWith((t) => {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        WriteReport();
+                        WriteError("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
+                    });
+                });
             }
         }
 
@@ -251,6 +264,9 @@ namespace NetVulture
 
                             _dgvResults.Rows.Add(data);
                         }
+
+                        _lblCountOfFailedRequests.Text = "Failed Requests:\r\n" + _selectedBatch.Results.Where(x => x.Status != IPStatus.Success).Count().ToString();
+                        _lblCountOfSuccessRequests.Text = "Success Requests:\r\n" + _selectedBatch.Results.Where(x => x.Status == IPStatus.Success).Count().ToString();
                     }
                     else
                     {
@@ -261,149 +277,154 @@ namespace NetVulture
                             _dgvResults.Rows.Add(_selectedBatch.HostList[i], "", "", "", "", "");
                         }
                     }
-
-                    if (_selectedBatch.FailedHosts.Count == 0)
-                    {
-                        _lblCountOfFailedRequests.Text = "Failed Requests:\r\n0";
-                        _lblCountOfSuccessRequests.Text = "Success Requests:\r\n0";
-                    }
-                    else
-                    {
-                        _lblCountOfFailedRequests.Text = "Failed Requests:\r\n" + _selectedBatch.Results.Where(x => x.Status != IPStatus.Success).Count().ToString();
-                        _lblCountOfSuccessRequests.Text = "Success Requests:\r\n" + _selectedBatch.Results.Where(x => x.Status == IPStatus.Success).Count().ToString();
-                    }
-
-                    _pnlSubMenuBatch.Enabled = true;
-                    _tbxJobName.Enabled = true;
-                    _tbxJobDescription.Enabled = true;
-                    _dgvResults.Enabled = true;
                 }
-                else
-                {
-                    _pnlSubMenuBatch.Enabled = false;
-                    _tbxJobName.Enabled = false;
-                    _tbxJobDescription.Enabled = false;
-                    _dgvResults.Enabled = false;
 
-                    _dgvResults.Rows.Clear();
-                } 
+                _pnlSubMenuBatch.Enabled = true;
+                _tbxJobName.Enabled = true;
+                _tbxJobDescription.Enabled = true;
+                _dgvResults.Enabled = true;
+            }
+            else
+            {
+                _pnlSubMenuBatch.Enabled = false;
+                _tbxJobName.Enabled = false;
+                _tbxJobDescription.Enabled = false;
+                _dgvResults.Enabled = false;
+
+                _dgvResults.Rows.Clear();
             }
         }
 
         /// <summary>
         /// Sending short messages to each registered mobile number.
         /// </summary>
-        private async void SendSms(string msg)
+        private async Task SendSms(string msg)
         {
             if (_isSmsAlertingEnabled)
             {
-                SshClient client = null;
+                _sbSmsAlertingProtocoll = new StringBuilder();
+                _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Begin send sms messages.");
+
                 List<Task> taskList = new List<Task>();
 
                 Ping p = new Ping();
+                _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Ping sms gateway address " + _smsGwAddress);
                 PingReply pr = await p.SendPingAsync(_smsGwAddress);
 
                 if (pr.Status != IPStatus.Success)
                 {
                     MessageBox.Show("Host is not available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): SendSms function canceled because host is not available!");
                     return;
                 }
 
                 try
                 {
+                    _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Begin send messages to " + _mobileNumberList.Count + " participants");
                     //Set up the SSH connection
-                    using (client = new SshClient(_smsGwAddress, _smsGwUser, _smsGwPassword))
+                    using (SshClient _client = new SshClient(_smsGwAddress, _smsGwUser, _smsGwPassword))
                     {
                         //Start the connection
-                        client.Connect();
+                        _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Connecting to ssh server " + _smsGwAddress);
+                        _client.Connect();
 
-                        foreach (string nr in Properties.Settings.Default.MobileNumbers)
+                        foreach (string nr in _mobileNumberList)
                         {
-                            SshCommand cmd = client.RunCommand("echo " + _smsGwPassword + " | sudo -S echo \"" + msg + "\" | sudo gammu sendsms TEXT \"" + nr + "\"");
-                            StreamReader reader = new StreamReader(cmd.OutputStream);
-                            string text = reader.ReadToEnd();
+                            _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Run command " + string.Format("echo {0} | sudo -S echo '{1}' | sudo gammu sendsms TEXT '{2}'", "############", msg, nr));
+                            SshCommand cmd = _client.RunCommand(string.Format("echo {0} | sudo -S echo '{1}' | sudo gammu sendsms TEXT '{2}'", _smsGwPassword, msg, nr));
                         }
                     }
                 }
-                catch (ArgumentException)
+                catch (ArgumentException aEx)
                 {
+                    _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Error ArgumentException has thrown with message: " + aEx.Message);
                     MessageBox.Show("Missing one or more connection parameters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                catch (System.Net.Sockets.SocketException)
+                catch (System.Net.Sockets.SocketException sEx)
                 {
+                    _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Error System.Net.Sockets.SocketException has thrown with message: " + sEx.Message);
                     MessageBox.Show("Host is not available or connection is interrupted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                catch (ObjectDisposedException)
+                catch (Exception ex)
                 {
-
-                }
-                catch (Exception)
-                {
+                    _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Error " + ex.StackTrace + " has thrown with message: " + ex.Message);
                     throw;
                 }
                 finally
                 {
-
+                    _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Send messages successfully. Closing connection and disposing client instance.");
                 }
             }
         }
 
         /// <summary>
-        /// Send email using smtp client.
+        /// Sending mail message to registered address.
         /// </summary>
-        private void SendEmail(string msg)
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        private async Task SendMail(string msg)
         {
-            /* 
-             * E-Mail Address: monitoring.bbs@gmail.com 
-             * Username: monitoring.bbs@gmail.com 
-             * Password: Moni2015@ 
-             *  
-             * Server: smtp.gmail.com 
-             * Port: 587 
-             */
-
             if (_isEmailAlertingEnabled)
             {
-                if (_addressList.Count > 0)
+                _sbMailAlertingProtocoll = new StringBuilder();
+                _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Begin send mail messages.");
+
+                Ping p = new Ping();
+                PingReply pr = await p.SendPingAsync(_mailServer);
+
+                if (pr.Status != IPStatus.Success)
                 {
-                    SmtpClient client = new SmtpClient(_mailServer, _mailServerPort);
-                    client.EnableSsl = true;
-                    client.Timeout = 10000;
-                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    client.UseDefaultCredentials = false;
-                    client.Credentials = new NetworkCredential(_mailUser, _mailPw);
-
-                    MailMessage mm = new MailMessage();
-                    mm.From = new MailAddress(_mailUser);
-
-                    foreach (string adr in _addressList)
-                    {
-                        mm.To.Add(new MailAddress(adr));
-                    }
-
-
-                    mm.Subject = "NetVulture Alterting Service";
-                    mm.Body = msg;
-                    mm.BodyEncoding = UTF8Encoding.UTF8;
-                    mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
-
-
-                    try
-                    {
-                        client.Send(mm);
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-                }
-                else
-                {
+                    MessageBox.Show("Host is not available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): SendMail function canceled because host is not available!");
                     return;
                 }
+
+                try
+                {
+                    _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Begin send messages to " + _addressList.Count + " participants");
+
+                    //Set up the SSH connection
+                    using (SshClient _client = new SshClient(_mailServer, _mailUser, _mailPw))
+                    {
+                        //Start the connection
+                        _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Connecting to ssh server " + _mailServer);
+                        _client.Connect();
+
+                        foreach (string address in _addressList)
+                        {
+                            //echo Moni2015@ | sudo -S echo 'Test1234' | sudo ssmtp -vvv andre.aper@outlook.com
+
+                            _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Run command " + string.Format("echo {0} | sudo -S echo '{1}' | sudo ssmtp -vvv {2}", "############", msg, address));
+                            SshCommand cmd = _client.RunCommand(string.Format("echo {0} | sudo -S echo '{1}' | sudo ssmtp -vvv {2}", _mailPw, msg, address));
+
+                            using (StreamReader sr = new StreamReader(cmd.ExtendedOutputStream))
+                            {
+                                _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Results: " + sr.ReadToEnd());
+                            }
+                        }
+                    }
+                }
+                catch (ArgumentException ae)
+                {
+                    _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Error ArgumentException has thrown with message: " + ae.Message);
+                    MessageBox.Show("Missing one or more connection parameters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (System.Net.Sockets.SocketException se)
+                {
+                    _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Error System.Net.Sockets.SocketException has thrown with message: " + se.Message);
+                    MessageBox.Show("Host is not available or connection is interrupted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Error " + ex.StackTrace + " has thrown with message: " + ex.Message);
+                    throw;
+                }
+                finally
+                {
+                    _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Send messages successfully. Closing connection and disposing client instance.");
+                }
             }
-             
-        } 
+        }
 
         /// <summary>
         /// Serializing the batch list and write to application root directory.
@@ -516,7 +537,7 @@ namespace NetVulture
 
         }
 
-        private async Task WriteError(string type, string src, string msg)
+        private async void WriteError(string type, string src, string msg)
         {
             try
             {
@@ -535,6 +556,27 @@ namespace NetVulture
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        private async void WriteReport()
+        {
+            string fileMail = Path.Combine(Application.StartupPath, "logs", "MailAlertingProtocoll_" + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss" + ".log"));
+            string fileSms = Path.Combine(Application.StartupPath, "logs", "SmsAlertingProtocoll_" + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss" + ".log"));
+
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "logs")))
+            {
+                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "logs"));
+            }
+
+            using (StreamWriter sw = new StreamWriter(fileMail))
+            {
+                await sw.WriteAsync(_sbMailAlertingProtocoll.ToString());
+            }
+
+            using (StreamWriter sw = new StreamWriter(fileSms))
+            {
+                await sw.WriteAsync(_sbSmsAlertingProtocoll.ToString());
             }
         }
 
@@ -559,6 +601,7 @@ namespace NetVulture
             _btnCollect.Enabled = true;
             _btnCollect.BackColor = Color.FromArgb(0, 50, 75);
             _lastExecutionTime = DateTime.Now;
+            _btnShowReport.Enabled = true;
 
             UpdateForm();
             DisplayBatch();
@@ -569,7 +612,8 @@ namespace NetVulture
             int arg = (int)e.Argument;
 
             if (this.InvokeRequired) { this.Invoke((MethodInvoker) delegate {
-                    _btnCollect.BackColor = Color.FromArgb(255, 155, 50);             
+                    _btnCollect.BackColor = Color.FromArgb(255, 155, 50);
+                    _btnShowReport.Enabled = false;
                 });
             }
 

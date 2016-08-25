@@ -37,7 +37,6 @@
             this._chkBxAutoStartTimer = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this._gbxSmsSettings = new System.Windows.Forms.GroupBox();
             this._tbxSmsGatewayPassword = new System.Windows.Forms.TextBox();
             this._tbxSmsGatewayUser = new System.Windows.Forms.TextBox();
@@ -65,11 +64,16 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this._chkBxAlertingEnabled = new System.Windows.Forms.CheckBox();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabPageGeneralSettings = new System.Windows.Forms.TabPage();
+            this.tabPageAlertingService = new System.Windows.Forms.TabPage();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this._gbxSmsSettings.SuspendLayout();
             this._gbxEmailSettings.SuspendLayout();
+            this.tabControl.SuspendLayout();
+            this.tabPageGeneralSettings.SuspendLayout();
+            this.tabPageAlertingService.SuspendLayout();
             this.SuspendLayout();
             // 
             // _tbxOutputDir
@@ -159,7 +163,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this._tbxOutputDir);
             this.groupBox1.Controls.Add(this._btnSelectDir);
-            this.groupBox1.Location = new System.Drawing.Point(376, 13);
+            this.groupBox1.Location = new System.Drawing.Point(8, 7);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -173,7 +177,7 @@
             this.groupBox2.Controls.Add(this._tbxInterval);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this._chkBxAutoStartTimer);
-            this.groupBox2.Location = new System.Drawing.Point(12, 13);
+            this.groupBox2.Location = new System.Drawing.Point(8, 92);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -181,20 +185,6 @@
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Timer";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this._gbxSmsSettings);
-            this.groupBox3.Controls.Add(this._gbxEmailSettings);
-            this.groupBox3.Controls.Add(this._chkBxAlertingEnabled);
-            this.groupBox3.Location = new System.Drawing.Point(12, 98);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Size = new System.Drawing.Size(1065, 358);
-            this.groupBox3.TabIndex = 9;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Alerting service";
             // 
             // _gbxSmsSettings
             // 
@@ -209,7 +199,7 @@
             this._gbxSmsSettings.Controls.Add(this.label7);
             this._gbxSmsSettings.Controls.Add(this.label3);
             this._gbxSmsSettings.Controls.Add(this.label6);
-            this._gbxSmsSettings.Location = new System.Drawing.Point(532, 57);
+            this._gbxSmsSettings.Location = new System.Drawing.Point(8, 39);
             this._gbxSmsSettings.Name = "_gbxSmsSettings";
             this._gbxSmsSettings.Size = new System.Drawing.Size(520, 289);
             this._gbxSmsSettings.TabIndex = 9;
@@ -339,7 +329,8 @@
             this._gbxEmailSettings.Controls.Add(this.label4);
             this._gbxEmailSettings.Controls.Add(this.label10);
             this._gbxEmailSettings.Controls.Add(this.label11);
-            this._gbxEmailSettings.Location = new System.Drawing.Point(6, 57);
+            this._gbxEmailSettings.Enabled = false;
+            this._gbxEmailSettings.Location = new System.Drawing.Point(534, 39);
             this._gbxEmailSettings.Name = "_gbxEmailSettings";
             this._gbxEmailSettings.Size = new System.Drawing.Size(520, 289);
             this._gbxEmailSettings.TabIndex = 8;
@@ -476,7 +467,7 @@
             // 
             this._chkBxAlertingEnabled.AutoSize = true;
             this._chkBxAlertingEnabled.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this._chkBxAlertingEnabled.Location = new System.Drawing.Point(12, 25);
+            this._chkBxAlertingEnabled.Location = new System.Drawing.Point(6, 7);
             this._chkBxAlertingEnabled.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this._chkBxAlertingEnabled.Name = "_chkBxAlertingEnabled";
             this._chkBxAlertingEnabled.Size = new System.Drawing.Size(143, 25);
@@ -485,30 +476,67 @@
             this._chkBxAlertingEnabled.UseVisualStyleBackColor = true;
             this._chkBxAlertingEnabled.CheckedChanged += new System.EventHandler(this._chkBxAlertingEnabled_CheckedChanged);
             // 
+            // tabControl
+            // 
+            this.tabControl.Controls.Add(this.tabPageGeneralSettings);
+            this.tabControl.Controls.Add(this.tabPageAlertingService);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(1073, 365);
+            this.tabControl.TabIndex = 10000000;
+            // 
+            // tabPageGeneralSettings
+            // 
+            this.tabPageGeneralSettings.Controls.Add(this.groupBox2);
+            this.tabPageGeneralSettings.Controls.Add(this.groupBox1);
+            this.tabPageGeneralSettings.Location = new System.Drawing.Point(4, 26);
+            this.tabPageGeneralSettings.Name = "tabPageGeneralSettings";
+            this.tabPageGeneralSettings.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageGeneralSettings.Size = new System.Drawing.Size(1065, 335);
+            this.tabPageGeneralSettings.TabIndex = 0;
+            this.tabPageGeneralSettings.Text = "General Settings";
+            this.tabPageGeneralSettings.UseVisualStyleBackColor = true;
+            // 
+            // tabPageAlertingService
+            // 
+            this.tabPageAlertingService.Controls.Add(this._gbxSmsSettings);
+            this.tabPageAlertingService.Controls.Add(this._gbxEmailSettings);
+            this.tabPageAlertingService.Controls.Add(this._chkBxAlertingEnabled);
+            this.tabPageAlertingService.Location = new System.Drawing.Point(4, 26);
+            this.tabPageAlertingService.Name = "tabPageAlertingService";
+            this.tabPageAlertingService.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageAlertingService.Size = new System.Drawing.Size(1065, 335);
+            this.tabPageAlertingService.TabIndex = 1;
+            this.tabPageAlertingService.Text = "Alerting Service";
+            this.tabPageAlertingService.UseVisualStyleBackColor = true;
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1090, 507);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            this.ClientSize = new System.Drawing.Size(1073, 365);
+            this.Controls.Add(this.tabControl);
             this.Controls.Add(this._btnClose);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "frmSettings";
             this.Text = "Settings";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSettings_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this._gbxSmsSettings.ResumeLayout(false);
             this._gbxSmsSettings.PerformLayout();
             this._gbxEmailSettings.ResumeLayout(false);
             this._gbxEmailSettings.PerformLayout();
+            this.tabControl.ResumeLayout(false);
+            this.tabPageGeneralSettings.ResumeLayout(false);
+            this.tabPageAlertingService.ResumeLayout(false);
+            this.tabPageAlertingService.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -524,7 +552,6 @@
         private System.Windows.Forms.CheckBox _chkBxAutoStartTimer;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox _tbxTargetAddresses;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox _chkBxAlertingEnabled;
@@ -552,5 +579,8 @@
         private System.Windows.Forms.Button _btnSendTestMail;
         private System.Windows.Forms.TextBox _tbxMailServerPort;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tabPageGeneralSettings;
+        private System.Windows.Forms.TabPage tabPageAlertingService;
     }
 }
