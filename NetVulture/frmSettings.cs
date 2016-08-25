@@ -261,16 +261,20 @@ namespace NetVulture
 
         private async void WriteReport()
         {
-            string file = Path.Combine(Application.StartupPath, "logs", "MailAlertingProtocoll_" + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss"));
+            string fileMail = Path.Combine(Application.StartupPath, "logs", "MailAlertingProtocoll_" + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss" + ".log"));
+            string fileSms = Path.Combine(Application.StartupPath, "logs", "SmsAlertingProtocoll_" + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss" + ".log"));
 
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "logs")))
             {
                 Directory.CreateDirectory(Path.Combine(Application.StartupPath, "logs"));
             }
 
-            using (StreamWriter sw = new StreamWriter(file))
+            if (_sbMailAlertingProtocoll != null)
             {
-                await sw.WriteAsync(_sbMailAlertingProtocoll.ToString());
+                using (StreamWriter sw = new StreamWriter(fileMail))
+                {
+                    await sw.WriteAsync(_sbMailAlertingProtocoll.ToString());
+                }
             }
         }
 

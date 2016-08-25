@@ -100,7 +100,6 @@ namespace NetVulture
                 sender.ContinueWith((t) => {
                     this.Invoke((MethodInvoker)delegate
                     {
-                        WriteReport();
                         WriteError("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
                     });
                 });
@@ -353,6 +352,7 @@ namespace NetVulture
                 finally
                 {
                     _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Send messages successfully. Closing connection and disposing client instance.");
+                    WriteReport();
                 }
             }
         }
@@ -422,6 +422,7 @@ namespace NetVulture
                 finally
                 {
                     _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Send messages successfully. Closing connection and disposing client instance.");
+                    WriteReport();
                 }
             }
         }
@@ -569,14 +570,20 @@ namespace NetVulture
                 Directory.CreateDirectory(Path.Combine(Application.StartupPath, "logs"));
             }
 
-            using (StreamWriter sw = new StreamWriter(fileMail))
+            if (_sbMailAlertingProtocoll != null)
             {
-                await sw.WriteAsync(_sbMailAlertingProtocoll.ToString());
+                using (StreamWriter sw = new StreamWriter(fileMail))
+                {
+                    await sw.WriteAsync(_sbMailAlertingProtocoll.ToString());
+                } 
             }
 
-            using (StreamWriter sw = new StreamWriter(fileSms))
+            if (_sbSmsAlertingProtocoll != null)
             {
-                await sw.WriteAsync(_sbSmsAlertingProtocoll.ToString());
+                using (StreamWriter sw = new StreamWriter(fileSms))
+                {
+                    await sw.WriteAsync(_sbSmsAlertingProtocoll.ToString());
+                } 
             }
         }
 
