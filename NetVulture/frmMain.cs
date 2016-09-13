@@ -89,8 +89,12 @@ namespace NetVulture
                             });
                         });
                     }
+                }
+                else
+                {
 
                 }
+
             }
 
             if (_allowSendingMail)
@@ -193,6 +197,7 @@ namespace NetVulture
                     b.TextImageRelation = TextImageRelation.Overlay;
                     b.Click += BatchList_Click;
 
+                    //TODO: Image wird nicht zurückgesetzt wenn FailedHosts keine elemente hat.
                     if (job.FailedHosts.Count > 0)
                     {
                         b.Image = Properties.Resources.High_Priority_32_Black;
@@ -485,16 +490,16 @@ namespace NetVulture
                                 {
                                     if (pr.Address == null)
                                     {
-                                        data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), pr.Status.ToString() };
+                                        data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), IPStatus.Unknown.ToString(), "0" };
                                     }
                                     else
                                     {
-                                        data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString() };
+                                        data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString(), job.FailedHosts[job.HostList[i]].ToString() };
                                     }
                                 }
                                 else
                                 {
-                                    data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), "Unknown" };
+                                    data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), "Unknown", "0" };
                                 }
 
                                 await swCsv.WriteLineAsync(string.Join(",", data));
@@ -514,20 +519,20 @@ namespace NetVulture
                                 {
                                     if (pr.Address == null)
                                     {
-                                        data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), IPStatus.Unknown.ToString() };
+                                        data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), IPStatus.Unknown.ToString(), "0" };
                                     }
                                     else
                                     {
-                                        data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString() };
+                                        data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString(), job.FailedHosts[job.HostList[i]].ToString() };
                                     }
                                 }
                                 else
                                 {
-                                    data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), IPStatus.Unknown.ToString() };
+                                    data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), IPStatus.Unknown.ToString(), "0" };
                                 }
 
-                                //['Target Address or Name','ReceivedIp','RoundTrip','ExecutionTime','Status']
-                                jsArrayElements[i] = "['" + data[0] + "','" + data[1] + "','" + data[2] + "','" + data[3] + "','" + data[4] + "']";
+                                //['Target Address or Name','ReceivedIp','RoundTrip','ExecutionTime','Status','Attemps']
+                                jsArrayElements[i] = "['" + data[0] + "','" + data[1] + "','" + data[2] + "','" + data[3] + "','" + data[4] + "','" + data[5] + "']";
                             }
 
                             await swJs.WriteAsync("var " + job.Name + " = [" + string.Join(",", jsArrayElements) + "];");
