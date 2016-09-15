@@ -494,7 +494,14 @@ namespace NetVulture
                                     }
                                     else
                                     {
-                                        data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString(), job.FailedHosts[job.HostList[i]].ToString() };
+                                        string attemps = "0";
+
+                                        if (job.FailedHosts.Any(x => x.Key == job.HostList[i]))
+                                        {
+                                            attemps = job.FailedHosts[job.HostList[i]].ToString();
+                                        }
+
+                                        data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString(), attemps };
                                     }
                                 }
                                 else
@@ -523,7 +530,14 @@ namespace NetVulture
                                     }
                                     else
                                     {
-                                        data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString(), job.FailedHosts[job.HostList[i]].ToString() };
+                                        string attemps = "0";
+
+                                        if (job.FailedHosts.Any(x => x.Key == job.HostList[i]))
+                                        {
+                                            attemps = job.FailedHosts[job.HostList[i]].ToString();
+                                        }
+
+                                        data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString(), attemps };
                                     }
                                 }
                                 else
