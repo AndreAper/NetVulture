@@ -340,7 +340,6 @@ namespace NetVulture
                     _pnlSubMenuBatch.Enabled = false;
                     _tbxJobName.Enabled = false;
                     _tbxJobDescription.Enabled = false;
-                    _dgvResults.Enabled = false;
                 }
                 else
                 {
@@ -349,7 +348,6 @@ namespace NetVulture
                         _pnlSubMenuBatch.Enabled = true;
                         _tbxJobName.Enabled = true;
                         _tbxJobDescription.Enabled = true;
-                        _dgvResults.Enabled = true; 
                     }
                 }
             }
@@ -358,7 +356,6 @@ namespace NetVulture
                 _pnlSubMenuBatch.Enabled = false;
                 _tbxJobName.Enabled = false;
                 _tbxJobDescription.Enabled = false;
-                _dgvResults.Enabled = false;
 
                 _dgvResults.Rows.Clear();
             }

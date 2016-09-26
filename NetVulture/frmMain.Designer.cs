@@ -241,7 +241,6 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this._dgvResults.DefaultCellStyle = dataGridViewCellStyle2;
             this._dgvResults.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._dgvResults.Enabled = false;
             this._dgvResults.Location = new System.Drawing.Point(317, 148);
             this._dgvResults.Margin = new System.Windows.Forms.Padding(3, 3, 20, 3);
             this._dgvResults.Name = "_dgvResults";
