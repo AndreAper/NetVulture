@@ -203,5 +203,29 @@ namespace NetVulture.Properties {
                 this["MailServerPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AutoloadCsvPath {
+            get {
+                return ((string)(this["AutoloadCsvPath"]));
+            }
+            set {
+                this["AutoloadCsvPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoloadCsvEnabled {
+            get {
+                return ((bool)(this["AutoloadCsvEnabled"]));
+            }
+            set {
+                this["AutoloadCsvEnabled"] = value;
+            }
+        }
     }
 }

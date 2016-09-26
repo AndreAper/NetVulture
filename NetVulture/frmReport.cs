@@ -19,8 +19,9 @@ namespace NetVulture
         private async Task<PingReply> PingRequest(int index)
         {
             DataGridViewRow newDataRow = dataGridView.Rows[index];
+
             NVBatch batch = _batchList.Single(b => b.Name == dataGridView[0, index].Value.ToString());
-            string address = batch.HostList.FirstOrDefault(h => h == dataGridView[1, index].Value.ToString());
+            string address = batch.HostList.FirstOrDefault(h => h.HostnameOrAddress == dataGridView[1, index].Value.ToString()).HostnameOrAddress;
 
             Ping p = new Ping();
             PingReply pr = null;
@@ -41,6 +42,7 @@ namespace NetVulture
                     newDataRow.Cells[0].Value = batch.Name;
                     newDataRow.Cells[1].Value = address;
                     newDataRow.Cells[2].Value = pr.Address;
+                    newDataRow.Cells[3].Value = batch.HostList[index].PhysicalAddress;
                     newDataRow.Cells[3].Value = entry.HostName;
                     newDataRow.Cells[4].Value = pr.Status.ToString();
                     newDataRow.Cells[5].Value = pr.RoundtripTime.ToString();
@@ -52,6 +54,7 @@ namespace NetVulture
                 {
                     newDataRow.Cells[0].Value = batch.Name;
                     newDataRow.Cells[1].Value = address;
+                    newDataRow.Cells[2].Value = "";
                     newDataRow.Cells[2].Value = "";
                     newDataRow.Cells[3].Value = "";
                     newDataRow.Cells[4].Value = pr.Status.ToString();
@@ -86,63 +89,30 @@ namespace NetVulture
                         DataGridViewRow row = dataGridView.Rows[dataGridView.Rows.Add()];
 
                         row.Cells[0].Value = _batchList[j].Name;
-                        row.Cells[1].Value = _batchList[j].HostList[i];
+                        row.Cells[1].Value = _batchList[j].HostList[i].HostnameOrAddress;
 
-                        string dns = "";
-                        string ipAddress = "";
-                        string ipStatus = "";
-                        string roundTrip = "";
+                        PingReply pr = _batchList[j].HostList[i].ReplyData;
 
-                        if (_batchList[j].Results.Count > 0)
+                        if (pr == null)
                         {
-                            ipAddress = _batchList[j].Results[i].Address.ToString();
-
-
-                            ipStatus = _batchList[j].Results[i].Status.ToString();
-
-                            if (_batchList[j].Results[i].Status != System.Net.NetworkInformation.IPStatus.Success)
-                            {
-                                row.DefaultCellStyle.BackColor = Color.Salmon;
-                            }
-
-                            roundTrip = _batchList[j].Results[i].RoundtripTime.ToString();
-
-                            if (ipAddress != "0.0.0.0")
-                            {
-                                IPAddress addr = System.Net.IPAddress.Parse(ipAddress);
-
-                                try
-                                {
-                                    IPHostEntry entry = Dns.GetHostEntry(addr);
-                                    dns = entry.HostName;
-
-                                }
-                                catch (System.Net.Sockets.SocketException)
-                                {
-                                    dns = "";
-                                }
-                            }
+                            row.Cells[2].Value = "";
+                            row.Cells[4].Value = "";
+                            row.Cells[5].Value = "";
+                        }
+                        else
+                        {
+                            row.Cells[2].Value = pr.Address.ToString();
+                            row.Cells[4].Value = pr.Status.ToString();
+                            row.Cells[5].Value = pr.RoundtripTime.ToString();
                         }
 
-                        string pingAttempts = "0";
-                        if (_batchList[j].FailedHosts.Count > 0)
-                        {
-                            if (_batchList[j].FailedHosts.ContainsKey(_batchList[j].Results[i].Address.ToString()))
-                            {
-                                pingAttempts = _batchList[j].FailedHosts[_batchList[j].Results[i].Address.ToString()].ToString();
-                            }
-                        }
+                        row.Cells[3].Value = _batchList[j].HostList[i].PhysicalAddress;
 
-
-                        row.Cells[2].Value = ipAddress;
-                        row.Cells[3].Value = dns;
-                        row.Cells[4].Value = ipStatus;
-                        row.Cells[5].Value = roundTrip;
-                        row.Cells[6].Value = "-1";
-                        row.Cells[7].Value = DateTime.Now.ToString();
+                        row.Cells[6].Value = _batchList[j].HostList[i].PingAttempts;
+                        row.Cells[7].Value = _batchList[j].HostList[i].LastAvailability.ToString();
                         row.Cells[8].Value = "Ping";
 
-                        //BatchName, Host, IPAddress, DNS, IPStatus, Roundtrip, Attempts, Last Execution, PingButton
+                        //BatchName, HostnameOrAddress, IPAddress, Physical Address, IPStatus, Roundtrip, Attempts, Last Execution, PingButton
                         //dataGridView.Rows.Add(_batchList[j].Name, _batchList[j].HostList[i], ipAddress, dns, ipStatus, roundTrip, pingAttempts, _batchList[j].LastExecution.ToString(), "Ping");
 
                     }
@@ -181,7 +151,7 @@ namespace NetVulture
 
                 _batchList.ForEach((batch) =>
                 {
-                    tasks.Add(Task.Factory.StartNew(() => batch.Capture()));
+                    tasks.Add(Task.Factory.StartNew(() => batch.CaptureAsync()));
                 });
 
                 Task.WhenAll(tasks);
@@ -191,7 +161,16 @@ namespace NetVulture
 
         private void _btnExportCsv_Click(object sender, EventArgs e)
         {
+            SaveFileDialog sfd = new SaveFileDialog();
 
+            sfd.Filter = "csv files (*.csv)|*.csv";
+            sfd.FilterIndex = 1;
+            sfd.RestoreDirectory = true;
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                NVManagementClass.SerializeToCsv(sfd.FileName, _batchList);
+            }
         }
     }
 }

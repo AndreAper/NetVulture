@@ -34,7 +34,6 @@
             this._btnClose = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this._tbxInterval = new System.Windows.Forms.TextBox();
-            this._chkBxAutoStartTimer = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this._gbxSmsSettings = new System.Windows.Forms.GroupBox();
@@ -67,6 +66,15 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageGeneralSettings = new System.Windows.Forms.TabPage();
             this.tabPageAlertingService = new System.Windows.Forms.TabPage();
+            this.tabPageBatchIO = new System.Windows.Forms.TabPage();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this._tbxBatchlistCsvPath = new System.Windows.Forms.TextBox();
+            this._chkBxEnableAutoImportBatchlist = new System.Windows.Forms.CheckBox();
+            this._btnSelectBatchlistCsv = new System.Windows.Forms.Button();
+            this._rtbxCsvHeader = new System.Windows.Forms.RichTextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this._lnkLblCopyHeader = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this._gbxSmsSettings.SuspendLayout();
@@ -74,6 +82,7 @@
             this.tabControl.SuspendLayout();
             this.tabPageGeneralSettings.SuspendLayout();
             this.tabPageAlertingService.SuspendLayout();
+            this.tabPageBatchIO.SuspendLayout();
             this.SuspendLayout();
             // 
             // _tbxOutputDir
@@ -101,11 +110,10 @@
             // 
             this._btnSelectDir.BackColor = System.Drawing.Color.Gainsboro;
             this._btnSelectDir.FlatAppearance.BorderSize = 0;
-            this._btnSelectDir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnSelectDir.Location = new System.Drawing.Point(654, 18);
+            this._btnSelectDir.Location = new System.Drawing.Point(654, 24);
             this._btnSelectDir.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this._btnSelectDir.Name = "_btnSelectDir";
-            this._btnSelectDir.Size = new System.Drawing.Size(34, 38);
+            this._btnSelectDir.Size = new System.Drawing.Size(34, 29);
             this._btnSelectDir.TabIndex = 4;
             this._btnSelectDir.Text = "...";
             this._btnSelectDir.UseVisualStyleBackColor = false;
@@ -114,7 +122,7 @@
             // _btnClose
             // 
             this._btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this._btnClose.Location = new System.Drawing.Point(964, 464);
+            this._btnClose.Location = new System.Drawing.Point(956, 372);
             this._btnClose.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this._btnClose.Name = "_btnClose";
             this._btnClose.Size = new System.Drawing.Size(113, 30);
@@ -127,7 +135,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(9, 26);
+            this.label2.Location = new System.Drawing.Point(10, 26);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(113, 21);
@@ -138,25 +146,13 @@
             // 
             this._tbxInterval.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._tbxInterval.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._tbxInterval.Location = new System.Drawing.Point(126, 24);
+            this._tbxInterval.Location = new System.Drawing.Point(127, 24);
             this._tbxInterval.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._tbxInterval.Name = "_tbxInterval";
             this._tbxInterval.Size = new System.Drawing.Size(81, 29);
             this._tbxInterval.TabIndex = 20;
             this._tbxInterval.Text = "60000";
             this._tbxInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // _chkBxAutoStartTimer
-            // 
-            this._chkBxAutoStartTimer.AutoSize = true;
-            this._chkBxAutoStartTimer.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this._chkBxAutoStartTimer.Location = new System.Drawing.Point(212, 25);
-            this._chkBxAutoStartTimer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this._chkBxAutoStartTimer.Name = "_chkBxAutoStartTimer";
-            this._chkBxAutoStartTimer.Size = new System.Drawing.Size(142, 25);
-            this._chkBxAutoStartTimer.TabIndex = 30;
-            this._chkBxAutoStartTimer.Text = "Auto Start Timer";
-            this._chkBxAutoStartTimer.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -176,12 +172,11 @@
             // 
             this.groupBox2.Controls.Add(this._tbxInterval);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this._chkBxAutoStartTimer);
-            this.groupBox2.Location = new System.Drawing.Point(8, 92);
+            this.groupBox2.Location = new System.Drawing.Point(715, 7);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Size = new System.Drawing.Size(358, 77);
+            this.groupBox2.Size = new System.Drawing.Size(344, 77);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Timer";
@@ -480,7 +475,7 @@
             // 
             this.tabControl.Controls.Add(this.tabPageGeneralSettings);
             this.tabControl.Controls.Add(this.tabPageAlertingService);
-            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Controls.Add(this.tabPageBatchIO);
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -512,11 +507,119 @@
             this.tabPageAlertingService.Text = "Alerting Service";
             this.tabPageAlertingService.UseVisualStyleBackColor = true;
             // 
+            // tabPageBatchIO
+            // 
+            this.tabPageBatchIO.Controls.Add(this._lnkLblCopyHeader);
+            this.tabPageBatchIO.Controls.Add(this._rtbxCsvHeader);
+            this.tabPageBatchIO.Controls.Add(this.label16);
+            this.tabPageBatchIO.Controls.Add(this.label15);
+            this.tabPageBatchIO.Controls.Add(this.label14);
+            this.tabPageBatchIO.Controls.Add(this._tbxBatchlistCsvPath);
+            this.tabPageBatchIO.Controls.Add(this._chkBxEnableAutoImportBatchlist);
+            this.tabPageBatchIO.Controls.Add(this._btnSelectBatchlistCsv);
+            this.tabPageBatchIO.Location = new System.Drawing.Point(4, 26);
+            this.tabPageBatchIO.Name = "tabPageBatchIO";
+            this.tabPageBatchIO.Size = new System.Drawing.Size(1065, 335);
+            this.tabPageBatchIO.TabIndex = 2;
+            this.tabPageBatchIO.Text = "Batchlist I/O";
+            this.tabPageBatchIO.UseVisualStyleBackColor = true;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label15.Location = new System.Drawing.Point(83, 75);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(518, 17);
+            this.label15.TabIndex = 14;
+            this.label15.Text = "NOTE: The application load the selected csv file automaticaly after the file was " +
+    "changed.";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(8, 45);
+            this.label14.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(74, 21);
+            this.label14.TabIndex = 11;
+            this.label14.Text = "Directory";
+            // 
+            // _tbxBatchlistCsvPath
+            // 
+            this._tbxBatchlistCsvPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._tbxBatchlistCsvPath.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._tbxBatchlistCsvPath.Location = new System.Drawing.Point(86, 42);
+            this._tbxBatchlistCsvPath.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this._tbxBatchlistCsvPath.Name = "_tbxBatchlistCsvPath";
+            this._tbxBatchlistCsvPath.Size = new System.Drawing.Size(509, 29);
+            this._tbxBatchlistCsvPath.TabIndex = 13;
+            // 
+            // _chkBxEnableAutoImportBatchlist
+            // 
+            this._chkBxEnableAutoImportBatchlist.AutoSize = true;
+            this._chkBxEnableAutoImportBatchlist.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this._chkBxEnableAutoImportBatchlist.Location = new System.Drawing.Point(86, 10);
+            this._chkBxEnableAutoImportBatchlist.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this._chkBxEnableAutoImportBatchlist.Name = "_chkBxEnableAutoImportBatchlist";
+            this._chkBxEnableAutoImportBatchlist.Size = new System.Drawing.Size(225, 25);
+            this._chkBxEnableAutoImportBatchlist.TabIndex = 41;
+            this._chkBxEnableAutoImportBatchlist.Text = "Enable Auto Import Batchlist";
+            this._chkBxEnableAutoImportBatchlist.UseVisualStyleBackColor = true;
+            // 
+            // _btnSelectBatchlistCsv
+            // 
+            this._btnSelectBatchlistCsv.BackColor = System.Drawing.Color.Gainsboro;
+            this._btnSelectBatchlistCsv.FlatAppearance.BorderSize = 0;
+            this._btnSelectBatchlistCsv.Location = new System.Drawing.Point(600, 42);
+            this._btnSelectBatchlistCsv.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this._btnSelectBatchlistCsv.Name = "_btnSelectBatchlistCsv";
+            this._btnSelectBatchlistCsv.Size = new System.Drawing.Size(34, 29);
+            this._btnSelectBatchlistCsv.TabIndex = 12;
+            this._btnSelectBatchlistCsv.Text = "...";
+            this._btnSelectBatchlistCsv.UseVisualStyleBackColor = false;
+            this._btnSelectBatchlistCsv.Click += new System.EventHandler(this._btnSelectBatchlistCsv_Click);
+            // 
+            // _rtbxCsvHeader
+            // 
+            this._rtbxCsvHeader.BackColor = System.Drawing.Color.WhiteSmoke;
+            this._rtbxCsvHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this._rtbxCsvHeader.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._rtbxCsvHeader.Location = new System.Drawing.Point(86, 139);
+            this._rtbxCsvHeader.Name = "_rtbxCsvHeader";
+            this._rtbxCsvHeader.Size = new System.Drawing.Size(548, 66);
+            this._rtbxCsvHeader.TabIndex = 42;
+            this._rtbxCsvHeader.Text = "BatchName;BatchDescription;HostnameOrAddress;HostDescription;Building;Cabinet;Rac" +
+    "k;PhysicalAddress;Maintenance;AutoFetchPhysicalAddress";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.Color.Red;
+            this.label16.Location = new System.Drawing.Point(83, 119);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(540, 17);
+            this.label16.TabIndex = 14;
+            this.label16.Text = "ATTENTION: It is required that csv file contains the header line that shown in th" +
+    "e box below.";
+            // 
+            // _lnkLblCopyHeader
+            // 
+            this._lnkLblCopyHeader.AutoSize = true;
+            this._lnkLblCopyHeader.Location = new System.Drawing.Point(596, 208);
+            this._lnkLblCopyHeader.Name = "_lnkLblCopyHeader";
+            this._lnkLblCopyHeader.Size = new System.Drawing.Size(38, 17);
+            this._lnkLblCopyHeader.TabIndex = 43;
+            this._lnkLblCopyHeader.TabStop = true;
+            this._lnkLblCopyHeader.Text = "Copy";
+            this._lnkLblCopyHeader.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this._lnkLblCopyHeader_LinkClicked);
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1073, 365);
+            this.ClientSize = new System.Drawing.Size(1073, 413);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this._btnClose);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -524,7 +627,6 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "frmSettings";
             this.Text = "Settings";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSettings_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -537,6 +639,8 @@
             this.tabPageGeneralSettings.ResumeLayout(false);
             this.tabPageAlertingService.ResumeLayout(false);
             this.tabPageAlertingService.PerformLayout();
+            this.tabPageBatchIO.ResumeLayout(false);
+            this.tabPageBatchIO.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -549,7 +653,6 @@
         private System.Windows.Forms.Button _btnClose;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox _tbxInterval;
-        private System.Windows.Forms.CheckBox _chkBxAutoStartTimer;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox _tbxTargetAddresses;
@@ -582,5 +685,14 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPageGeneralSettings;
         private System.Windows.Forms.TabPage tabPageAlertingService;
+        private System.Windows.Forms.TabPage tabPageBatchIO;
+        private System.Windows.Forms.CheckBox _chkBxEnableAutoImportBatchlist;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox _tbxBatchlistCsvPath;
+        private System.Windows.Forms.Button _btnSelectBatchlistCsv;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.RichTextBox _rtbxCsvHeader;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.LinkLabel _lnkLblCopyHeader;
     }
 }

@@ -201,6 +201,8 @@ namespace NetVulture
                 {
                     _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): Begin send messages to " + _tbxTargetAddresses.Lines.Count() + " participants");
 
+                    _client = new SshClient(_tbxMailServer.Text, _tbxMailUser.Text, _tbxMailPassword.Text);
+
                     if (_client != null || _client.IsConnected)
                     {
                         foreach (string address in _tbxTargetAddresses.Lines)
@@ -284,10 +286,11 @@ namespace NetVulture
 
             _tbxOutputDir.Text = Properties.Settings.Default.OutputDir;
             _tbxInterval.Text = Properties.Settings.Default.Interval.ToString();
-            _chkBxAutoStartTimer.Checked = Properties.Settings.Default.AutoStartTimer;
             _chkBxAlertingEnabled.Checked = Properties.Settings.Default.AlertingEnabled;
             _cbxBxSmsAlertingEnabled.Checked = Properties.Settings.Default.SmsAlertingEnabled;
             _chkBxEmailAlertingEnabled.Checked = Properties.Settings.Default.EmailAlertingEnabled;
+            _tbxBatchlistCsvPath.Text = Properties.Settings.Default.AutoloadCsvPath;
+            _chkBxEnableAutoImportBatchlist.Checked = Properties.Settings.Default.AutoloadCsvEnabled;
 
             _gbxEmailSettings.Enabled = _chkBxAlertingEnabled.Checked;
             _gbxSmsSettings.Enabled = _chkBxAlertingEnabled.Checked;
@@ -339,10 +342,11 @@ namespace NetVulture
         {
             Properties.Settings.Default.OutputDir = _tbxOutputDir.Text;
             Properties.Settings.Default.Interval = Convert.ToInt32(_tbxInterval.Text);
-            Properties.Settings.Default.AutoStartTimer = _chkBxAutoStartTimer.Checked;
             Properties.Settings.Default.AlertingEnabled = _chkBxAlertingEnabled.Checked;
             Properties.Settings.Default.SmsAlertingEnabled = _cbxBxSmsAlertingEnabled.Checked;
             Properties.Settings.Default.EmailAlertingEnabled = _chkBxEmailAlertingEnabled.Checked;
+            Properties.Settings.Default.AutoloadCsvPath = _tbxBatchlistCsvPath.Text;
+            Properties.Settings.Default.AutoloadCsvEnabled = _chkBxEnableAutoImportBatchlist.Checked;
 
             if (_chkBxAlertingEnabled.Checked && _chkBxEmailAlertingEnabled.Checked)
             {
@@ -420,7 +424,7 @@ namespace NetVulture
             {
                 _btnSendTestMail.Enabled = false;
                 _btnSendTestMail.Text = "Send messages...";
-                Task task = Task.Run(() => SendMail("This is a test message!"));
+                Task task = Task.Run(() => NVManagementClass.SendMail(_tbxMailServer.Text, _tbxMailUser.Text, _tbxMailPassword.Text, "This is a test message!", _tbxTargetAddresses.Lines));
 
                 task.ContinueWith((t) => {
                     this.Invoke((MethodInvoker)delegate
@@ -437,55 +441,21 @@ namespace NetVulture
             }
         }
 
-        private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
+        private void _btnSelectBatchlistCsv_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.OutputDir = _tbxOutputDir.Text;
-            Properties.Settings.Default.Interval = Convert.ToInt32(_tbxInterval.Text);
-            Properties.Settings.Default.AutoStartTimer = _chkBxAutoStartTimer.Checked;
-            Properties.Settings.Default.AlertingEnabled = _chkBxAlertingEnabled.Checked;
-            Properties.Settings.Default.SmsAlertingEnabled = _cbxBxSmsAlertingEnabled.Checked;
-            Properties.Settings.Default.EmailAlertingEnabled = _chkBxEmailAlertingEnabled.Checked;
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "csv files (*.csv)|*.csv";
+            ofd.FilterIndex = 1;
 
-            if (_chkBxAlertingEnabled.Checked && _chkBxEmailAlertingEnabled.Checked)
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
-                System.Collections.Specialized.StringCollection scEmail = new System.Collections.Specialized.StringCollection();
-                foreach (string line in _tbxTargetAddresses.Lines)
-                {
-                    scEmail.Add(line);
-                }
-
-                Properties.Settings.Default.TargetAddresses = scEmail;
-
-                Properties.Settings.Default.MailUser = _tbxMailUser.Text;
-                Properties.Settings.Default.MailPassword = _tbxMailPassword.Text;
-                Properties.Settings.Default.MailServer = _tbxMailServer.Text;
-
-                if (_tbxMailServerPort.Text.Length > 0)
-                {
-                    Properties.Settings.Default.MailServerPort = Convert.ToInt32(_tbxMailServerPort.Text);
-                }
-                else
-                {
-                    Properties.Settings.Default.MailServerPort = 0;
-                }
+                _tbxBatchlistCsvPath.Text = ofd.FileName;
             }
+        }
 
-            if (_chkBxAlertingEnabled.Checked && _cbxBxSmsAlertingEnabled.Checked)
-            {
-                System.Collections.Specialized.StringCollection scSms = new System.Collections.Specialized.StringCollection();
-                foreach (string line in _tbxMobileNumbers.Lines)
-                {
-                    scSms.Add(line);
-                }
-
-                Properties.Settings.Default.MobileNumbers = scSms;
-
-                Properties.Settings.Default.GatewayAddress = _tbxSmsGatewayAddress.Text;
-                Properties.Settings.Default.GatewayUser = _tbxSmsGatewayUser.Text;
-                Properties.Settings.Default.GatewayPassword = _tbxSmsGatewayPassword.Text;
-            }
-
-            Properties.Settings.Default.Save();
+        private void _lnkLblCopyHeader_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Clipboard.SetText(_rtbxCsvHeader.Text);
         }
     }
 }

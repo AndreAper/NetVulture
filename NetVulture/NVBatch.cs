@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Net.NetworkInformation;
-using System.Timers;
-using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
+using System.Net;
+using System.Runtime.InteropServices;
 
 namespace NetVulture
 {
@@ -13,12 +14,11 @@ namespace NetVulture
     {
         private string _name;
         private string _description;
-        private List<string> _hostList = null;
-        private List<PingReply> _results = null;
+        private List<HostInformation> _hostList = null;
         private DateTime _lastExec;
         private int _timeOut;
         private int _bufferSize;
-        private Dictionary<string, int> _failedHosts;
+        private bool _maintenance;
 
         /// <summary>
         /// Get or set the name of the batch
@@ -36,12 +36,12 @@ namespace NetVulture
         /// Get or set the list that contains all hosts to send the icmp echo messages.
         /// </summary>
         [XmlElement(ElementName = "HostList")]
-        public List<string> HostList { get { return _hostList; } set { _hostList = value; } }
+        public List<HostInformation> HostList { get { return _hostList; } set { _hostList = value; } }
 
         /// <summary>
         /// Get the last execution of icmp echo request.
         /// </summary>
-        [XmlIgnore]
+        [XmlElement(ElementName = "LastExecution")]
         public DateTime LastExecution { get { return _lastExec; } }
 
         /// <summary>
@@ -57,24 +57,16 @@ namespace NetVulture
         public int Buffersize { get { return _bufferSize; } set { _bufferSize = value; } }
 
         /// <summary>
-        /// Get the results of all icmp echo requests.
+        /// Get or set the indicator if maintenance is active or not.
         /// </summary>
-        [XmlIgnore]
-        public List<PingReply> Results { get { return _results; } }
-
-        /// <summary>
-        /// Get the a list of failed targets.
-        /// </summary>
-        [XmlIgnore]
-        public Dictionary<string, int> FailedHosts { get { return _failedHosts; } }
+        [XmlElement(ElementName = "Maintenance")]
+        public bool Maintenance { get { return _maintenance; } set { _maintenance = value; } }
 
         /// <summary>
         /// Create a new instance of NetVultureBatch.
         /// </summary>
         public NVBatch()
         {
-            _results = new List<PingReply>();
-            _failedHosts = new Dictionary<string, int>();
             _name = "New Batch";
             _timeOut = 1000;
             _bufferSize = 32;
@@ -83,163 +75,84 @@ namespace NetVulture
         /// <summary>
         /// Sending icmp echo message to each host in the hostlist asynchronous.
         /// </summary>
-        public async Task Capture()
+        public async Task CaptureAsync()
         {
             if (NetworkInterface.GetIsNetworkAvailable())
             {
                 if (_hostList != null && _hostList.Count > 0)
                 {
-                    _results.Clear();
+                    //Last execute of batch
                     _lastExec = DateTime.Now;
 
                     for (int j = 0; j < _hostList.Count; j = j+1)
                     {
-                        Ping p = new Ping();
-                        PingReply pr = null;
-
-                        try
+                        if (_hostList[j].MaintenanceActivated == false)
                         {
-                            pr = await p.SendPingAsync(_hostList[j], _timeOut, new byte[_bufferSize]);
-                            _results.Add(pr);
-
-                            if (pr.Status != IPStatus.Success)
+                            Ping p = new Ping();
+                            PingReply pr = await p.SendPingAsync(_hostList[j].HostnameOrAddress, _timeOut, new byte[_bufferSize]);
+                            try
                             {
-                                if (_failedHosts.Any(x => x.Key == _hostList[j]))
+                                _hostList[j].ReplyData = pr;
+
+                                if (pr.Status != IPStatus.Success)
                                 {
-                                    _failedHosts[_hostList[j]]++;
+                                    _hostList[j].PingAttempts++;
                                 }
                                 else
                                 {
-                                    _failedHosts.Add(_hostList[j], 0);
+                                    _hostList[j].LastAvailability = DateTime.Now;
+                                    _hostList[j].PingAttempts = 0;
+
+                                    //if (_hostList[j].AutoFetchPhysicalAddress)
+                                    //{
+                                    //    _hostList[j].PhysicalAddress = await Task.Run(() => GetMACAddressFromARP(_hostList[j].HostnameOrAddress));
+                                    //}
                                 }
+
                             }
-
-                        }
-                        catch (Exception)
-                        {
-                            _results.Add(pr);
-
-                            if (_failedHosts.Any(x => x.Key == _hostList[j]))
+                            catch (Exception)
                             {
-                                _failedHosts[_hostList[j]]++;
+                                _hostList[j].ReplyData = null;
+                                _hostList[j].PingAttempts++;
                             }
-                            else
-                            {
-                                _failedHosts.Add(_hostList[j], 0);
-                            }
+
+
+                            p.Dispose(); 
                         }
-
-
-                        p.Dispose();
                     }
                 }
             }
         }
 
-        public async Task Capture(int timeOut)
+        [DllImport("iphlpapi.dll", ExactSpelling = true)]
+        static extern int SendARP(int DestIP, int SrcIP, byte[] pMacAddr, ref uint PhyAddrLen);
+        
+        // *********************************************************************
+        /// <summary>
+        /// Gets the MAC address from ARP table in colon (:) separated format.
+        /// </summary>
+        /// <param name="hostNameOrAddress">Host name or IP address of the
+        /// remote host for which MAC address is desired.</param>
+        /// <returns>A string containing MAC address; null if MAC address could
+        /// not be found.</returns>
+        private string GetMACAddressFromARP(string hostNameOrAddress)
         {
-            if (NetworkInterface.GetIsNetworkAvailable())
+            IPHostEntry hostEntry = Dns.GetHostEntry(hostNameOrAddress);
+
+            if (hostEntry.AddressList.Length == 0) return null;
+            byte[] macAddr = new byte[6];
+            uint macAddrLen = (uint)macAddr.Length;
+            if (SendARP((int) hostEntry.AddressList[0].Address, 0, macAddr, ref macAddrLen) != 0) return null;
+
+            StringBuilder macAddressString = new StringBuilder();
+            for (int i = 0; i<macAddr.Length; i++)
             {
-                if (_hostList != null && _hostList.Count > 0)
-                {
-                    _results.Clear();
-                    _lastExec = DateTime.Now;
-
-                    for (int j = 0; j < _hostList.Count; j = j + 1)
-                    {
-                        Ping p = new Ping();
-                        PingReply pr = null;
-
-                        try
-                        {
-                            pr = await p.SendPingAsync(_hostList[j], timeOut, new byte[_bufferSize]);
-                            _results.Add(pr);
-
-                            if (pr.Status != IPStatus.Success)
-                            {
-                                if (_failedHosts.Any(x => x.Key == _hostList[j]))
-                                {
-                                    _failedHosts[_hostList[j]]++;
-                                }
-                                else
-                                {
-                                    _failedHosts.Add(_hostList[j], 0);
-                                }
-                            }
-
-                        }
-                        catch (Exception)
-                        {
-                            _results.Add(pr);
-
-                            if (_failedHosts.Any(x => x.Key == _hostList[j]))
-                            {
-                                _failedHosts[_hostList[j]]++;
-                            }
-                            else
-                            {
-                                _failedHosts.Add(_hostList[j], 0);
-                            }
-                        }
-
-
-                        p.Dispose();
-                    }
-                }
+                if (macAddressString.Length > 0)
+                macAddressString.Append(":");
+                macAddressString.AppendFormat("{0:x2}", macAddr[i]);
             }
-        }
 
-        public async Task Capture(int timeOut, int bufferSize)
-        {
-            if (NetworkInterface.GetIsNetworkAvailable())
-            {
-                if (_hostList != null && _hostList.Count > 0)
-                {
-                    _results.Clear();
-                    _lastExec = DateTime.Now;
-
-                    for (int j = 0; j < _hostList.Count; j = j + 1)
-                    {
-                        Ping p = new Ping();
-                        PingReply pr = null;
-
-                        try
-                        {
-                            pr = await p.SendPingAsync(_hostList[j], timeOut, new byte[bufferSize]);
-                            _results.Add(pr);
-
-                            if (pr.Status != IPStatus.Success)
-                            {
-                                if (_failedHosts.Any(x => x.Key == _hostList[j]))
-                                {
-                                    _failedHosts[_hostList[j]]++;
-                                }
-                                else
-                                {
-                                    _failedHosts.Add(_hostList[j], 0);
-                                }
-                            }
-
-                        }
-                        catch (Exception)
-                        {
-                            _results.Add(pr);
-
-                            if (_failedHosts.Any(x => x.Key == _hostList[j]))
-                            {
-                                _failedHosts[_hostList[j]]++;
-                            }
-                            else
-                            {
-                                _failedHosts.Add(_hostList[j], 0);
-                            }
-                        }
-
-
-                        p.Dispose();
-                    }
-                }
-            }
+            return macAddressString.ToString();
         }
     }
 }

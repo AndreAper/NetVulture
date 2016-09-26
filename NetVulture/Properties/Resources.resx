@@ -121,6 +121,9 @@
   <data name="High_Priority_32_Black" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\High_Priority_32_Black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Todo_List_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Todo_List_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Running_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Running_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -157,7 +160,7 @@
   <data name="Collect_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Collect_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Todo_List_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Todo_List_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Maintenance-32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Maintenance-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -51,5 +51,11 @@
     <Setting Name="MailServerPort" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">587</Value>
     </Setting>
+    <Setting Name="AutoloadCsvPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="AutoloadCsvEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

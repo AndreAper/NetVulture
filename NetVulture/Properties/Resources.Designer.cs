@@ -133,6 +133,16 @@ namespace NetVulture.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Maintenance_32 {
+            get {
+                object obj = ResourceManager.GetObject("Maintenance-32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Plus_32 {
             get {
                 object obj = ResourceManager.GetObject("Plus_32", resourceCulture);

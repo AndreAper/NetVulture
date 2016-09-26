@@ -1,13 +1,4 @@
-﻿/*
- * TODO: Alle nicht erfolgreichen Echo-Anfragen in einer History speichern.
- * TODO: Report nach csv exportieren.
- * TODO: SendSMS und SendMail in frmMain implementieren.
- * TODO: Reportbutton bei aktiver Pingausführen weil die ResultList nicht übergeben werden kann da sie NULL ist.
- * TODO: Enumeration "HostMode" implermentieren mit den elementen "Active, Maintenance, Fault, AwaitNewReply"
- * TODO: Vor senden der Email via SSH die Internetverbindung auf dem Gateway aktivieren und Google.com anpingen. 
- */ 
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,11 +10,8 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.IO;
 using System.Net.NetworkInformation;
-using System.Net.Mail;
-using System.Net;
 using System.Diagnostics;
 using Renci.SshNet;
-using System.Threading;
 
 namespace NetVulture
 {
@@ -32,76 +20,88 @@ namespace NetVulture
         private List<NVBatch> _batchList;
         private NVBatch _selectedBatch;
 
-        private string _outputDir, _smsGwAddress, _smsGwUser, _smsGwPassword, _mailUser, _mailPw, _mailServer;
+        private string _outputDir, _smsGwAddress, _smsGwUser, _smsGwPassword, _mailUser, _mailPw, _mailServer, _autoImportCsvPath;
         private DateTime _lastExecutionTime;
         private BackgroundWorker _backWorker;
         private System.Collections.Specialized.StringCollection _addressList, _mobileNumberList;
         private int _mailServerPort;
-        private bool _isEmailAlertingEnabled, _isSmsAlertingEnabled;
+        private bool _isEmailAlertingEnabled, _isSmsAlertingEnabled, _isAutoImportEnabled;
         private StringBuilder _sbMailAlertingProtocoll, _sbSmsAlertingProtocoll;
 
         private void CheckAlert()
         {
-            StringBuilder sbMail = new StringBuilder("ATTENTION: The followed hosts are not available.");
+            StringBuilder sbMail = new StringBuilder();
             bool _allowSendingMail = false;
 
             foreach (NVBatch batch in _batchList)
             {
-                if (batch.FailedHosts.Count > 0)
+                if (!batch.Maintenance)
                 {
-                    if (batch.FailedHosts.Any(x => x.Value == 10))
+                    if (batch.HostList.Any(x => x.ReplyData != null))
                     {
-                        IEnumerable<KeyValuePair<string, int>> firstPass = batch.FailedHosts.Where(x => x.Value == 10);
+                        IEnumerable<HostInformation> failed = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status != IPStatus.Success);
 
-                        if (firstPass.Count() > 0)
+                        if (failed.Count() > 0)
                         {
-                            sbMail.AppendLine(Environment.NewLine);
-
-                            foreach (string failedAddress in batch.FailedHosts.Keys)
+                            if (failed.Any(x => x.PingAttempts == 10))
                             {
-                                //{BATCHNAME}       {TARGTE_DNS_IP}     {STAUS} 
-                                sbMail.AppendLine(batch.Name + "\t\t" + failedAddress);
-                                sbMail.AppendLine(Environment.NewLine);
+                                IEnumerable<HostInformation> firstPass = failed.Where(x => x.PingAttempts == 10);
+
+                                if (firstPass.Count() > 0)
+                                {
+                                    sbMail.Append("<style type='text/css'>");
+                                    sbMail.Append("h1 { font: 25px consolas, sans-serif; color: #f6f6f6; background-color: #00324b; width: 790px; padding: 10px 5px; text-align:center; }");
+                                    sbMail.Append(".tg { border-collapse: collapse; border-spacing: 0; width: 800px; font: 15px consolas, sans-serif; }");
+                                    sbMail.Append(".tg td { font-weight: bold; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; }");
+                                    sbMail.Append(".tg th { font-weight: normal; padding: 10px 15px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; color: #4a4a4a; background-color: #f6f6f6; }");
+                                    sbMail.Append(".tg .tg-header { vertical-align: top; color: white; background-color: #e6003c; }");
+                                    sbMail.Append("</style>");
+                                    sbMail.Append("<h1>NetVulture Alerting System</h1>");
+                                    sbMail.Append("<table class='tg'>");
+                                    sbMail.Append("<tr> <th class='tg-header'>Batch</th><th class='tg-header'>Hostname or Address</th><th class='tg-header'>Building</th><th class='tg-header'>Cabinet</th><th class='tg-header'>Rack</th><th class='tg-header'>Last Availability</th><th class='tg-header'>Status</th></tr>");
+
+                                    foreach (HostInformation hi in firstPass)
+                                    {
+                                        sbMail.Append("<tr><th>" + batch.Name + "</th><th>" + hi.HostnameOrAddress + "</th><th>" + hi.Building + "</th><th>" + hi.Cabinet + "</th><th>" + hi.Rack + "</th><th>" + hi.LastAvailability.ToString() + "</th><th>" + hi.ReplyData.Status.ToString() + "</th></tr>");
+                                    }
+
+                                    sbMail.Append("</table>");
+                                    _allowSendingMail = true;
+                                }
                             }
 
-                            sbMail.AppendLine(Environment.NewLine);
-                            _allowSendingMail = true;
-                        }
-                    }
-
-                    if (batch.FailedHosts.Any(x => x.Value == 20))
-                    {
-                        StringBuilder sbSms = new StringBuilder("ATTENTION ");
-
-                        IEnumerable<KeyValuePair<string, int>> secondPass = batch.FailedHosts.Where(x => x.Value == 20);
-
-                        if (secondPass.Count() > 0)
-                        {
-                            sbSms.Append(secondPass.Count() + " of " + batch.HostList.Count + " hosts from batch " + batch.Name + " are not available after 20 attemps to ping.");
-                        }
-
-                        Task sender = Task.Run(() => SendSms(sbSms.ToString()));
-                        sender.ContinueWith((t) => {
-                            this.Invoke((MethodInvoker)delegate
+                            if (failed.Any(x => x.PingAttempts == 20))
                             {
-                                WriteReport();
-                                WriteError("Message Dispatcher", "void CheckAlert()", "Sending SMS successfully");
-                            });
-                        });
-                    }
-                }
-                else
-                {
+                                StringBuilder sbSms = new StringBuilder("ATTENTION ");
 
-                }
+                                IEnumerable<HostInformation> secondPass = failed.Where(x => x.PingAttempts == 20);
 
+                                if (secondPass.Count() > 0)
+                                {
+                                    sbSms.Append(secondPass.Count() + " of " + batch.HostList.Count + " hosts from batch " + batch.Name + " are not available after 20 attemps to ping.");
+                                }
+
+                                Task sender = Task.Run(() => SendSms(sbSms.ToString()));
+                                sender.ContinueWith((t) =>
+                                {
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
+                                        WriteReport();
+                                        WriteError("Message Dispatcher", "void CheckAlert()", "Sending SMS successfully");
+                                    });
+                                });
+                            }
+                        }
+                    } 
+                }
             }
 
             if (_allowSendingMail)
             {
-                Task sender = Task.Run(() => SendMail(sbMail.ToString()));
+                Task task = Task.Run(() => NVManagementClass.SendMail(_mailServer, _mailUser, _mailPw, sbMail.ToString(), _addressList.Cast<string>().ToArray()));
+                //Task sender = Task.Run(() => SendMail(sbMail.ToString()));
 
-                sender.ContinueWith((t) => {
+                task.ContinueWith((t) => {
                     this.Invoke((MethodInvoker)delegate
                     {
                         WriteError("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
@@ -135,12 +135,85 @@ namespace NetVulture
             }
         }
 
+        private void UpdateBatchList()
+        {
+            //List all Batches to the FlowLayoutPanel.
+            if (_batchList != null && _batchList.Count > 0)
+            {
+                _flpBatchList.Controls.Clear();
+
+                foreach (NVBatch job in _batchList)
+                {
+                    Button b = new Button();
+                    b.BackColor = Color.Transparent;
+                    b.TextAlign = ContentAlignment.MiddleLeft;
+                    b.Text = job.Name;
+                    b.FlatStyle = FlatStyle.Flat;
+                    b.FlatAppearance.BorderSize = 0;
+                    b.FlatAppearance.MouseOverBackColor = Color.FromArgb(205, 215, 220);
+                    b.Font = new Font("Segoe UI Light", 12);
+                    b.ForeColor = Color.FromArgb(0, 50, 75);
+                    b.ImageAlign = ContentAlignment.MiddleRight;
+                    b.Margin = new Padding(0);
+                    b.Width = _flpBatchList.Width;
+                    b.Height = 40;
+                    b.UseVisualStyleBackColor = false;
+                    b.TextImageRelation = TextImageRelation.Overlay;
+                    b.Click += BatchList_Click;
+
+                    if (job.HostList != null)
+                    {
+                        if (job.Maintenance)
+                        {
+                            b.Image = Properties.Resources.Maintenance_32;
+                        }
+                        else
+                        {
+                            if (job.HostList.Any(x => x.ReplyData != null))
+                            {
+                                if (job.HostList.Count(x => x.ReplyData != null && x.ReplyData.Status != IPStatus.Success) > 0)
+                                {
+                                    b.Image = Properties.Resources.High_Priority_32_Black;
+                                }
+                                else
+                                {
+                                    b.Image = null;
+                                }
+                            }
+                        }
+                    }
+
+                    _flpBatchList.Controls.Add(b);
+                }
+
+                DisplayBatch();
+            }
+            else
+            {
+                _flpBatchList.Controls.Clear();
+
+                _pnlSubMenuBatch.Enabled = false;
+                _tbxJobName.Text = "";
+                _tbxJobName.Enabled = false;
+                _tbxJobDescription.Enabled = false;
+                _dgvResults.Enabled = false;
+                _dgvResults.Rows.Clear();
+
+                _lblLastBatchExec.Text = "Last execution:\r\n";
+                _lblCountOfFailedRequests.Text = "Failed Requests:\r\n";
+                _lblCountOfSuccessRequests.Text = "Success Requests:\r\n";
+            }
+            
+        }
+
         private void UpdateForm()
         {
             //Get the saved settings from configuration file
             _outputDir = Properties.Settings.Default.OutputDir;
             _lblOutputDir.Text = "Output: " + Environment.NewLine + _outputDir;
             _isEmailAlertingEnabled = Properties.Settings.Default.EmailAlertingEnabled;
+            _isAutoImportEnabled = Properties.Settings.Default.AutoloadCsvEnabled;
+            _autoImportCsvPath = Properties.Settings.Default.AutoloadCsvPath;
 
             if (_isEmailAlertingEnabled)
             {
@@ -173,44 +246,25 @@ namespace NetVulture
                 _lblSmsAlertingStatus.Text = "SMS Alerting Status:" + Environment.NewLine + "Disabled";
             }
 
-            //List all Batches to the FlowLayoutPanel.
-            if (_batchList != null && _batchList.Count > 0)
+            if (_isAutoImportEnabled)
             {
-                _flpBatchList.Controls.Clear();
-
-                foreach (NVBatch job in _batchList)
-                {
-                    Button b = new Button();
-                    b.BackColor = Color.Transparent;
-                    b.TextAlign = ContentAlignment.MiddleLeft;
-                    b.Text = job.Name;
-                    b.FlatStyle = FlatStyle.Flat;
-                    b.FlatAppearance.BorderSize = 0;
-                    b.FlatAppearance.MouseOverBackColor = Color.FromArgb(205, 215, 220);
-                    b.Font = new Font("Segoe UI Light", 12);
-                    b.ForeColor = Color.FromArgb(0, 50, 75);
-                    b.ImageAlign = ContentAlignment.MiddleRight;
-                    b.Margin = new Padding(0);
-                    b.Width = _flpBatchList.Width;
-                    b.Height = 40;
-                    b.UseVisualStyleBackColor = false;
-                    b.TextImageRelation = TextImageRelation.Overlay;
-                    b.Click += BatchList_Click;
-
-                    //TODO: Image wird nicht zurückgesetzt wenn FailedHosts keine elemente hat.
-                    if (job.FailedHosts.Count > 0)
-                    {
-                        b.Image = Properties.Resources.High_Priority_32_Black;
-                    }
-                    else
-                    {
-                        b.Image = null;
-                    }
-
-                    _flpBatchList.Controls.Add(b);
-                }
-
-                //TODO: Von hier aus noch ShowBatch() aufrufen? Zum anzeigen des zu letzt gewählte Batch??????
+                _chkBtnTimerEnabled.Enabled = false;
+                _btnAddBatch.Enabled = false;
+                _btnCollect.Enabled = false;
+                _pnlSubMenuBatch.Enabled = false;
+                _tbxJobName.Enabled = false;
+                _tbxJobDescription.Enabled = false;
+                _chkBtnTimerEnabled.Checked = true;
+            }
+            else
+            {
+                _chkBtnTimerEnabled.Enabled = true;
+                _btnAddBatch.Enabled = true;
+                _btnCollect.Enabled = true;
+                _pnlSubMenuBatch.Enabled = true;
+                _tbxJobName.Enabled = true;
+                _tbxJobDescription.Enabled = true;
+                _lblNoChangesPossible.Visible = false;
             }
         }
 
@@ -236,57 +290,68 @@ namespace NetVulture
             {
                 _tbxJobName.Text = _selectedBatch.Name;
                 _tbxJobDescription.Text = _selectedBatch.Description;
-                _lblLastBatchExec.Text = "Last execution:\r\n" + _selectedBatch.LastExecution.ToString();
+                _lblLastBatchExec.Text = "Last batch run:\r\n" + _selectedBatch.LastExecution.ToString();
+                _chkBtnBatchMaintenanceSwitch.Checked = _selectedBatch.Maintenance;
 
                 if (_selectedBatch.HostList != null && _selectedBatch.HostList.Count > 0)
                 {
-                    if (_selectedBatch.Results != null && _selectedBatch.Results.Count > 0)
+                    _dgvResults.Rows.Clear();
+                    int failedRequests = 0;
+                    int successRequests = 0;
+
+                    for (int i = 0; i < _selectedBatch.HostList.Count; i++)
                     {
-                        _dgvResults.Rows.Clear();
+                        PingReply pr = _selectedBatch.HostList[i].ReplyData;
 
-                        for (int i = 0; i < _selectedBatch.Results.Count; i++)
+                        string[] data;
+
+                        if (pr == null)
                         {
-                            PingReply pr = _selectedBatch.Results[i];
-
-                            string[] data;
-
-                            if (pr == null)
+                            data = new string[] { _selectedBatch.HostList[i].HostnameOrAddress, "", "", "", "", "", "" };
+                            failedRequests++;
+                        }
+                        else
+                        {
+                            if (pr.Status != IPStatus.Success)
                             {
-                                data = new string[] { _selectedBatch.HostList[i], "", "", _selectedBatch.LastExecution.ToString(), "Unknown", "" };
+                                failedRequests++;
                             }
                             else
                             {
-                                int attempts = 0;
-
-                                if (pr.Status != IPStatus.Success)
-                                {
-                                    attempts = _selectedBatch.FailedHosts[_selectedBatch.HostList[i]];
-                                }
-
-                                data = new string[] { _selectedBatch.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), _selectedBatch.LastExecution.ToString(), pr.Status.ToString(), attempts.ToString() };
+                                successRequests++;
                             }
 
-                            _dgvResults.Rows.Add(data);
+                            data = new string[] { _selectedBatch.HostList[i].HostnameOrAddress, pr.Address.ToString(), _selectedBatch.HostList[i].PhysicalAddress, pr.RoundtripTime.ToString(), _selectedBatch.HostList[i].LastAvailability.ToString(), pr.Status.ToString(), _selectedBatch.HostList[i].PingAttempts.ToString() };
                         }
 
-                        _lblCountOfFailedRequests.Text = "Failed Requests:\r\n" + _selectedBatch.Results.Where(x => x.Status != IPStatus.Success).Count().ToString();
-                        _lblCountOfSuccessRequests.Text = "Success Requests:\r\n" + _selectedBatch.Results.Where(x => x.Status == IPStatus.Success).Count().ToString();
+                        _dgvResults.Rows.Add(data);
                     }
-                    else
-                    {
-                        _dgvResults.Rows.Clear();
 
-                        for (int i = 0; i < _selectedBatch.HostList.Count; i++)
-                        {
-                            _dgvResults.Rows.Add(_selectedBatch.HostList[i], "", "", "", "", "");
-                        }
-                    }
+                    _lblCountOfFailedRequests.Text = "Failed Requests:\r\n" + failedRequests.ToString();
+                    _lblCountOfSuccessRequests.Text = "Success Requests:\r\n" + successRequests.ToString();
+                }
+                else
+                {
+                    _dgvResults.Rows.Clear();
                 }
 
-                _pnlSubMenuBatch.Enabled = true;
-                _tbxJobName.Enabled = true;
-                _tbxJobDescription.Enabled = true;
-                _dgvResults.Enabled = true;
+                if (_collectTimer.Enabled)
+                {
+                    _pnlSubMenuBatch.Enabled = false;
+                    _tbxJobName.Enabled = false;
+                    _tbxJobDescription.Enabled = false;
+                    _dgvResults.Enabled = false;
+                }
+                else
+                {
+                    if (_isAutoImportEnabled == false)
+                    {
+                        _pnlSubMenuBatch.Enabled = true;
+                        _tbxJobName.Enabled = true;
+                        _tbxJobDescription.Enabled = true;
+                        _dgvResults.Enabled = true; 
+                    }
+                }
             }
             else
             {
@@ -317,8 +382,8 @@ namespace NetVulture
 
                 if (pr.Status != IPStatus.Success)
                 {
-                    MessageBox.Show("Host is not available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): SendSms function canceled because host is not available!");
+                    MessageBox.Show("SMS/E-Mail gateway is not available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): SendSms function canceled because SMS/E-Mail gateway is not available.!");
                     return;
                 }
 
@@ -379,7 +444,7 @@ namespace NetVulture
 
                 if (pr.Status != IPStatus.Success)
                 {
-                    MessageBox.Show("Host is not available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("SMS/Mail Gateway is not available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     _sbMailAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendMail(): SendMail function canceled because host is not available!");
                     return;
                 }
@@ -452,6 +517,10 @@ namespace NetVulture
                     throw;
                 }
             }
+            else
+            {
+                File.Delete(@"batchlist.xml");
+            }
         }
 
         /// <summary>
@@ -471,87 +540,87 @@ namespace NetVulture
                     Directory.CreateDirectory(_outputDir);
                 }
 
-                foreach (NVBatch job in _batchList)
+                foreach (NVBatch batch in _batchList)
                 {
-                    string csvFile = Path.Combine(_outputDir, job.Name + ".csv");
-                    string jsFile = Path.Combine(_outputDir, job.Name + ".js");
-
-                    if (job.Results != null && job.Results.Count > 0)
+                    if (!batch.Maintenance)
                     {
-                        using (StreamWriter swCsv = new StreamWriter(csvFile))
+                        string csvFile = Path.Combine(_outputDir, batch.Name + ".csv");
+                        string csvFileFailed = Path.Combine(_outputDir, batch.Name + "_FailedRequestHistory.csv");
+                        string jsFile = Path.Combine(_outputDir, batch.Name + ".js");
+
+                        if (batch.HostList != null && batch.HostList.Count > 0)
                         {
-                            for (int i = 0; i < job.Results.Count; i++)
+                            //Live CSV output
+                            using (StreamWriter swCsv = new StreamWriter(csvFile))
                             {
-                                PingReply pr = job.Results[i];
-
-                                string[] data;
-
-                                if (pr != null)
+                                for (int i = 0; i < batch.HostList.Count; i++)
                                 {
-                                    if (pr.Address == null)
+                                    PingReply pr = batch.HostList[i].ReplyData;
+
+                                    string[] data;
+
+                                    if (pr == null)
                                     {
-                                        data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), IPStatus.Unknown.ToString(), "0" };
+                                        data = new string[] { batch.HostList[i].HostnameOrAddress, "", "", batch.HostList[i].LastAvailability.ToString(), "Unknown", "" };
                                     }
                                     else
                                     {
-                                        string attemps = "0";
-
-                                        if (job.FailedHosts.Any(x => x.Key == job.HostList[i]))
-                                        {
-                                            attemps = job.FailedHosts[job.HostList[i]].ToString();
-                                        }
-
-                                        data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString(), attemps };
+                                        data = new string[] { batch.HostList[i].HostnameOrAddress, pr.Address.ToString(), pr.RoundtripTime.ToString(), batch.HostList[i].LastAvailability.ToString(), pr.Status.ToString(), batch.HostList[i].PingAttempts.ToString() };
                                     }
-                                }
-                                else
-                                {
-                                    data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), "Unknown", "0" };
-                                }
 
-                                await swCsv.WriteLineAsync(string.Join(",", data));
+                                    await swCsv.WriteLineAsync(string.Join(";", data));
+                                }
                             }
-                        }
 
-                        using (StreamWriter swJs = new StreamWriter(jsFile))
-                        {
-                            string[] jsArrayElements = new string[job.Results.Count];
-
-                            for (int i = 0; i < job.Results.Count; i++)
+                            //History CSV output
+                            using (StreamWriter swCsv = new StreamWriter(csvFileFailed, true))
                             {
-                                PingReply pr = job.Results[i];
-                                string[] data;
-
-                                if (pr != null)
+                                for (int i = 0; i < batch.HostList.Count; i++)
                                 {
-                                    if (pr.Address == null)
+                                    PingReply pr = batch.HostList[i].ReplyData;
+
+                                    if (pr == null)
                                     {
-                                        data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), IPStatus.Unknown.ToString(), "0" };
+                                        await swCsv.WriteLineAsync(string.Join(";", batch.HostList[i].HostnameOrAddress, "", "", batch.HostList[i].LastAvailability.ToString(), "", ""));
                                     }
                                     else
                                     {
-                                        string attemps = "0";
-
-                                        if (job.FailedHosts.Any(x => x.Key == job.HostList[i]))
+                                        if (pr.Status != IPStatus.Success)
                                         {
-                                            attemps = job.FailedHosts[job.HostList[i]].ToString();
+                                            await swCsv.WriteLineAsync(string.Join(";", batch.HostList[i].HostnameOrAddress, pr.Address.ToString(), pr.RoundtripTime.ToString(), batch.HostList[i].LastAvailability.ToString(), pr.Status.ToString(), batch.HostList[i].PingAttempts.ToString())); 
                                         }
-
-                                        data = new string[] { job.HostList[i], pr.Address.ToString(), pr.RoundtripTime.ToString(), job.LastExecution.ToString(), pr.Status.ToString(), attemps };
                                     }
                                 }
-                                else
-                                {
-                                    data = new string[] { job.HostList[i], "0.0.0.0", "0", job.LastExecution.ToString(), IPStatus.Unknown.ToString(), "0" };
-                                }
-
-                                //['Target Address or Name','ReceivedIp','RoundTrip','ExecutionTime','Status','Attemps']
-                                jsArrayElements[i] = "['" + data[0] + "','" + data[1] + "','" + data[2] + "','" + data[3] + "','" + data[4] + "','" + data[5] + "']";
                             }
 
-                            await swJs.WriteAsync("var " + job.Name + " = [" + string.Join(",", jsArrayElements) + "];");
-                        }
-                    }                   
+                            // Live JS output
+                            using (StreamWriter swJs = new StreamWriter(jsFile))
+                            {
+                                string[] jsArrayElements = new string[batch.HostList.Count];
+
+                                for (int i = 0; i < batch.HostList.Count; i++)
+                                {
+                                    PingReply pr = batch.HostList[i].ReplyData;
+
+                                    string[] data;
+
+                                    if (pr == null)
+                                    {
+                                        data = new string[] { batch.HostList[i].HostnameOrAddress, "", "", batch.HostList[i].LastAvailability.ToString(), "Unknown", "" };
+                                    }
+                                    else
+                                    {
+                                        data = new string[] { batch.HostList[i].HostnameOrAddress, pr.Address.ToString(), pr.RoundtripTime.ToString(), batch.HostList[i].LastAvailability.ToString(), pr.Status.ToString(), batch.HostList[i].PingAttempts.ToString() };
+                                    }
+
+                                    //['Target Address or Name','ReceivedIp','RoundTrip','ExecutionTime','Status','Attemps']
+                                    jsArrayElements[i] = "['" + data[0] + "','" + data[1] + "','" + data[2] + "','" + data[3] + "','" + data[4] + "','" + data[5] + "']";
+                                }
+
+                                await swJs.WriteAsync("var " + batch.Name + " = [" + string.Join(",", jsArrayElements) + "];");
+                            }
+                        }  
+                    }                  
                 }
             }
 
@@ -615,6 +684,7 @@ namespace NetVulture
             _backWorker.DoWork += _backWorker_DoWork;
             _backWorker.RunWorkerCompleted += _backWorker_RunWorkerCompleted;
 
+            UpdateBatchList();
             UpdateForm();
         }
 
@@ -623,13 +693,15 @@ namespace NetVulture
             await WriteOutput();
             CheckAlert();
 
-            _lblLastCollect.Text = "Last Execution: " + Environment.NewLine + _lastExecutionTime.ToString();
+            _lblLastCollect.Text = "Last Overall Execution: " + Environment.NewLine + _lastExecutionTime.ToString();
             _btnCollect.Enabled = true;
             _btnCollect.BackColor = Color.FromArgb(0, 50, 75);
             _lastExecutionTime = DateTime.Now;
             _btnShowReport.Enabled = true;
+            _pnlSubMenuBatch.Enabled = true;
 
             UpdateForm();
+            UpdateBatchList();
             DisplayBatch();
         }
 
@@ -637,7 +709,10 @@ namespace NetVulture
         {
             int arg = (int)e.Argument;
 
-            if (this.InvokeRequired) { this.Invoke((MethodInvoker) delegate {
+            if (this.InvokeRequired)
+            {
+                this.Invoke((MethodInvoker)delegate
+                {
                     _btnCollect.BackColor = Color.FromArgb(255, 155, 50);
                     _btnShowReport.Enabled = false;
                 });
@@ -647,14 +722,17 @@ namespace NetVulture
             {
                 for (int i = 0; i < _batchList.Count; i++)
                 {
-                    Task t = _batchList[i].Capture();
-                    t.Wait();
+                    if (!_batchList[i].Maintenance)
+                    {
+                        Task t = _batchList[i].CaptureAsync();
+                        t.Wait(); 
+                    }
                 }
             }
 
             if (arg >= 0)
             {
-                Task t = _batchList[arg].Capture();
+                Task t = _batchList[arg].CaptureAsync();
                 t.Wait();
             }
         }
@@ -664,6 +742,7 @@ namespace NetVulture
             if (_backWorker.IsBusy)
             {
                 MessageBox.Show("The collect process is already running...");
+                return;
             }
             else
             {
@@ -691,7 +770,7 @@ namespace NetVulture
         private void _btnAddBatch_Click(object sender, EventArgs e)
         {
             _batchList.Add(new NVBatch());
-            UpdateForm();
+            UpdateBatchList();
         }
 
         private void _tbxJobName_TextChanged(object sender, EventArgs e)
@@ -702,30 +781,37 @@ namespace NetVulture
         private void _tbxJobDescription_Leave(object sender, EventArgs e)
         {
             TransferBatch();
-            UpdateForm();
+            UpdateBatchList();
         }
 
         private void _RemoveSelectedBatch_Click(object sender, EventArgs e)
         {
             DialogResult res = MessageBox.Show("Do you want to remove this batch?", "Remove Batch", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (res == System.Windows.Forms.DialogResult.Yes)
+            if (res == DialogResult.Yes)
             {
                 _batchList.Remove(_selectedBatch);
-                UpdateForm();
+                UpdateBatchList();
             }
         }
 
         private void _btnRunSelectedBatch_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(_outputDir))
+            if (_backWorker.IsBusy)
             {
-                MessageBox.Show("No output directory selcted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("The collect process is already running...");
+                return;
             }
             else
             {
-                _backWorker.RunWorkerAsync(_batchList.IndexOf(_batchList.Single(x => x.Name == _selectedBatch.Name)));
-                DisplayBatch();
+                if (String.IsNullOrEmpty(_outputDir))
+                {
+                    MessageBox.Show("No output directory selcted.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    _backWorker.RunWorkerAsync(_batchList.IndexOf(_batchList.Single(x => x.Name == _selectedBatch.Name)));
+                }
             }
         }
 
@@ -735,6 +821,51 @@ namespace NetVulture
             {
                 btn.Width = _flpBatchList.Width;
             }
+        }
+
+        private void _chkBtnBatchMaintenanceSwitch_CheckedChanged(object sender, EventArgs e)
+        {
+            _selectedBatch.Maintenance = _chkBtnBatchMaintenanceSwitch.Checked;
+            TransferBatch();
+            UpdateForm();
+            DisplayBatch();
+        }
+
+        private void _btnImportCsv_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "csv files (*.csv)|*.csv";
+            ofd.FilterIndex = 1;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                _batchList = NVManagementClass.DeserializeFromCsv(ofd.FileName);
+                UpdateBatchList();
+            }
+        }
+
+        private void _fsw_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (_isAutoImportEnabled)
+            {
+                _batchList = NVManagementClass.DeserializeFromCsv(_autoImportCsvPath);
+                UpdateBatchList();
+            }
+        }
+
+        private void _btnExportCsv_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+
+            sfd.Filter = "csv files (*.csv)|*.csv";
+            sfd.FilterIndex = 1;
+            sfd.RestoreDirectory = true;
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                NVManagementClass.SerializeToCsv(sfd.FileName, _batchList);
+            }
+
         }
 
         private void _lblOutputDir_Click(object sender, EventArgs e)
@@ -785,12 +916,18 @@ namespace NetVulture
 
         private void _collectTimer_Tick(object sender, EventArgs e)
         {
+            if (_backWorker.IsBusy)
+            {
+                return;
+            }
+
             _backWorker.RunWorkerAsync(-1);
         }
 
         private void _chkBtnTimerEnabled_CheckedChanged(object sender, EventArgs e)
         {
             _collectTimer.Enabled = _chkBtnTimerEnabled.Checked;
+            _lblNoChangesPossible.Visible = _chkBtnTimerEnabled.Checked;
 
             if (_chkBtnTimerEnabled.Checked)
             {
@@ -813,6 +950,7 @@ namespace NetVulture
         {
             TransferBatch();
             UpdateForm();
+            
         }
 
         private void _clock_Tick(object sender, EventArgs e)

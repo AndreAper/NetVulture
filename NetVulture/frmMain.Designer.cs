@@ -37,26 +37,30 @@
             this._btnCollect = new System.Windows.Forms.Button();
             this._btnAddBatch = new System.Windows.Forms.Button();
             this._dgvResults = new System.Windows.Forms.DataGridView();
-            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HostnameOrAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PhysicalAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RoundTrip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Attempts = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this._tbxJobDescription = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this._btnShowReport = new System.Windows.Forms.Button();
             this._lblAppTitle = new System.Windows.Forms.Label();
             this._btnOpenSettings = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this._tbxJobName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this._pnlUnderlineMainMenu = new System.Windows.Forms.Panel();
             this._flpBatchList = new System.Windows.Forms.FlowLayoutPanel();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this._btnImportCsv = new System.Windows.Forms.ToolStripMenuItem();
+            this._btnExportCsv = new System.Windows.Forms.ToolStripMenuItem();
             this._pnlSubMenuBatch = new System.Windows.Forms.Panel();
+            this._lblNoChangesPossible = new System.Windows.Forms.Label();
+            this._chkBtnBatchMaintenanceSwitch = new System.Windows.Forms.CheckBox();
             this._btnEditHostList = new System.Windows.Forms.Button();
             this._btnRunSelectedBatch = new System.Windows.Forms.Button();
-            this._RemoveSelectedBatch = new System.Windows.Forms.Button();
+            this._btnRemoveSelectedBatch = new System.Windows.Forms.Button();
             this._pnlUnderlinSubmenuForBatch = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this._lblCountOfFailedRequests = new System.Windows.Forms.Label();
@@ -67,11 +71,16 @@
             this._lblSmsAlertingStatus = new System.Windows.Forms.Label();
             this._lblClock = new System.Windows.Forms.Label();
             this._lblOutputDir = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this._tbxJobDescription = new System.Windows.Forms.TextBox();
             this._collectTimer = new System.Windows.Forms.Timer(this.components);
             this._clock = new System.Windows.Forms.Timer(this.components);
+            this._fsw = new System.IO.FileSystemWatcher();
             this._tlpBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._dgvResults)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
             this._pnlSubMenuBatch.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._fsw)).BeginInit();
             this.SuspendLayout();
             // 
             // _tlpBody
@@ -215,8 +224,9 @@
             this._dgvResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this._dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this._dgvResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Target,
+            this.HostnameOrAddress,
             this.Address,
+            this.PhysicalAddress,
             this.RoundTrip,
             this.Time,
             this.Status,
@@ -249,17 +259,23 @@
             this._dgvResults.Size = new System.Drawing.Size(1071, 443);
             this._dgvResults.TabIndex = 4;
             // 
-            // Target
+            // HostnameOrAddress
             // 
-            this.Target.HeaderText = "Target";
-            this.Target.Name = "Target";
-            this.Target.ReadOnly = true;
+            this.HostnameOrAddress.HeaderText = "Hostname or Address";
+            this.HostnameOrAddress.Name = "HostnameOrAddress";
+            this.HostnameOrAddress.ReadOnly = true;
             // 
             // Address
             // 
             this.Address.HeaderText = "Address";
             this.Address.Name = "Address";
             this.Address.ReadOnly = true;
+            // 
+            // PhysicalAddress
+            // 
+            this.PhysicalAddress.HeaderText = "Physical Address";
+            this.PhysicalAddress.Name = "PhysicalAddress";
+            this.PhysicalAddress.ReadOnly = true;
             // 
             // RoundTrip
             // 
@@ -269,7 +285,7 @@
             // 
             // Time
             // 
-            this.Time.HeaderText = "Time";
+            this.Time.HeaderText = "Last Availability";
             this.Time.Name = "Time";
             this.Time.ReadOnly = true;
             // 
@@ -284,23 +300,6 @@
             this.Attempts.HeaderText = "Attempts";
             this.Attempts.Name = "Attempts";
             this.Attempts.ReadOnly = true;
-            // 
-            // _tbxJobDescription
-            // 
-            this._tbxJobDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this._tbxJobDescription.BackColor = System.Drawing.Color.White;
-            this._tbxJobDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this._tlpBody.SetColumnSpan(this._tbxJobDescription, 2);
-            this._tbxJobDescription.Enabled = false;
-            this._tbxJobDescription.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._tbxJobDescription.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this._tbxJobDescription.Location = new System.Drawing.Point(766, 105);
-            this._tbxJobDescription.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
-            this._tbxJobDescription.Name = "_tbxJobDescription";
-            this._tbxJobDescription.Size = new System.Drawing.Size(622, 29);
-            this._tbxJobDescription.TabIndex = 20;
-            this._tbxJobDescription.TextChanged += new System.EventHandler(this._tbxJobDescription_TextChanged);
-            this._tbxJobDescription.Leave += new System.EventHandler(this._tbxJobDescription_Leave);
             // 
             // label4
             // 
@@ -376,19 +375,6 @@
             this._btnOpenSettings.UseVisualStyleBackColor = false;
             this._btnOpenSettings.Click += new System.EventHandler(this._btnOpenSettings_Click);
             // 
-            // label2
-            // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this.label2.Location = new System.Drawing.Point(616, 109);
-            this.label2.Margin = new System.Windows.Forms.Padding(2);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 21);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Description";
-            // 
             // _tbxJobName
             // 
             this._tbxJobName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -434,6 +420,7 @@
             // _flpBatchList
             // 
             this._flpBatchList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this._flpBatchList.ContextMenuStrip = this.contextMenuStrip;
             this._flpBatchList.Dock = System.Windows.Forms.DockStyle.Fill;
             this._flpBatchList.Location = new System.Drawing.Point(0, 45);
             this._flpBatchList.Margin = new System.Windows.Forms.Padding(0);
@@ -442,13 +429,37 @@
             this._flpBatchList.Size = new System.Drawing.Size(164, 664);
             this._flpBatchList.TabIndex = 64;
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._btnImportCsv,
+            this._btnExportCsv});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(111, 48);
+            // 
+            // _btnImportCsv
+            // 
+            this._btnImportCsv.Name = "_btnImportCsv";
+            this._btnImportCsv.Size = new System.Drawing.Size(110, 22);
+            this._btnImportCsv.Text = "Import";
+            this._btnImportCsv.Click += new System.EventHandler(this._btnImportCsv_Click);
+            // 
+            // _btnExportCsv
+            // 
+            this._btnExportCsv.Name = "_btnExportCsv";
+            this._btnExportCsv.Size = new System.Drawing.Size(110, 22);
+            this._btnExportCsv.Text = "Export";
+            this._btnExportCsv.Click += new System.EventHandler(this._btnExportCsv_Click);
+            // 
             // _pnlSubMenuBatch
             // 
             this._pnlSubMenuBatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this._tlpBody.SetColumnSpan(this._pnlSubMenuBatch, 6);
+            this._pnlSubMenuBatch.Controls.Add(this._lblNoChangesPossible);
+            this._pnlSubMenuBatch.Controls.Add(this._chkBtnBatchMaintenanceSwitch);
             this._pnlSubMenuBatch.Controls.Add(this._btnEditHostList);
             this._pnlSubMenuBatch.Controls.Add(this._btnRunSelectedBatch);
-            this._pnlSubMenuBatch.Controls.Add(this._RemoveSelectedBatch);
+            this._pnlSubMenuBatch.Controls.Add(this._btnRemoveSelectedBatch);
             this._pnlSubMenuBatch.Dock = System.Windows.Forms.DockStyle.Fill;
             this._pnlSubMenuBatch.Enabled = false;
             this._pnlSubMenuBatch.Location = new System.Drawing.Point(164, 45);
@@ -456,6 +467,43 @@
             this._pnlSubMenuBatch.Name = "_pnlSubMenuBatch";
             this._pnlSubMenuBatch.Size = new System.Drawing.Size(1244, 40);
             this._pnlSubMenuBatch.TabIndex = 32;
+            // 
+            // _lblNoChangesPossible
+            // 
+            this._lblNoChangesPossible.AutoSize = true;
+            this._lblNoChangesPossible.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblNoChangesPossible.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(0)))), ((int)(((byte)(60)))));
+            this._lblNoChangesPossible.Location = new System.Drawing.Point(598, 10);
+            this._lblNoChangesPossible.Name = "_lblNoChangesPossible";
+            this._lblNoChangesPossible.Size = new System.Drawing.Size(322, 21);
+            this._lblNoChangesPossible.TabIndex = 62;
+            this._lblNoChangesPossible.Text = "No changes possible until timer is enabled.";
+            this._lblNoChangesPossible.Visible = false;
+            // 
+            // _chkBtnBatchMaintenanceSwitch
+            // 
+            this._chkBtnBatchMaintenanceSwitch.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._chkBtnBatchMaintenanceSwitch.Appearance = System.Windows.Forms.Appearance.Button;
+            this._chkBtnBatchMaintenanceSwitch.BackColor = System.Drawing.Color.Transparent;
+            this._chkBtnBatchMaintenanceSwitch.FlatAppearance.BorderSize = 0;
+            this._chkBtnBatchMaintenanceSwitch.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(155)))), ((int)(((byte)(50)))));
+            this._chkBtnBatchMaintenanceSwitch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._chkBtnBatchMaintenanceSwitch.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._chkBtnBatchMaintenanceSwitch.ForeColor = System.Drawing.Color.Black;
+            this._chkBtnBatchMaintenanceSwitch.Image = global::NetVulture.Properties.Resources.Maintenance_32;
+            this._chkBtnBatchMaintenanceSwitch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._chkBtnBatchMaintenanceSwitch.Location = new System.Drawing.Point(422, 0);
+            this._chkBtnBatchMaintenanceSwitch.Margin = new System.Windows.Forms.Padding(0);
+            this._chkBtnBatchMaintenanceSwitch.Name = "_chkBtnBatchMaintenanceSwitch";
+            this._chkBtnBatchMaintenanceSwitch.Size = new System.Drawing.Size(150, 40);
+            this._chkBtnBatchMaintenanceSwitch.TabIndex = 61;
+            this._chkBtnBatchMaintenanceSwitch.Text = "Maintenance";
+            this._chkBtnBatchMaintenanceSwitch.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this._chkBtnBatchMaintenanceSwitch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._chkBtnBatchMaintenanceSwitch.UseVisualStyleBackColor = false;
+            this._chkBtnBatchMaintenanceSwitch.CheckedChanged += new System.EventHandler(this._chkBtnBatchMaintenanceSwitch_CheckedChanged);
             // 
             // _btnEditHostList
             // 
@@ -494,25 +542,25 @@
             this._btnRunSelectedBatch.UseVisualStyleBackColor = false;
             this._btnRunSelectedBatch.Click += new System.EventHandler(this._btnRunSelectedBatch_Click);
             // 
-            // _RemoveSelectedBatch
+            // _btnRemoveSelectedBatch
             // 
-            this._RemoveSelectedBatch.BackColor = System.Drawing.Color.Transparent;
-            this._RemoveSelectedBatch.FlatAppearance.BorderSize = 0;
-            this._RemoveSelectedBatch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(0)))), ((int)(((byte)(60)))));
-            this._RemoveSelectedBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._RemoveSelectedBatch.Font = new System.Drawing.Font("Segoe UI Light", 12F);
-            this._RemoveSelectedBatch.ForeColor = System.Drawing.Color.Black;
-            this._RemoveSelectedBatch.Image = global::NetVulture.Properties.Resources.Delete_32;
-            this._RemoveSelectedBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._RemoveSelectedBatch.Location = new System.Drawing.Point(300, 0);
-            this._RemoveSelectedBatch.Margin = new System.Windows.Forms.Padding(0);
-            this._RemoveSelectedBatch.Name = "_RemoveSelectedBatch";
-            this._RemoveSelectedBatch.Size = new System.Drawing.Size(150, 40);
-            this._RemoveSelectedBatch.TabIndex = 31;
-            this._RemoveSelectedBatch.Text = "Remove";
-            this._RemoveSelectedBatch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this._RemoveSelectedBatch.UseVisualStyleBackColor = false;
-            this._RemoveSelectedBatch.Click += new System.EventHandler(this._RemoveSelectedBatch_Click);
+            this._btnRemoveSelectedBatch.BackColor = System.Drawing.Color.Transparent;
+            this._btnRemoveSelectedBatch.FlatAppearance.BorderSize = 0;
+            this._btnRemoveSelectedBatch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(0)))), ((int)(((byte)(60)))));
+            this._btnRemoveSelectedBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnRemoveSelectedBatch.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._btnRemoveSelectedBatch.ForeColor = System.Drawing.Color.Black;
+            this._btnRemoveSelectedBatch.Image = global::NetVulture.Properties.Resources.Delete_32;
+            this._btnRemoveSelectedBatch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnRemoveSelectedBatch.Location = new System.Drawing.Point(300, 0);
+            this._btnRemoveSelectedBatch.Margin = new System.Windows.Forms.Padding(0);
+            this._btnRemoveSelectedBatch.Name = "_btnRemoveSelectedBatch";
+            this._btnRemoveSelectedBatch.Size = new System.Drawing.Size(150, 40);
+            this._btnRemoveSelectedBatch.TabIndex = 31;
+            this._btnRemoveSelectedBatch.Text = "Remove";
+            this._btnRemoveSelectedBatch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._btnRemoveSelectedBatch.UseVisualStyleBackColor = false;
+            this._btnRemoveSelectedBatch.Click += new System.EventHandler(this._RemoveSelectedBatch_Click);
             // 
             // _pnlUnderlinSubmenuForBatch
             // 
@@ -568,9 +616,9 @@
             this._lblLastBatchExec.Location = new System.Drawing.Point(316, 596);
             this._lblLastBatchExec.Margin = new System.Windows.Forms.Padding(2);
             this._lblLastBatchExec.Name = "_lblLastBatchExec";
-            this._lblLastBatchExec.Size = new System.Drawing.Size(115, 21);
+            this._lblLastBatchExec.Size = new System.Drawing.Size(111, 21);
             this._lblLastBatchExec.TabIndex = 0;
-            this._lblLastBatchExec.Text = "Last execution: ";
+            this._lblLastBatchExec.Text = "Last batch run:";
             // 
             // _lblLastCollect
             // 
@@ -585,7 +633,7 @@
             this._lblLastCollect.Name = "_lblLastCollect";
             this._lblLastCollect.Size = new System.Drawing.Size(146, 38);
             this._lblLastCollect.TabIndex = 0;
-            this._lblLastCollect.Text = "Last Execution: ";
+            this._lblLastCollect.Text = "Last Overall Execution: ";
             // 
             // _lblEmailAlertingStatus
             // 
@@ -648,6 +696,36 @@
             this._lblOutputDir.Text = "Output: ";
             this._lblOutputDir.Click += new System.EventHandler(this._lblOutputDir_Click);
             // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this.label2.Location = new System.Drawing.Point(616, 109);
+            this.label2.Margin = new System.Windows.Forms.Padding(2);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(89, 21);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Description";
+            // 
+            // _tbxJobDescription
+            // 
+            this._tbxJobDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this._tbxJobDescription.BackColor = System.Drawing.Color.White;
+            this._tbxJobDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._tlpBody.SetColumnSpan(this._tbxJobDescription, 2);
+            this._tbxJobDescription.Enabled = false;
+            this._tbxJobDescription.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._tbxJobDescription.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._tbxJobDescription.Location = new System.Drawing.Point(766, 105);
+            this._tbxJobDescription.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
+            this._tbxJobDescription.Name = "_tbxJobDescription";
+            this._tbxJobDescription.Size = new System.Drawing.Size(622, 29);
+            this._tbxJobDescription.TabIndex = 20;
+            this._tbxJobDescription.TextChanged += new System.EventHandler(this._tbxJobDescription_TextChanged);
+            this._tbxJobDescription.Leave += new System.EventHandler(this._tbxJobDescription_Leave);
+            // 
             // _collectTimer
             // 
             this._collectTimer.Interval = 60000;
@@ -658,6 +736,14 @@
             this._clock.Enabled = true;
             this._clock.Interval = 1000;
             this._clock.Tick += new System.EventHandler(this._clock_Tick);
+            // 
+            // _fsw
+            // 
+            this._fsw.EnableRaisingEvents = true;
+            this._fsw.Filter = "*.csv";
+            this._fsw.NotifyFilter = System.IO.NotifyFilters.LastWrite;
+            this._fsw.SynchronizingObject = this;
+            this._fsw.Changed += new System.IO.FileSystemEventHandler(this._fsw_Changed);
             // 
             // frmMain
             // 
@@ -673,7 +759,10 @@
             this._tlpBody.ResumeLayout(false);
             this._tlpBody.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this._dgvResults)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
             this._pnlSubMenuBatch.ResumeLayout(false);
+            this._pnlSubMenuBatch.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._fsw)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -703,20 +792,27 @@
         private System.Windows.Forms.Label _lblEmailAlertingStatus;
         private System.Windows.Forms.Label _lblCountOfSuccessRequests;
         private System.Windows.Forms.Button _btnShowReport;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Target;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Address;
-        private System.Windows.Forms.DataGridViewTextBoxColumn RoundTrip;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Time;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Attempts;
         private System.Windows.Forms.Panel _pnlUnderlineMainMenu;
         private System.Windows.Forms.FlowLayoutPanel _flpBatchList;
         private System.Windows.Forms.Button _btnRunSelectedBatch;
         private System.Windows.Forms.Panel _pnlSubMenuBatch;
-        private System.Windows.Forms.Button _RemoveSelectedBatch;
+        private System.Windows.Forms.Button _btnRemoveSelectedBatch;
         private System.Windows.Forms.Button _btnEditHostList;
         private System.Windows.Forms.Panel _pnlUnderlinSubmenuForBatch;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox _chkBtnBatchMaintenanceSwitch;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem _btnImportCsv;
+        private System.Windows.Forms.ToolStripMenuItem _btnExportCsv;
+        private System.Windows.Forms.Label _lblNoChangesPossible;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HostnameOrAddress;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Address;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PhysicalAddress;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RoundTrip;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Time;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Attempts;
+        private System.IO.FileSystemWatcher _fsw;
     }
 }
 

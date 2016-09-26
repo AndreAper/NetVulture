@@ -30,17 +30,17 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dataGridView = new System.Windows.Forms.DataGridView();
+            this._btnPingAll = new System.Windows.Forms.Button();
+            this._btnExportCsv = new System.Windows.Forms.Button();
             this.BatchName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TargetHost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HostnameOrAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IPAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DNS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PhysicalAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IPStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Roundtrip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Attempts = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LastExecution = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Ping = new System.Windows.Forms.DataGridViewButtonColumn();
-            this._btnPingAll = new System.Windows.Forms.Button();
-            this._btnExportCsv = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
@@ -66,7 +66,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1150, 680);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1373, 680);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // dataGridView
@@ -80,9 +80,9 @@
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.BatchName,
-            this.TargetHost,
+            this.HostnameOrAddress,
             this.IPAddress,
-            this.DNS,
+            this.PhysicalAddress,
             this.IPStatus,
             this.Roundtrip,
             this.Attempts,
@@ -100,53 +100,8 @@
             this.dataGridView.RowTemplate.Height = 30;
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView.ShowEditingIcon = false;
-            this.dataGridView.Size = new System.Drawing.Size(1144, 606);
+            this.dataGridView.Size = new System.Drawing.Size(1367, 606);
             this.dataGridView.TabIndex = 0;
-            // 
-            // BatchName
-            // 
-            this.BatchName.HeaderText = "Batch Name";
-            this.BatchName.Name = "BatchName";
-            // 
-            // TargetHost
-            // 
-            this.TargetHost.HeaderText = "Target Host";
-            this.TargetHost.Name = "TargetHost";
-            // 
-            // IPAddress
-            // 
-            this.IPAddress.HeaderText = "IPAddress";
-            this.IPAddress.Name = "IPAddress";
-            // 
-            // DNS
-            // 
-            this.DNS.HeaderText = "DNS";
-            this.DNS.Name = "DNS";
-            // 
-            // IPStatus
-            // 
-            this.IPStatus.HeaderText = "IPStatus";
-            this.IPStatus.Name = "IPStatus";
-            // 
-            // Roundtrip
-            // 
-            this.Roundtrip.HeaderText = "Roundtrip";
-            this.Roundtrip.Name = "Roundtrip";
-            // 
-            // Attempts
-            // 
-            this.Attempts.HeaderText = "Attempts";
-            this.Attempts.Name = "Attempts";
-            // 
-            // LastExecution
-            // 
-            this.LastExecution.HeaderText = "Last Execution";
-            this.LastExecution.Name = "LastExecution";
-            // 
-            // Ping
-            // 
-            this.Ping.HeaderText = "Ping";
-            this.Ping.Name = "Ping";
             // 
             // _btnPingAll
             // 
@@ -192,14 +147,58 @@
             this._btnExportCsv.Text = "Export";
             this._btnExportCsv.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this._btnExportCsv.UseVisualStyleBackColor = false;
-            this._btnExportCsv.Visible = false;
             this._btnExportCsv.Click += new System.EventHandler(this._btnExportCsv_Click);
+            // 
+            // BatchName
+            // 
+            this.BatchName.HeaderText = "Batch Name";
+            this.BatchName.Name = "BatchName";
+            // 
+            // HostnameOrAddress
+            // 
+            this.HostnameOrAddress.HeaderText = "Hostname or Address";
+            this.HostnameOrAddress.Name = "HostnameOrAddress";
+            // 
+            // IPAddress
+            // 
+            this.IPAddress.HeaderText = "IPAddress";
+            this.IPAddress.Name = "IPAddress";
+            // 
+            // PhysicalAddress
+            // 
+            this.PhysicalAddress.HeaderText = "Physical Address";
+            this.PhysicalAddress.Name = "PhysicalAddress";
+            // 
+            // IPStatus
+            // 
+            this.IPStatus.HeaderText = "IPStatus";
+            this.IPStatus.Name = "IPStatus";
+            // 
+            // Roundtrip
+            // 
+            this.Roundtrip.HeaderText = "Roundtrip";
+            this.Roundtrip.Name = "Roundtrip";
+            // 
+            // Attempts
+            // 
+            this.Attempts.HeaderText = "Attempts";
+            this.Attempts.Name = "Attempts";
+            // 
+            // LastExecution
+            // 
+            this.LastExecution.HeaderText = "Last Execution";
+            this.LastExecution.Name = "LastExecution";
+            // 
+            // Ping
+            // 
+            this.Ping.HeaderText = "Ping";
+            this.Ping.Name = "Ping";
             // 
             // frmReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1150, 680);
+            this.ClientSize = new System.Drawing.Size(1373, 680);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -215,16 +214,16 @@
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.Button _btnPingAll;
+        private System.Windows.Forms.Button _btnExportCsv;
         private System.Windows.Forms.DataGridViewTextBoxColumn BatchName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TargetHost;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HostnameOrAddress;
         private System.Windows.Forms.DataGridViewTextBoxColumn IPAddress;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DNS;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PhysicalAddress;
         private System.Windows.Forms.DataGridViewTextBoxColumn IPStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn Roundtrip;
         private System.Windows.Forms.DataGridViewTextBoxColumn Attempts;
         private System.Windows.Forms.DataGridViewTextBoxColumn LastExecution;
         private System.Windows.Forms.DataGridViewButtonColumn Ping;
-        private System.Windows.Forms.Button _btnPingAll;
-        private System.Windows.Forms.Button _btnExportCsv;
     }
 }
