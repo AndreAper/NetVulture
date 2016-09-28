@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * TODO: SMS/Mail wenn das betroffene Gerät wieder Online ist.
+ * 
+ * 
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -47,25 +54,39 @@ namespace NetVulture
                             {
                                 IEnumerable<HostInformation> firstPass = failed.Where(x => x.PingAttempts == 10);
 
+                                //HACK: Uncomment to send html mail.
+                                //if (firstPass.Count() > 0)
+                                //{
+                                //    sbMail.Append("<style type='text/css'>");
+                                //    sbMail.Append("h1 { font: 25px consolas, sans-serif; color: #f6f6f6; background-color: #00324b; width: 790px; padding: 10px 5px; text-align:center; }");
+                                //    sbMail.Append(".tg { border-collapse: collapse; border-spacing: 0; width: 800px; font: 15px consolas, sans-serif; }");
+                                //    sbMail.Append(".tg td { font-weight: bold; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; }");
+                                //    sbMail.Append(".tg th { font-weight: normal; padding: 10px 15px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; color: #4a4a4a; background-color: #f6f6f6; }");
+                                //    sbMail.Append(".tg .tg-header { vertical-align: top; color: white; background-color: #e6003c; }");
+                                //    sbMail.Append("</style>");
+                                //    sbMail.Append("<h1>NetVulture Alerting System</h1>");
+                                //    sbMail.Append("<table class='tg'>");
+                                //    sbMail.Append("<tr> <th class='tg-header'>Batch</th><th class='tg-header'>Hostname or Address</th><th class='tg-header'>Building</th><th class='tg-header'>Cabinet</th><th class='tg-header'>Rack</th><th class='tg-header'>Last Availability</th><th class='tg-header'>Status</th></tr>");
+
+                                //    foreach (HostInformation hi in firstPass)
+                                //    {
+                                //        sbMail.Append("<tr><th>" + batch.Name + "</th><th>" + hi.HostnameOrAddress + "</th><th>" + hi.Building + "</th><th>" + hi.Cabinet + "</th><th>" + hi.Rack + "</th><th>" + hi.LastAvailability.ToString() + "</th><th>" + hi.ReplyData.Status.ToString() + "</th></tr>");
+                                //    }
+
+                                //    sbMail.Append("</table>");
+                                //    _allowSendingMail = true;
+                                //}
+
                                 if (firstPass.Count() > 0)
                                 {
-                                    sbMail.Append("<style type='text/css'>");
-                                    sbMail.Append("h1 { font: 25px consolas, sans-serif; color: #f6f6f6; background-color: #00324b; width: 790px; padding: 10px 5px; text-align:center; }");
-                                    sbMail.Append(".tg { border-collapse: collapse; border-spacing: 0; width: 800px; font: 15px consolas, sans-serif; }");
-                                    sbMail.Append(".tg td { font-weight: bold; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; }");
-                                    sbMail.Append(".tg th { font-weight: normal; padding: 10px 15px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; color: #4a4a4a; background-color: #f6f6f6; }");
-                                    sbMail.Append(".tg .tg-header { vertical-align: top; color: white; background-color: #e6003c; }");
-                                    sbMail.Append("</style>");
-                                    sbMail.Append("<h1>NetVulture Alerting System</h1>");
-                                    sbMail.Append("<table class='tg'>");
-                                    sbMail.Append("<tr> <th class='tg-header'>Batch</th><th class='tg-header'>Hostname or Address</th><th class='tg-header'>Building</th><th class='tg-header'>Cabinet</th><th class='tg-header'>Rack</th><th class='tg-header'>Last Availability</th><th class='tg-header'>Status</th></tr>");
+                                    sbMail.AppendLine("NetVulture Alerting System");
+                                    sbMail.AppendLine(Environment.NewLine);
 
                                     foreach (HostInformation hi in firstPass)
                                     {
-                                        sbMail.Append("<tr><th>" + batch.Name + "</th><th>" + hi.HostnameOrAddress + "</th><th>" + hi.Building + "</th><th>" + hi.Cabinet + "</th><th>" + hi.Rack + "</th><th>" + hi.LastAvailability.ToString() + "</th><th>" + hi.ReplyData.Status.ToString() + "</th></tr>");
+                                        sbMail.AppendLine("Batch: " + batch.Name + "\t\tHost: " + hi.HostnameOrAddress + "\t\tBuilding: " + hi.Building + "\t\tCabinet: " + hi.Cabinet + "\t\tRack: " + hi.Rack + "\t\tLast Availability: " + hi.LastAvailability.ToString() + "\t\tStatus: " + hi.ReplyData.Status.ToString());
                                     }
 
-                                    sbMail.Append("</table>");
                                     _allowSendingMail = true;
                                 }
                             }
@@ -424,6 +445,7 @@ namespace NetVulture
             }
         }
 
+        //TODO: Methode wird nicht mehr benötigt!
         /// <summary>
         /// Sending mail message to registered address.
         /// </summary>
