@@ -127,8 +127,8 @@ namespace NetVulture
 
                     foreach (string address in to)
                     {
-                        //echo Moni2015@ | sudo -S echo 'Test1234' | sudo ssmtp -vvv andre.aper@outlook.com
-                        SshCommand cmd = _client.RunCommand(string.Format("echo {0} | sudo -S echo '{1}' | sudo ssmtp -vvv {2}", pw, msg, address));
+                        string command = string.Format("echo -e 'Subject: {0}\nFrom: {1}\nTo: {2}\n{3}\n\n' | sudo ssmtp '{4}'", "NetVulture Alerting System", "monitoring.bbs@gmail.com", address, msg, address);
+                        SshCommand cmd = _client.RunCommand(command);
                     }
                 }
             }
