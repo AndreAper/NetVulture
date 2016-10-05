@@ -91,7 +91,7 @@ namespace NetVulture
 
                                     foreach (HostInformation hi in firstPass)
                                     {
-                                        sbMail.AppendLine("Host: " + hi.HostnameOrAddress + "\t\tBuilding: " + hi.Building + "\t\tCabinet: " + hi.Cabinet + "\t\tRack: " + hi.Rack + "\t\tLast Availability: " + hi.LastAvailability.ToString() + "\t\tStatus: " + hi.ReplyData.Status.ToString());
+                                        sbMail.AppendLine("Host: " + hi.HostnameOrAddress + "\t\tDescription: " + hi.Description + "\t\tBuilding: " + hi.Building + "\t\tCabinet: " + hi.Cabinet + "\t\tRack: " + hi.Rack + "\t\tLast Availability: " + hi.LastAvailability.ToString() + "\t\tStatus: " + hi.ReplyData.Status.ToString());
                                     }
 
                                     _allowSendingMail = true;
@@ -331,7 +331,7 @@ namespace NetVulture
 
                         if (pr == null)
                         {
-                            data = new string[] { _selectedBatch.HostList[i].HostnameOrAddress, "", "", "", "", "", "" };
+                            data = new string[] { _selectedBatch.HostList[i].HostnameOrAddress, "", "", "", "", "", "","" };
                             failedRequests++;
                         }
                         else
@@ -345,7 +345,7 @@ namespace NetVulture
                                 successRequests++;
                             }
 
-                            data = new string[] { _selectedBatch.HostList[i].HostnameOrAddress, pr.Address.ToString(), _selectedBatch.HostList[i].PhysicalAddress, pr.RoundtripTime.ToString(), _selectedBatch.HostList[i].LastAvailability.ToString(), pr.Status.ToString(), _selectedBatch.HostList[i].PingAttempts.ToString() };
+                            data = new string[] { _selectedBatch.HostList[i].HostnameOrAddress, pr.Address.ToString(), _selectedBatch.HostList[i].PhysicalAddress, pr.RoundtripTime.ToString(), _selectedBatch.HostList[i].LastAvailability.ToString(), pr.Status.ToString(), _selectedBatch.HostList[i].PingAttempts.ToString(), _selectedBatch.HostList[i].MaintenanceActivated.ToString() };
                         }
 
                         _dgvResults.Rows.Add(data);

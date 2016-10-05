@@ -37,13 +37,6 @@
             this._btnCollect = new System.Windows.Forms.Button();
             this._btnAddBatch = new System.Windows.Forms.Button();
             this._dgvResults = new System.Windows.Forms.DataGridView();
-            this.HostnameOrAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PhysicalAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RoundTrip = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Attempts = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
             this._btnShowReport = new System.Windows.Forms.Button();
             this._lblAppTitle = new System.Windows.Forms.Label();
@@ -76,6 +69,14 @@
             this._collectTimer = new System.Windows.Forms.Timer(this.components);
             this._clock = new System.Windows.Forms.Timer(this.components);
             this._fsw = new System.IO.FileSystemWatcher();
+            this.HostnameOrAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PhysicalAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RoundTrip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Attempts = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Maintenance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this._tlpBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._dgvResults)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -230,7 +231,8 @@
             this.RoundTrip,
             this.Time,
             this.Status,
-            this.Attempts});
+            this.Attempts,
+            this.Maintenance});
             this._tlpBody.SetColumnSpan(this._dgvResults, 5);
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
@@ -257,48 +259,6 @@
             this._dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this._dgvResults.Size = new System.Drawing.Size(1071, 443);
             this._dgvResults.TabIndex = 4;
-            // 
-            // HostnameOrAddress
-            // 
-            this.HostnameOrAddress.HeaderText = "Hostname or Address";
-            this.HostnameOrAddress.Name = "HostnameOrAddress";
-            this.HostnameOrAddress.ReadOnly = true;
-            // 
-            // Address
-            // 
-            this.Address.HeaderText = "Address";
-            this.Address.Name = "Address";
-            this.Address.ReadOnly = true;
-            // 
-            // PhysicalAddress
-            // 
-            this.PhysicalAddress.HeaderText = "Physical Address";
-            this.PhysicalAddress.Name = "PhysicalAddress";
-            this.PhysicalAddress.ReadOnly = true;
-            // 
-            // RoundTrip
-            // 
-            this.RoundTrip.HeaderText = "RoundTrip (ms)";
-            this.RoundTrip.Name = "RoundTrip";
-            this.RoundTrip.ReadOnly = true;
-            // 
-            // Time
-            // 
-            this.Time.HeaderText = "Last Availability";
-            this.Time.Name = "Time";
-            this.Time.ReadOnly = true;
-            // 
-            // Status
-            // 
-            this.Status.HeaderText = "Status";
-            this.Status.Name = "Status";
-            this.Status.ReadOnly = true;
-            // 
-            // Attempts
-            // 
-            this.Attempts.HeaderText = "Attempts";
-            this.Attempts.Name = "Attempts";
-            this.Attempts.ReadOnly = true;
             // 
             // label4
             // 
@@ -744,6 +704,54 @@
             this._fsw.SynchronizingObject = this;
             this._fsw.Changed += new System.IO.FileSystemEventHandler(this._fsw_Changed);
             // 
+            // HostnameOrAddress
+            // 
+            this.HostnameOrAddress.HeaderText = "Hostname or Address";
+            this.HostnameOrAddress.Name = "HostnameOrAddress";
+            this.HostnameOrAddress.ReadOnly = true;
+            // 
+            // Address
+            // 
+            this.Address.HeaderText = "Address";
+            this.Address.Name = "Address";
+            this.Address.ReadOnly = true;
+            // 
+            // PhysicalAddress
+            // 
+            this.PhysicalAddress.HeaderText = "Physical Address";
+            this.PhysicalAddress.Name = "PhysicalAddress";
+            this.PhysicalAddress.ReadOnly = true;
+            // 
+            // RoundTrip
+            // 
+            this.RoundTrip.HeaderText = "RoundTrip (ms)";
+            this.RoundTrip.Name = "RoundTrip";
+            this.RoundTrip.ReadOnly = true;
+            // 
+            // Time
+            // 
+            this.Time.HeaderText = "Last Availability";
+            this.Time.Name = "Time";
+            this.Time.ReadOnly = true;
+            // 
+            // Status
+            // 
+            this.Status.HeaderText = "Status";
+            this.Status.Name = "Status";
+            this.Status.ReadOnly = true;
+            // 
+            // Attempts
+            // 
+            this.Attempts.HeaderText = "Attempts";
+            this.Attempts.Name = "Attempts";
+            this.Attempts.ReadOnly = true;
+            // 
+            // Maintenance
+            // 
+            this.Maintenance.HeaderText = "Maintenance";
+            this.Maintenance.Name = "Maintenance";
+            this.Maintenance.ReadOnly = true;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -804,6 +812,7 @@
         private System.Windows.Forms.ToolStripMenuItem _btnImportCsv;
         private System.Windows.Forms.ToolStripMenuItem _btnExportCsv;
         private System.Windows.Forms.Label _lblNoChangesPossible;
+        private System.IO.FileSystemWatcher _fsw;
         private System.Windows.Forms.DataGridViewTextBoxColumn HostnameOrAddress;
         private System.Windows.Forms.DataGridViewTextBoxColumn Address;
         private System.Windows.Forms.DataGridViewTextBoxColumn PhysicalAddress;
@@ -811,7 +820,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Time;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
         private System.Windows.Forms.DataGridViewTextBoxColumn Attempts;
-        private System.IO.FileSystemWatcher _fsw;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Maintenance;
     }
 }
 
