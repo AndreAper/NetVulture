@@ -79,38 +79,41 @@ namespace NetVulture
 
                                 if (firstPass.Count() > 0)
                                 {
-                                    sbMail.AppendLine("NetVulture Alerting System");
+                                    //Mail
+                                    sbMail.AppendLine("NetNulture has detect that hosts are not available from Batch: " + batch.Name);
+                                    sbMail.AppendLine(Environment.NewLine);
+                                    sbMail.AppendLine("Batch Name: " + batch.Name);
+                                    sbMail.AppendLine("Batch Description: " + batch.Description);
+                                    sbMail.AppendLine("Hosts Online: " + batch.HostList.Count(x => x.ReplyData.Status == IPStatus.Success).ToString());
+                                    sbMail.AppendLine("Hosts Offline: " + firstPass.Count().ToString());
+                                    sbMail.AppendLine("Last Execution: " + batch.LastExecution.ToString());
                                     sbMail.AppendLine(Environment.NewLine);
 
                                     foreach (HostInformation hi in firstPass)
                                     {
-                                        sbMail.AppendLine("Batch: " + batch.Name + "\t\tHost: " + hi.HostnameOrAddress + "\t\tBuilding: " + hi.Building + "\t\tCabinet: " + hi.Cabinet + "\t\tRack: " + hi.Rack + "\t\tLast Availability: " + hi.LastAvailability.ToString() + "\t\tStatus: " + hi.ReplyData.Status.ToString());
+                                        sbMail.AppendLine("Host: " + hi.HostnameOrAddress + "\t\tBuilding: " + hi.Building + "\t\tCabinet: " + hi.Cabinet + "\t\tRack: " + hi.Rack + "\t\tLast Availability: " + hi.LastAvailability.ToString() + "\t\tStatus: " + hi.ReplyData.Status.ToString());
                                     }
 
                                     _allowSendingMail = true;
-                                }
-                            }
 
-                            if (failed.Any(x => x.PingAttempts == 20))
-                            {
-                                StringBuilder sbSms = new StringBuilder("ATTENTION ");
+                                    //SMS
+                                    StringBuilder sbSms = new StringBuilder("ATTENTION ");
 
-                                IEnumerable<HostInformation> secondPass = failed.Where(x => x.PingAttempts == 20);
-
-                                if (secondPass.Count() > 0)
-                                {
-                                    sbSms.Append(secondPass.Count() + " of " + batch.HostList.Count + " hosts from batch " + batch.Name + " are not available after 20 attemps to ping.");
-                                }
-
-                                Task sender = Task.Run(() => SendSms(sbSms.ToString()));
-                                sender.ContinueWith((t) =>
-                                {
-                                    this.Invoke((MethodInvoker)delegate
+                                    if (firstPass.Count() > 0)
                                     {
-                                        WriteReport();
-                                        WriteError("Message Dispatcher", "void CheckAlert()", "Sending SMS successfully");
+                                        sbSms.Append(firstPass.Count() + " of " + batch.HostList.Count + " hosts from batch " + batch.Name + " are not available after 20 attemps to ping.");
+                                    }
+
+                                    Task sender = Task.Run(() => SendSms(sbSms.ToString()));
+                                    sender.ContinueWith((t) =>
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            WriteReport();
+                                            WriteError("Message Dispatcher", "void CheckAlert()", "Sending SMS successfully");
+                                        });
                                     });
-                                });
+                                }
                             }
                         }
                     } 
