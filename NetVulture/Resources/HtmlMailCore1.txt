@@ -1,0 +1,13 @@
+<style type='text/css'>
+h1 { font: 25px consolas, sans-serif; color: #f6f6f6; background-color: #00324b; width: 790px; padding: 10px 5px; text-align:center; }
+.tg { border-collapse: collapse; border-spacing: 0; width: 800px; font: 15px consolas, sans-serif; }
+.tg td { font-weight: bold; padding: 10px 5px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; }
+.tg th { font-weight: normal; padding: 10px 15px; border-style: solid; border-width: 1px; overflow: hidden; word-break: normal; color: #4a4a4a; background-color: #f6f6f6; }
+.tg .tg-header { vertical-align: top; color: white; background-color: #e6003c; }
+</style>
+
+<h1>IOB Monitoring Summery Report</h1>
+
+<table class='tg'>
+    <tr> <th class='tg-header'>Batch</th><th class='tg-header'>Hostname or Address</th><th class='tg-header'>Building</th><th class='tg-header'>Cabinet</th><th class='tg-header'>Rack</th><th class='tg-header'>Last Availability</th><th class='tg-header'>Status</th></tr>
+</table>

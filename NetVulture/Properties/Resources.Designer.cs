@@ -191,12 +191,140 @@ namespace NetVulture.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;style type=&quot;text/css&quot;&gt;
+        ///.tg  {border-collapse:collapse;border-spacing:0;}
+        ///.tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+        ///.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+        ///.tg .tg-lkh3{background-color:#9aff99}
+        ///.tg .tg-urui{font-weight:bold;background-color:#e3e3e3}
+        ///.tg .tg-kza0{font-weight:bold;font-s [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string SummeryReportTemplate {
+            get {
+                return ResourceManager.GetString("SummeryReportTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Synchronize_32 {
             get {
                 object obj = ResourceManager.GetObject("Synchronize_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;style type=&quot;text/css&quot;&gt;
+        ///.tg  {border-collapse:collapse;border-spacing:0;}
+        ///.tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+        ///.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+        ///.tg .tg-lkh3{background-color:#8DD454}
+        ///.tg .tg-urui{font-weight:bold;background-color:#e3e3e3}
+        ///.tg .tg-kza0{font-weight:bold;font-s [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string TableBatchHeader {
+            get {
+                return ResourceManager.GetString("TableBatchHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;style type=&quot;text/css&quot;&gt;
+        ///.tg  {border-collapse:collapse;border-spacing:0;}
+        ///.tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+        ///.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+        ///.tg .tg-lkh3{background-color:#9aff99}
+        ///.tg .tg-urui{font-weight:bold;background-color:#e3e3e3}
+        ///.tg .tg-kza0{font-weight:bold;font-s [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string TableBody {
+            get {
+                return ResourceManager.GetString("TableBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;tr&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-aqa8&quot;&gt;&lt;/td&gt;
+        ///    &lt;td cl [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string TableCleanRow {
+            get {
+                return ResourceManager.GetString("TableCleanRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;/table&gt; ähnelt.
+        /// </summary>
+        internal static string TableCloseTag {
+            get {
+                return ResourceManager.GetString("TableCloseTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;tr&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{0}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{1}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{2}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{3}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{4}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{5}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{6}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{7}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{8}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{9}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{10}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{11}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{12}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{13}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-i6eq&quot;&gt;{1 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string TableDeviceOfflineRow {
+            get {
+                return ResourceManager.GetString("TableDeviceOfflineRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;tr&gt;
+        ///    &lt;td class=&quot;tg-lkh3&quot;&gt;{0}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-lkh3&quot;&gt;{1}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-lkh3&quot;&gt;{2}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-lkh3&quot;&gt;{3}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-lkh3&quot;&gt;{4}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-lkh3&quot;&gt;{5}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-lkh3&quot;&gt;{6}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-a080&quot;&gt;{7}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-a080&quot;&gt;{8}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-a080&quot;&gt;{9}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-a080&quot;&gt;{10}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-a080&quot;&gt;{11}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-a080&quot;&gt;{12}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-a080&quot;&gt;{13}&lt;/td&gt;
+        ///    &lt;td class=&quot;tg-a080&quot;&gt;{1 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string TableDeviceOnlineRow {
+            get {
+                return ResourceManager.GetString("TableDeviceOnlineRow", resourceCulture);
             }
         }
         

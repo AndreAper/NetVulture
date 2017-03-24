@@ -30,9 +30,6 @@
   &lt;string&gt;015771412853&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
-    <Setting Name="GatewayAddress" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="GatewayUser" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -56,6 +53,15 @@
     </Setting>
     <Setting Name="AutoloadCsvEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="GatewayAccountRef" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SendSummeryEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="SendSummeryTime" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">03/16/2017 21:44:00</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 using System.Net.NetworkInformation;
 using Renci.SshNet;
 using System.IO;
+using com.esendex.sdk.messaging;
+using System.Net.Mail;
+using System.ComponentModel;
+using System.Net.Sockets;
+using System.Net.Security;
 
 namespace NetVulture
 {
     public static class NVManagementClass
     {
+        const string username = "andre.aper@buhlergroup.com";
+        const string password = "tsDhd3XNCyqhspJVKGiL";
+        const string accountRef = "EX0226254";
+
         /// <summary>
         /// Read and deserialize a csv file to an batch list.
         /// </summary>
@@ -18,7 +27,6 @@ namespace NetVulture
         /// <returns>A list of batches.</returns>
         public static List<NVBatch> DeserializeFromCsv(string file)
         {
-            //BatchName;BatchDescription;HostnameOrAddress;HostDescription;Building;Cabinet;Rack;PhysicalAddress;Maintenance;AutoFetchPhysicalAddress
             List<NVBatch> lst = new List<NVBatch>();
             List<string> lines = new List<string>(File.ReadAllLines(file));
 
@@ -29,28 +37,29 @@ namespace NetVulture
 
             for (int i = 0; i < lines.Count; i++)
             {
-                //BatchName [0]
-                //BatchDescription [1]
-                //HostnameOrAddress [2]
-                //HostDescription [3]
-                //Building [4]
-                //Cabinet [5]
-                //Rack [6]
-                //PhysicalAddress [7]
-                //Maintenance [8]
-                //AutoFetchPhysicalAddress [9]
-
                 string[] line = lines[i].Split(';');
 
-                HostInformation hi = new HostInformation();
+                NVDevice hi = new NVDevice();
                 hi.HostnameOrAddress = line[2];
-                hi.Description = line[3];
-                hi.Building = line[4];
-                hi.Cabinet = line[5];
-                hi.Rack = line[6];
-                hi.PhysicalAddress = line[7];
-                hi.MaintenanceActivated = bool.Parse(line[8]);
-                hi.AutoFetchPhysicalAddress = bool.Parse(line[9]);
+                hi.AlternativeAddress = line[3];
+                hi.PriorityLevel = int.Parse(line[4]);
+                hi.IsStaticIp = bool.Parse(line[5]);
+                hi.Description = line[6];
+                hi.DeviceVendor = line[7];
+                hi.DeviceModel = line[8];
+                hi.DeviceSerial = line[9];
+                hi.Building = line[10];
+                hi.Cabinet = line[11];
+                hi.Rack = line[12];
+                hi.Panel = line[13];
+                hi.ConnectedTo = line[14];
+                hi.VlanId = line[15];
+                hi.PhysicalAddress = line[16];
+                hi.MaintenanceActivated = bool.Parse(line[17]);
+                hi.AutoFetchPhysicalAddress = bool.Parse(line[18]);
+                hi.Comment = line[19];
+                hi.LastAvailability = DateTime.MinValue;
+                hi.PingAttempts = 0;
 
                 //Wenn Batch mit Name schon vorhanden ist.
                 if (lst.Exists(x => x.Name == line[0]))
@@ -62,7 +71,7 @@ namespace NetVulture
                     NVBatch batch = new NVBatch();
                     batch.Name = line[0];
                     batch.Description = line[1];
-                    batch.HostList = new List<HostInformation>();
+                    batch.HostList = new List<NVDevice>();
                     lst.Add(batch);
 
                     lst[lst.IndexOf(batch)].HostList.Add(hi);
@@ -83,13 +92,13 @@ namespace NetVulture
             {
                 using (StreamWriter sw = new StreamWriter(file))
                 {
-                    sw.WriteLine("BatchName;BatchDescription;HostnameOrAddress;HostDescription;Building;Cabinet;Rack;PhysicalAddress;Maintenance;AutoFetchPhysicalAddress");
+                    sw.WriteLine("BatchName;BatchDescription;HostnameOrAddress;AlternativeAddress;PriorityLevel;IsStaticIp;Description;DeviceVendor;DeviceModel;DeviceSerial;Building;Cabinet;Rack;Panel;ConnectedTo;VlanId;PhysicalAddress;MaintenanceActivated;AutoFetchPhysicalAddress;Comment;LastAvailability;PingAttempts");
 
                     foreach (NVBatch batch in batchList)
                     {
-                        foreach (HostInformation hi in batch.HostList)
+                        foreach (NVDevice hi in batch.HostList)
                         {
-                            sw.WriteLine(string.Join(";", batch.Name, batch.Description, hi.HostnameOrAddress, hi.Description, hi.Building, hi.Cabinet, hi.Rack, hi.PhysicalAddress, hi.MaintenanceActivated, hi.AutoFetchPhysicalAddress));
+                            sw.WriteLine(string.Join(";", batch.Name, batch.Description, hi.HostnameOrAddress, hi.AlternativeAddress, hi.PriorityLevel, hi.IsStaticIp, hi.Description, hi.DeviceVendor, hi.DeviceModel, hi.DeviceSerial, hi.Building, hi.Cabinet, hi.Rack, hi.Panel, hi.ConnectedTo, hi.VlanId, hi.PhysicalAddress, hi.MaintenanceActivated, hi.AutoFetchPhysicalAddress, hi.Comment, hi.LastAvailability, hi.PingAttempts));
                         }
                     }
                 }
@@ -101,35 +110,169 @@ namespace NetVulture
         }
 
         /// <summary>
+        /// Convert a batch to javascript array.
+        /// </summary>
+        /// <param name="batchList">The target batch to convert.</param>
+        /// <returns>A string that contains all current information about a batch.</returns>
+        public static string ConvertToJsArray(NVBatch batch)
+        {
+            string[] jsArrayElements = new string[batch.HostList.Count];
+
+            for (int i = 0; i < batch.HostList.Count; i++)
+            {
+                PingReply pr = batch.HostList[i].ReplyData;
+
+                string[] data;
+
+                if (pr == null)
+                {
+                    data = new string[] {
+                        batch.HostList[i].HostnameOrAddress,
+                        batch.HostList[i].AlternativeAddress,
+                        batch.HostList[i].PriorityLevel.ToString(),
+                        batch.HostList[i].IsStaticIp.ToString(),
+                        batch.HostList[i].Description,
+                        batch.HostList[i].DeviceVendor,
+                        batch.HostList[i].DeviceModel,
+                        batch.HostList[i].DeviceSerial,
+                        batch.HostList[i].Building,
+                        batch.HostList[i].Cabinet,
+                        batch.HostList[i].Rack,
+                        batch.HostList[i].Panel,
+                        batch.HostList[i].ConnectedTo,
+                        batch.HostList[i].VlanId,
+                        batch.HostList[i].PhysicalAddress,
+                        batch.HostList[i].MaintenanceActivated.ToString(),
+                        batch.HostList[i].AutoFetchPhysicalAddress.ToString(),
+                        batch.HostList[i].Comment,
+                        batch.HostList[i].LastAvailability.ToString(),
+                        batch.HostList[i].PingAttempts.ToString(),
+                        "",
+                        "",
+                        ""
+                    };
+                }
+                else
+                {
+                    data = new string[] {
+                        batch.HostList[i].HostnameOrAddress,
+                        batch.HostList[i].AlternativeAddress,
+                        batch.HostList[i].PriorityLevel.ToString(),
+                        batch.HostList[i].IsStaticIp.ToString(),
+                        batch.HostList[i].Description,
+                        batch.HostList[i].DeviceVendor,
+                        batch.HostList[i].DeviceModel,
+                        batch.HostList[i].DeviceSerial,
+                        batch.HostList[i].Building,
+                        batch.HostList[i].Cabinet,
+                        batch.HostList[i].Rack,
+                        batch.HostList[i].Panel,
+                        batch.HostList[i].ConnectedTo,
+                        batch.HostList[i].VlanId,
+                        batch.HostList[i].PhysicalAddress,
+                        batch.HostList[i].MaintenanceActivated.ToString(),
+                        batch.HostList[i].AutoFetchPhysicalAddress.ToString(),
+                        batch.HostList[i].Comment,
+                        batch.HostList[i].LastAvailability.ToString(),
+                        batch.HostList[i].PingAttempts.ToString(),
+                        batch.HostList[i].ReplyData.Status.ToString(),
+                        batch.HostList[i].ReplyData.RoundtripTime.ToString(),
+                        batch.HostList[i].ReplyData.Address.ToString()
+                    };
+                }
+
+                //['Target Address or Name','ReceivedIp','RoundTrip','ExecutionTime','Status','Attemps']
+                //jsArrayElements[i] = "['" + data[0] + "','" + data[1] + "','" + data[2] + "','" + data[3] + "','" + data[4] + "','" + data[5] + "']";
+                jsArrayElements[i] = string.Format("['{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}','{20}','{21}','{22}']", data);
+            }
+
+            return "var " + batch.Name.Replace(" ", "_") + " = [" + string.Join(",", jsArrayElements) + "];";
+        }
+
+        /// <summary>
         /// Sending mail message to registered address.
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        public static async Task SendMail(string svr, string usr, string pw, string msg, params string[] to)
+        public static async Task SendMailAsync(string msg, params string[] to)
         {
-            Ping p = new Ping();
-            PingReply pr = await p.SendPingAsync(svr);
-
-            if (pr.Status != IPStatus.Success)
+            if (to.Length > 0)
             {
-                //TODO: Rückmeldung wenn Methode abgebrochen wurde.
-                //MessageBox.Show("SMS/Mail Gateway is not available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                throw new Renci.SshNet.Common.SshConnectionException("SMS/Mail Gateway is not available.");
+                foreach (string recipient in to)
+                {
+                    try
+                    {
+                        Ping p = new Ping();
+                        PingReply pr = p.Send(Properties.Settings.Default.MailServer);
+
+                        if (pr.Status != IPStatus.Success)
+                        {
+                            throw new Exception("Mail server: " + Properties.Settings.Default.MailServer + " not available!", null);
+                        }
+
+                        SmtpClient client = new SmtpClient();
+                        client.Port = Properties.Settings.Default.MailServerPort;
+                        client.Host = Properties.Settings.Default.MailServer;
+                        client.EnableSsl = true;
+                        client.Timeout = 10000;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.UseDefaultCredentials = false;
+                        client.Credentials = new System.Net.NetworkCredential(Properties.Settings.Default.MailUser, Properties.Settings.Default.MailPassword);
+                        await client.SendMailAsync(Properties.Settings.Default.MailUser, recipient, "IOB Monitoring Test Messsage", msg);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public static void SendHtmlEmail(string body, params string[] recipients)
+        {
+            MailMessage message = new MailMessage();
+            message.From = new MailAddress(Properties.Settings.Default.MailUser);
+
+            foreach (string to in recipients)
+            {
+                message.To.Add(to);
             }
 
+            message.Subject = "Html Email Test";
+            message.IsBodyHtml = true;
+            message.Body = body;
+
+            SmtpClient smtpClient = new SmtpClient();
+            smtpClient.UseDefaultCredentials = true;
+            smtpClient.Host = Properties.Settings.Default.MailServer;
+            smtpClient.Port = Properties.Settings.Default.MailServerPort;
+            smtpClient.EnableSsl = true;
+            smtpClient.Credentials = new System.Net.NetworkCredential(Properties.Settings.Default.MailUser, Properties.Settings.Default.MailPassword);
+            smtpClient.Send(message);
+        }
+
+        public static void SendShortMessage(string recipient, string msg)
+        {
             try
             {
-                //Set up the SSH connection
-                using (SshClient _client = new SshClient(svr, usr, pw))
-                {
-                    //Start the connection
-                    _client.Connect();
+                MessagingService messagingService = new MessagingService(Properties.Settings.Default.GatewayUser, Properties.Settings.Default.GatewayPassword);
+                messagingService.SendMessage(new SmsMessage(recipient, msg, Properties.Settings.Default.GatewayAccountRef));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
-                    foreach (string address in to)
-                    {
-                        string command = string.Format("echo -e 'Subject: {0}\nFrom: {1}\nTo: {2}\n{3}\n\n' | sudo ssmtp '{4}'", "NetVulture Alerting System", "monitoring.bbs@gmail.com", address, msg, address);
-                        SshCommand cmd = _client.RunCommand(command);
-                    }
+        public static void SendMultipleShortMessage(string msg, params string[] recipients)
+        {
+            try
+            {
+                MessagingService messagingService = new MessagingService(Properties.Settings.Default.GatewayUser, Properties.Settings.Default.GatewayPassword);
+
+                foreach (string r in recipients)
+                {
+                    messagingService.SendMessage(new SmsMessage(r, msg, Properties.Settings.Default.GatewayAccountRef));
                 }
             }
             catch (Exception)
@@ -137,5 +280,12 @@ namespace NetVulture
                 throw;
             }
         }
+    }
+
+    public enum PriorityLevel
+    {
+        High,
+        Medium,
+        Low
     }
 }

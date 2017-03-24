@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="com.esendex.sdk, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9dceac28a20578e2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\com.esendex.sdk.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -77,9 +81,10 @@
     <Compile Include="frmSettings.Designer.cs">
       <DependentUpon>frmSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="HostInformation.cs" />
+    <Compile Include="NVDevice.cs" />
     <Compile Include="NVBatch.cs" />
     <Compile Include="NVManagementClass.cs" />
+    <Compile Include="NVSummaryDesigner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmMain.resx">
@@ -163,6 +168,10 @@
     <None Include="Resources\Maintenance-32.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\HtmlMailCore.txt" />
+    <None Include="Resources\HtmlMailCore1.txt" />
+    <None Include="Resources\SummeryReportTemplate.txt" />
+    <None Include="Resources\Template.txt" />
     <Content Include="table.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

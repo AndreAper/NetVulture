@@ -76,6 +76,7 @@ namespace NetVulture
             return pr;
         }
 
+        //TODO: Anpassen an die neue NVDevice-Klasse
         private void UpdateDGV()
         {
             dataGridView.Rows.Clear();

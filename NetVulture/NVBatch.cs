@@ -14,7 +14,7 @@ namespace NetVulture
     {
         private string _name;
         private string _description;
-        private List<HostInformation> _hostList = null;
+        private List<NVDevice> _hostList = null;
         private DateTime _lastExec;
         private int _timeOut;
         private int _bufferSize;
@@ -36,7 +36,7 @@ namespace NetVulture
         /// Get or set the list that contains all hosts to send the icmp echo messages.
         /// </summary>
         [XmlElement(ElementName = "HostList")]
-        public List<HostInformation> HostList { get { return _hostList; } set { _hostList = value; } }
+        public List<NVDevice> HostList { get { return _hostList; } set { _hostList = value; } }
 
         /// <summary>
         /// Get the last execution of icmp echo request.
@@ -89,12 +89,14 @@ namespace NetVulture
                         if (_hostList[j].MaintenanceActivated == false)
                         {
                             Ping p = new Ping();
-                            PingReply pr = await p.SendPingAsync(_hostList[j].HostnameOrAddress, _timeOut, new byte[_bufferSize]);
+                            
                             try
                             {
+                                PingReply pr = await p.SendPingAsync(_hostList[j].HostnameOrAddress, _timeOut, new byte[_bufferSize]);
+
                                 _hostList[j].ReplyData = pr;
 
-                                if (pr.Status != IPStatus.Success)
+                                if (pr == null || pr.Status != IPStatus.Success)
                                 {
                                     _hostList[j].PingAttempts++;
                                 }
@@ -102,11 +104,6 @@ namespace NetVulture
                                 {
                                     _hostList[j].LastAvailability = DateTime.Now;
                                     _hostList[j].PingAttempts = 0;
-
-                                    //if (_hostList[j].AutoFetchPhysicalAddress)
-                                    //{
-                                    //    _hostList[j].PhysicalAddress = await Task.Run(() => GetMACAddressFromARP(_hostList[j].HostnameOrAddress));
-                                    //}
                                 }
 
                             }
@@ -115,7 +112,6 @@ namespace NetVulture
                                 _hostList[j].ReplyData = null;
                                 _hostList[j].PingAttempts++;
                             }
-
 
                             p.Dispose(); 
                         }
@@ -137,22 +133,33 @@ namespace NetVulture
         /// not be found.</returns>
         private string GetMACAddressFromARP(string hostNameOrAddress)
         {
-            IPHostEntry hostEntry = Dns.GetHostEntry(hostNameOrAddress);
+            string mac = "00:00:00:00:00:00";
 
-            if (hostEntry.AddressList.Length == 0) return null;
-            byte[] macAddr = new byte[6];
-            uint macAddrLen = (uint)macAddr.Length;
-            if (SendARP((int) hostEntry.AddressList[0].Address, 0, macAddr, ref macAddrLen) != 0) return null;
-
-            StringBuilder macAddressString = new StringBuilder();
-            for (int i = 0; i<macAddr.Length; i++)
+            try
             {
-                if (macAddressString.Length > 0)
-                macAddressString.Append(":");
-                macAddressString.AppendFormat("{0:x2}", macAddr[i]);
+                IPHostEntry hostEntry = Dns.GetHostEntry(hostNameOrAddress);
+
+                if (hostEntry.AddressList.Length == 0) return null;
+                byte[] macAddr = new byte[6];
+                uint macAddrLen = (uint)macAddr.Length;
+                if (SendARP((int)hostEntry.AddressList[0].Address, 0, macAddr, ref macAddrLen) != 0) return null;
+
+                StringBuilder macAddressString = new StringBuilder();
+                for (int i = 0; i < macAddr.Length; i++)
+                {
+                    if (macAddressString.Length > 0)
+                        macAddressString.Append(":");
+                    macAddressString.AppendFormat("{0:x2}", macAddr[i]);
+                }
+
+                mac = macAddressString.ToString();
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
-            return macAddressString.ToString();
+            return mac;
         }
     }
 }

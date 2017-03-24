@@ -1,0 +1,19 @@
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg .tg-lkh3{background-color:#9aff99}
+.tg .tg-urui{font-weight:bold;background-color:#e3e3e3}
+.tg .tg-kza0{font-weight:bold;font-size:12px;font-family:"Lucida Console", Monaco, monospace !important;;background-color:#f6f6f6;vertical-align:top}
+.tg .tg-es9i{font-weight:bold;font-size:18px;background-color:#00324b;color:#ffffff;text-align:center;vertical-align:top}
+.tg .tg-i6eq{background-color:#ffccc9;vertical-align:top}
+.tg .tg-aqa8{font-size:10px;background-color:#ffffff;vertical-align:top}
+.tg .tg-ksyb{font-weight:bold;background-color:#e3e3e3;vertical-align:top}
+.tg .tg-a080{background-color:#9aff99;vertical-align:top}
+</style>
+<table class="tg">
+  <tr>
+    <th class="tg-es9i" colspan="21">IOB MONITORING DAILY REPORT</th>
+  </tr>
+
+</table>

@@ -12,7 +12,7 @@ namespace NetVulture.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.0.1.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -123,18 +123,6 @@ namespace NetVulture.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GatewayAddress {
-            get {
-                return ((string)(this["GatewayAddress"]));
-            }
-            set {
-                this["GatewayAddress"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string GatewayUser {
             get {
                 return ((string)(this["GatewayUser"]));
@@ -225,6 +213,42 @@ namespace NetVulture.Properties {
             }
             set {
                 this["AutoloadCsvEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GatewayAccountRef {
+            get {
+                return ((string)(this["GatewayAccountRef"]));
+            }
+            set {
+                this["GatewayAccountRef"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SendSummeryEnabled {
+            get {
+                return ((bool)(this["SendSummeryEnabled"]));
+            }
+            set {
+                this["SendSummeryEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("03/16/2017 21:44:00")]
+        public global::System.DateTime SendSummeryTime {
+            get {
+                return ((global::System.DateTime)(this["SendSummeryTime"]));
+            }
+            set {
+                this["SendSummeryTime"] = value;
             }
         }
     }

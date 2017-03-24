@@ -29,14 +29,22 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this._tlpBody = new System.Windows.Forms.TableLayoutPanel();
             this._chkBtnTimerEnabled = new System.Windows.Forms.CheckBox();
             this._btnCollect = new System.Windows.Forms.Button();
             this._btnAddBatch = new System.Windows.Forms.Button();
             this._dgvResults = new System.Windows.Forms.DataGridView();
+            this.HostnameOrAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PhysicalAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RoundTrip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Attempts = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Maintenance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
             this._btnShowReport = new System.Windows.Forms.Button();
             this._lblAppTitle = new System.Windows.Forms.Label();
@@ -69,18 +77,11 @@
             this._collectTimer = new System.Windows.Forms.Timer(this.components);
             this._clock = new System.Windows.Forms.Timer(this.components);
             this._fsw = new System.IO.FileSystemWatcher();
-            this.HostnameOrAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PhysicalAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RoundTrip = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Attempts = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Maintenance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this._tlpBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._dgvResults)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
             this._pnlSubMenuBatch.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._fsw)).BeginInit();
             this.SuspendLayout();
             // 
@@ -96,20 +97,17 @@
             this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
             this._tlpBody.Controls.Add(this._chkBtnTimerEnabled, 1, 0);
-            this._tlpBody.Controls.Add(this._btnCollect, 4, 0);
             this._tlpBody.Controls.Add(this._btnAddBatch, 2, 0);
             this._tlpBody.Controls.Add(this._dgvResults, 2, 5);
             this._tlpBody.Controls.Add(this.label4, 1, 5);
-            this._tlpBody.Controls.Add(this._btnShowReport, 3, 0);
             this._tlpBody.Controls.Add(this._lblAppTitle, 0, 0);
-            this._tlpBody.Controls.Add(this._btnOpenSettings, 5, 0);
             this._tlpBody.Controls.Add(this._tbxJobName, 2, 4);
             this._tlpBody.Controls.Add(this.label1, 1, 4);
             this._tlpBody.Controls.Add(this._pnlUnderlineMainMenu, 0, 1);
             this._tlpBody.Controls.Add(this._flpBatchList, 0, 2);
             this._tlpBody.Controls.Add(this._pnlSubMenuBatch, 1, 2);
             this._tlpBody.Controls.Add(this._pnlUnderlinSubmenuForBatch, 1, 3);
-            this._tlpBody.Controls.Add(this.panel1, 6, 0);
+            this._tlpBody.Controls.Add(this.panel1, 5, 0);
             this._tlpBody.Controls.Add(this._lblCountOfFailedRequests, 4, 8);
             this._tlpBody.Controls.Add(this._lblCountOfSuccessRequests, 3, 8);
             this._tlpBody.Controls.Add(this._lblLastBatchExec, 2, 8);
@@ -120,6 +118,8 @@
             this._tlpBody.Controls.Add(this._lblOutputDir, 6, 9);
             this._tlpBody.Controls.Add(this.label2, 4, 4);
             this._tlpBody.Controls.Add(this._tbxJobDescription, 5, 4);
+            this._tlpBody.Controls.Add(this._btnCollect, 3, 0);
+            this._tlpBody.Controls.Add(this._btnOpenSettings, 4, 0);
             this._tlpBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this._tlpBody.Location = new System.Drawing.Point(0, 0);
             this._tlpBody.Name = "_tlpBody";
@@ -176,7 +176,7 @@
             this._btnCollect.ForeColor = System.Drawing.Color.White;
             this._btnCollect.Image = global::NetVulture.Properties.Resources.Collect_32;
             this._btnCollect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnCollect.Location = new System.Drawing.Point(614, 0);
+            this._btnCollect.Location = new System.Drawing.Point(464, 0);
             this._btnCollect.Margin = new System.Windows.Forms.Padding(0);
             this._btnCollect.Name = "_btnCollect";
             this._btnCollect.Size = new System.Drawing.Size(150, 40);
@@ -215,14 +215,14 @@
             this._dgvResults.AllowUserToDeleteRows = false;
             this._dgvResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this._dgvResults.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this._dgvResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this._dgvResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this._dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this._dgvResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.HostnameOrAddress,
@@ -234,31 +234,79 @@
             this.Attempts,
             this.Maintenance});
             this._tlpBody.SetColumnSpan(this._dgvResults, 5);
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(90)))), ((int)(((byte)(110)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this._dgvResults.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(90)))), ((int)(((byte)(110)))));
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this._dgvResults.DefaultCellStyle = dataGridViewCellStyle11;
             this._dgvResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this._dgvResults.Location = new System.Drawing.Point(317, 148);
             this._dgvResults.Margin = new System.Windows.Forms.Padding(3, 3, 20, 3);
             this._dgvResults.Name = "_dgvResults";
             this._dgvResults.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this._dgvResults.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this._dgvResults.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this._tlpBody.SetRowSpan(this._dgvResults, 3);
             this._dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this._dgvResults.Size = new System.Drawing.Size(1071, 443);
             this._dgvResults.TabIndex = 4;
+            // 
+            // HostnameOrAddress
+            // 
+            this.HostnameOrAddress.HeaderText = "Hostname or Address";
+            this.HostnameOrAddress.Name = "HostnameOrAddress";
+            this.HostnameOrAddress.ReadOnly = true;
+            // 
+            // Address
+            // 
+            this.Address.HeaderText = "Address";
+            this.Address.Name = "Address";
+            this.Address.ReadOnly = true;
+            // 
+            // PhysicalAddress
+            // 
+            this.PhysicalAddress.HeaderText = "Physical Address";
+            this.PhysicalAddress.Name = "PhysicalAddress";
+            this.PhysicalAddress.ReadOnly = true;
+            // 
+            // RoundTrip
+            // 
+            this.RoundTrip.HeaderText = "RoundTrip (ms)";
+            this.RoundTrip.Name = "RoundTrip";
+            this.RoundTrip.ReadOnly = true;
+            // 
+            // Time
+            // 
+            this.Time.HeaderText = "Last Availability";
+            this.Time.Name = "Time";
+            this.Time.ReadOnly = true;
+            // 
+            // Status
+            // 
+            this.Status.HeaderText = "Status";
+            this.Status.Name = "Status";
+            this.Status.ReadOnly = true;
+            // 
+            // Attempts
+            // 
+            this.Attempts.HeaderText = "Attempts";
+            this.Attempts.Name = "Attempts";
+            this.Attempts.ReadOnly = true;
+            // 
+            // Maintenance
+            // 
+            this.Maintenance.HeaderText = "Maintenance";
+            this.Maintenance.Name = "Maintenance";
+            this.Maintenance.ReadOnly = true;
             // 
             // label4
             // 
@@ -285,7 +333,7 @@
             this._btnShowReport.ForeColor = System.Drawing.Color.White;
             this._btnShowReport.Image = global::NetVulture.Properties.Resources.Details_32;
             this._btnShowReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnShowReport.Location = new System.Drawing.Point(464, 0);
+            this._btnShowReport.Location = new System.Drawing.Point(0, 0);
             this._btnShowReport.Margin = new System.Windows.Forms.Padding(0);
             this._btnShowReport.Name = "_btnShowReport";
             this._btnShowReport.Size = new System.Drawing.Size(150, 40);
@@ -293,6 +341,7 @@
             this._btnShowReport.Text = "Report";
             this._btnShowReport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this._btnShowReport.UseVisualStyleBackColor = false;
+            this._btnShowReport.Visible = false;
             this._btnShowReport.Click += new System.EventHandler(this._btnShowReport_Click);
             // 
             // _lblAppTitle
@@ -308,7 +357,7 @@
             this._lblAppTitle.Name = "_lblAppTitle";
             this._lblAppTitle.Size = new System.Drawing.Size(164, 40);
             this._lblAppTitle.TabIndex = 2;
-            this._lblAppTitle.Text = "NetVulture";
+            this._lblAppTitle.Text = "NetVulture 1.3";
             this._lblAppTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // _btnOpenSettings
@@ -324,7 +373,7 @@
             this._btnOpenSettings.ForeColor = System.Drawing.Color.White;
             this._btnOpenSettings.Image = global::NetVulture.Properties.Resources.Settings_32;
             this._btnOpenSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnOpenSettings.Location = new System.Drawing.Point(764, 0);
+            this._btnOpenSettings.Location = new System.Drawing.Point(614, 0);
             this._btnOpenSettings.Margin = new System.Windows.Forms.Padding(0);
             this._btnOpenSettings.Name = "_btnOpenSettings";
             this._btnOpenSettings.Size = new System.Drawing.Size(150, 40);
@@ -446,6 +495,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this._chkBtnBatchMaintenanceSwitch.Appearance = System.Windows.Forms.Appearance.Button;
             this._chkBtnBatchMaintenanceSwitch.BackColor = System.Drawing.Color.Transparent;
+            this._chkBtnBatchMaintenanceSwitch.Enabled = false;
             this._chkBtnBatchMaintenanceSwitch.FlatAppearance.BorderSize = 0;
             this._chkBtnBatchMaintenanceSwitch.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(155)))), ((int)(((byte)(50)))));
             this._chkBtnBatchMaintenanceSwitch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -467,6 +517,7 @@
             // _btnEditHostList
             // 
             this._btnEditHostList.BackColor = System.Drawing.Color.Transparent;
+            this._btnEditHostList.Enabled = false;
             this._btnEditHostList.FlatAppearance.BorderSize = 0;
             this._btnEditHostList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._btnEditHostList.Font = new System.Drawing.Font("Segoe UI Light", 12F);
@@ -485,6 +536,7 @@
             // _btnRunSelectedBatch
             // 
             this._btnRunSelectedBatch.BackColor = System.Drawing.Color.Transparent;
+            this._btnRunSelectedBatch.Enabled = false;
             this._btnRunSelectedBatch.FlatAppearance.BorderSize = 0;
             this._btnRunSelectedBatch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(185)))), ((int)(((byte)(40)))));
             this._btnRunSelectedBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -504,6 +556,7 @@
             // _btnRemoveSelectedBatch
             // 
             this._btnRemoveSelectedBatch.BackColor = System.Drawing.Color.Transparent;
+            this._btnRemoveSelectedBatch.Enabled = false;
             this._btnRemoveSelectedBatch.FlatAppearance.BorderSize = 0;
             this._btnRemoveSelectedBatch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(0)))), ((int)(((byte)(60)))));
             this._btnRemoveSelectedBatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -536,11 +589,13 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._tlpBody.SetColumnSpan(this.panel1, 2);
+            this.panel1.Controls.Add(this._btnShowReport);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(914, 0);
+            this.panel1.Location = new System.Drawing.Point(764, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(494, 40);
+            this.panel1.Size = new System.Drawing.Size(644, 40);
             this.panel1.TabIndex = 65;
             // 
             // _lblCountOfFailedRequests
@@ -704,54 +759,6 @@
             this._fsw.SynchronizingObject = this;
             this._fsw.Changed += new System.IO.FileSystemEventHandler(this._fsw_Changed);
             // 
-            // HostnameOrAddress
-            // 
-            this.HostnameOrAddress.HeaderText = "Hostname or Address";
-            this.HostnameOrAddress.Name = "HostnameOrAddress";
-            this.HostnameOrAddress.ReadOnly = true;
-            // 
-            // Address
-            // 
-            this.Address.HeaderText = "Address";
-            this.Address.Name = "Address";
-            this.Address.ReadOnly = true;
-            // 
-            // PhysicalAddress
-            // 
-            this.PhysicalAddress.HeaderText = "Physical Address";
-            this.PhysicalAddress.Name = "PhysicalAddress";
-            this.PhysicalAddress.ReadOnly = true;
-            // 
-            // RoundTrip
-            // 
-            this.RoundTrip.HeaderText = "RoundTrip (ms)";
-            this.RoundTrip.Name = "RoundTrip";
-            this.RoundTrip.ReadOnly = true;
-            // 
-            // Time
-            // 
-            this.Time.HeaderText = "Last Availability";
-            this.Time.Name = "Time";
-            this.Time.ReadOnly = true;
-            // 
-            // Status
-            // 
-            this.Status.HeaderText = "Status";
-            this.Status.Name = "Status";
-            this.Status.ReadOnly = true;
-            // 
-            // Attempts
-            // 
-            this.Attempts.HeaderText = "Attempts";
-            this.Attempts.Name = "Attempts";
-            this.Attempts.ReadOnly = true;
-            // 
-            // Maintenance
-            // 
-            this.Maintenance.HeaderText = "Maintenance";
-            this.Maintenance.Name = "Maintenance";
-            this.Maintenance.ReadOnly = true;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -769,6 +776,7 @@
             this.contextMenuStrip.ResumeLayout(false);
             this._pnlSubMenuBatch.ResumeLayout(false);
             this._pnlSubMenuBatch.PerformLayout();
+            this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this._fsw)).EndInit();
             this.ResumeLayout(false);
 

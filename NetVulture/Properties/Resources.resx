@@ -163,4 +163,123 @@
   <data name="Maintenance-32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Maintenance-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SummeryReportTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SummeryReportTemplate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="TableBatchHeader" xml:space="preserve">
+    <value>&lt;style type="text/css"&gt;
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg .tg-lkh3{background-color:#8DD454}
+.tg .tg-urui{font-weight:bold;background-color:#e3e3e3}
+.tg .tg-kza0{font-weight:bold;font-size:12px;font-family:"Lucida Console", Monaco, monospace !important;;background-color:#f6f6f6;vertical-align:top}
+.tg .tg-es9i{font-weight:bold;font-size:18px;background-color:#00324b;color:#ffffff;text-align:center;vertical-align:top}
+.tg .tg-i6eq{background-color:#EA0043;vertical-align:top}
+.tg .tg-aqa8{font-size:10px;background-color:#ffffff;vertical-align:top}
+.tg .tg-ksyb{font-weight:bold;background-color:#e3e3e3;vertical-align:top}
+.tg .tg-a080{background-color:#8DD454;vertical-align:top}
+&lt;/style&gt;
+&lt;table class="tg"&gt;
+  &lt;tr&gt;
+    &lt;th class="tg-es9i" colspan="21"&gt;IOB MONITORING DAILY REPORT&lt;/th&gt;
+  &lt;/tr&gt;</value>
+  </data>
+  <data name="TableBody" xml:space="preserve">
+    <value>&lt;style type="text/css"&gt;
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg .tg-lkh3{background-color:#9aff99}
+.tg .tg-urui{font-weight:bold;background-color:#e3e3e3}
+.tg .tg-kza0{font-weight:bold;font-size:12px;font-family:"Lucida Console", Monaco, monospace !important;;background-color:#f6f6f6;vertical-align:top}
+.tg .tg-es9i{font-weight:bold;font-size:18px;background-color:#00324b;color:#ffffff;text-align:center;vertical-align:top}
+.tg .tg-i6eq{background-color:#ffccc9;vertical-align:top}
+.tg .tg-aqa8{font-size:10px;background-color:#ffffff;vertical-align:top}
+.tg .tg-ksyb{font-weight:bold;background-color:#e3e3e3;vertical-align:top}
+.tg .tg-a080{background-color:#9aff99;vertical-align:top}
+&lt;/style&gt;
+&lt;table class="tg"&gt;
+  &lt;tr&gt;
+    &lt;th class="tg-es9i" colspan="21"&gt;IOB MONITORING DAILY REPORT&lt;/th&gt;
+  &lt;/tr&gt;</value>
+  </data>
+  <data name="TableCleanRow" xml:space="preserve">
+    <value>&lt;tr&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+    &lt;td class="tg-aqa8"&gt;&lt;/td&gt;
+  &lt;/tr&gt;</value>
+  </data>
+  <data name="TableCloseTag" xml:space="preserve">
+    <value>&lt;/table&gt;</value>
+  </data>
+  <data name="TableDeviceOfflineRow" xml:space="preserve">
+    <value>&lt;tr&gt;
+    &lt;td class="tg-i6eq"&gt;{0}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{1}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{2}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{3}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{4}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{5}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{6}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{7}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{8}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{9}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{10}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{11}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{12}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{13}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{14}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{15}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{16}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{17}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{18}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{19}&lt;/td&gt;
+    &lt;td class="tg-i6eq"&gt;{20}&lt;/td&gt;
+  &lt;/tr&gt;</value>
+  </data>
+  <data name="TableDeviceOnlineRow" xml:space="preserve">
+    <value>&lt;tr&gt;
+    &lt;td class="tg-lkh3"&gt;{0}&lt;/td&gt;
+    &lt;td class="tg-lkh3"&gt;{1}&lt;/td&gt;
+    &lt;td class="tg-lkh3"&gt;{2}&lt;/td&gt;
+    &lt;td class="tg-lkh3"&gt;{3}&lt;/td&gt;
+    &lt;td class="tg-lkh3"&gt;{4}&lt;/td&gt;
+    &lt;td class="tg-lkh3"&gt;{5}&lt;/td&gt;
+    &lt;td class="tg-lkh3"&gt;{6}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{7}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{8}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{9}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{10}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{11}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{12}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{13}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{14}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{15}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{16}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{17}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{18}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{19}&lt;/td&gt;
+    &lt;td class="tg-a080"&gt;{20}&lt;/td&gt;
+  &lt;/tr&gt;</value>
+  </data>
 </root>

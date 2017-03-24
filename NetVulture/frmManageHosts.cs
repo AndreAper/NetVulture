@@ -14,14 +14,14 @@ namespace NetVulture
     public partial class frmManageHosts : Form
     {
 
-        public List<HostInformation> HostList { get { return _lst; } }
-        private List<HostInformation> _lst = null;
+        public List<NVDevice> HostList { get { return _lst; } }
+        private List<NVDevice> _lst = null;
 
         private void UpdateLbx()
         {
             _lbxHIs.Items.Clear();
 
-            foreach (HostInformation hi in _lst)
+            foreach (NVDevice hi in _lst)
             {
                 _lbxHIs.Items.Add(hi.HostnameOrAddress);
             }
@@ -30,10 +30,10 @@ namespace NetVulture
         public frmManageHosts()
         {
             InitializeComponent();
-            _lst = new List<HostInformation>();
+            _lst = new List<NVDevice>();
         }
 
-        public frmManageHosts(List<HostInformation> lst)
+        public frmManageHosts(List<NVDevice> lst)
         {
             InitializeComponent();
             _lst = lst;
@@ -41,9 +41,7 @@ namespace NetVulture
             UpdateLbx();
         }
 
-        private void _btnOk_Click(object sender, EventArgs e)
-        {
-        }
+        private void _btnOk_Click(object sender, EventArgs e){}
 
         private void _btnAddHI_Click(object sender, EventArgs e)
         {
@@ -60,25 +58,44 @@ namespace NetVulture
                     return;
                 }
 
-                HostInformation hi = new HostInformation();
+                NVDevice hi = new NVDevice();
                 hi.HostnameOrAddress = _tbxDnsEntry.Text;
+                hi.AlternativeAddress = _tbxAlternativeAddress.Text;
+                hi.PriorityLevel = Convert.ToInt32(_nudPrioriyLevel.Value);
+                hi.IsStaticIp = _chkBxIsStatic.Checked;
                 hi.Description = _tbxHostDescription.Text;
+                hi.DeviceVendor = _tbxDeviceVendor.Text;
+                hi.DeviceModel = _tbxDeviceModel.Text;
+                hi.DeviceSerial = _tbxDeviceSerial.Text;
                 hi.Building = _tbxBuilding.Text;
                 hi.Cabinet = _tbxCabinet.Text;
                 hi.Rack = _tbxRack.Text;
+                hi.Panel = _tbxPanel.Text;
+                hi.ConnectedTo = _tbxConnectedTo.Text;
+                hi.VlanId = _tbxVlanId.Text;
                 hi.PhysicalAddress = _tbxPhysicalAddress.Text;
                 hi.MaintenanceActivated = _chkBxIsMaintenanceActive.Checked;
                 hi.AutoFetchPhysicalAddress = _chkBxAutoFetchMac.Checked;
+                hi.Comment = _tbxComment.Text;
 
                 _lst.Add(hi);
                 UpdateLbx();
 
-                _tbxDnsEntry.Text = "";
-                _tbxHostDescription.Text = "";
-                _tbxPhysicalAddress.Text = "";
-                _tbxBuilding.Text = "";
-                _tbxCabinet.Text = "";
-                _tbxRack.Text = "";
+                Action<Control.ControlCollection> func = null;
+
+                func = (controls) =>
+                {
+                    foreach (Control control in controls)
+                        if (control is TextBox)
+                            (control as TextBox).Clear();
+                        else
+                            func(control.Controls);
+                };
+
+                func(Controls);
+
+                _nudPrioriyLevel.Value = 0;
+                _chkBxIsStatic.Checked = false;
                 _chkBxIsMaintenanceActive.Checked = false;
                 _chkBxAutoFetchMac.Checked = false;
 
@@ -89,37 +106,33 @@ namespace NetVulture
         {
             if (_lbxHIs.SelectedIndex != -1)
             {
-                HostInformation hi = _lst.ElementAt(_lbxHIs.SelectedIndex);
+                NVDevice hi = _lst.ElementAt(_lbxHIs.SelectedIndex);
+
                 _tbxDnsEntry.Text = hi.HostnameOrAddress;
+                _tbxAlternativeAddress.Text = hi.AlternativeAddress;
+                _nudPrioriyLevel.Value = hi.PriorityLevel;
+                _chkBxIsStatic.Checked = hi.IsStaticIp;
                 _tbxHostDescription.Text = hi.Description;
+                _tbxDeviceVendor.Text = hi.DeviceVendor;
+                _tbxDeviceModel.Text = hi.DeviceModel;
+                _tbxDeviceSerial.Text = hi.DeviceSerial;
                 _tbxBuilding.Text = hi.Building;
                 _tbxCabinet.Text = hi.Cabinet;
                 _tbxRack.Text = hi.Rack;
+                _tbxPanel.Text = hi.Panel;
+                _tbxConnectedTo.Text = hi.ConnectedTo;
+                _tbxVlanId.Text = hi.VlanId;
                 _tbxPhysicalAddress.Text = hi.PhysicalAddress;
                 _chkBxIsMaintenanceActive.Checked = hi.MaintenanceActivated;
                 _chkBxAutoFetchMac.Checked = hi.AutoFetchPhysicalAddress;
+                _tbxComment.Text = hi.Comment;
+
                 _btnSave.Enabled = true;
             }
         }
 
         private void _btnRemoveHI_Click(object sender, EventArgs e)
         {
-            //if (_lbxHIs.SelectedIndex != -1)
-            //{
-            //    _lst.RemoveAt(_lbxHIs.SelectedIndex);
-
-            //    _tbxDnsEntry.Text = "";
-            //    _tbxHostDescription.Text = "";
-            //    _tbxPhysicalAddress.Text = "";
-            //    _tbxBuilding.Text = "";
-            //    _tbxCabinet.Text = "";
-            //    _tbxRack.Text = "";
-            //    _chkBxIsMaintenanceActive.Checked = false;
-            //    _chkBxAutoFetchMac.Checked = false;
-
-            //    UpdateLbx();
-            //}
-
             for (int x = _lbxHIs.SelectedIndices.Count - 1; x >= 0; x--)
             {
                 int idx = _lbxHIs.SelectedIndices[x];
@@ -134,13 +147,23 @@ namespace NetVulture
             if (_lbxHIs.SelectedIndex != -1)
             {
                 _lst[_lbxHIs.SelectedIndex].HostnameOrAddress = _tbxDnsEntry.Text;
+                _lst[_lbxHIs.SelectedIndex].AlternativeAddress = _tbxAlternativeAddress.Text;
+                _lst[_lbxHIs.SelectedIndex].PriorityLevel = Convert.ToInt32(_nudPrioriyLevel.Value);
+                _lst[_lbxHIs.SelectedIndex].IsStaticIp = _chkBxIsStatic.Checked;
                 _lst[_lbxHIs.SelectedIndex].Description = _tbxHostDescription.Text;
+                _lst[_lbxHIs.SelectedIndex].DeviceVendor = _tbxDeviceVendor.Text;
+                _lst[_lbxHIs.SelectedIndex].DeviceModel = _tbxDeviceModel.Text;
+                _lst[_lbxHIs.SelectedIndex].DeviceSerial = _tbxDeviceSerial.Text;
                 _lst[_lbxHIs.SelectedIndex].Building = _tbxBuilding.Text;
                 _lst[_lbxHIs.SelectedIndex].Cabinet = _tbxCabinet.Text;
                 _lst[_lbxHIs.SelectedIndex].Rack = _tbxRack.Text;
+                _lst[_lbxHIs.SelectedIndex].Panel = _tbxPanel.Text;
+                _lst[_lbxHIs.SelectedIndex].ConnectedTo = _tbxConnectedTo.Text;
+                _lst[_lbxHIs.SelectedIndex].VlanId = _tbxVlanId.Text;
                 _lst[_lbxHIs.SelectedIndex].PhysicalAddress = _tbxPhysicalAddress.Text;
                 _lst[_lbxHIs.SelectedIndex].MaintenanceActivated = _chkBxIsMaintenanceActive.Checked;
                 _lst[_lbxHIs.SelectedIndex].AutoFetchPhysicalAddress = _chkBxAutoFetchMac.Checked;
+                _lst[_lbxHIs.SelectedIndex].Comment = _tbxComment.Text;
 
                 _lbxHIs.SelectedIndex = -1;
                 _btnSave.Enabled = false;
@@ -165,36 +188,44 @@ namespace NetVulture
                     lines.RemoveAt(0); 
                 }
 
-                _lst = new List<HostInformation>();
+                _lst = new List<NVDevice>();
 
                 foreach (string line in lines)
                 {
-                    //HostnameOrAddress [0]
-                    //HostDescription [1]
-                    //Building [2]
-                    //Cabinet [3]
-                    //Rack [4]
-                    //PhysicalAddress [5]
-                    //Maintenance [6]
-                    //AutoFetchPhysicalAddress [7]
-
                     string[] elements = line.Split(';');
 
-                    HostInformation hi = new HostInformation();
+                    NVDevice hi = new NVDevice();
                     hi.HostnameOrAddress = elements[0];
-                    hi.Description = elements[1];
-                    hi.Building = elements[2];
-                    hi.Cabinet = elements[3];
-                    hi.Rack = elements[4];
-                    hi.PhysicalAddress = elements[5];
-                    hi.MaintenanceActivated = bool.Parse(elements[6]);
-                    hi.AutoFetchPhysicalAddress = bool.Parse(elements[7]);
+                    hi.AlternativeAddress = elements[1];
+                    hi.PriorityLevel = int.Parse(elements[2]);
+                    hi.IsStaticIp = bool.Parse(elements[3]);
+                    hi.Description = elements[4];
+                    hi.DeviceVendor = elements[5];
+                    hi.DeviceModel = elements[6];
+                    hi.DeviceSerial = elements[7];
+                    hi.Building = elements[8];
+                    hi.Cabinet = elements[9];
+                    hi.Rack = elements[10];
+                    hi.Panel = elements[11];
+                    hi.ConnectedTo = elements[12];
+                    hi.VlanId = elements[13];
+                    hi.PhysicalAddress = elements[14];
+                    hi.MaintenanceActivated = bool.Parse(elements[15]);
+                    hi.AutoFetchPhysicalAddress = bool.Parse(elements[16]);
+                    hi.Comment = elements[17];
+                    hi.LastAvailability = DateTime.MinValue;
+                    hi.PingAttempts = int.Parse(elements[19]);
 
                     _lst.Add(hi);
                 }
             }
 
             UpdateLbx();
+        }
+
+        private void _btnExport_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -37,15 +37,15 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this._gbxSmsSettings = new System.Windows.Forms.GroupBox();
+            this._tbxAccountRef = new System.Windows.Forms.TextBox();
             this._tbxSmsGatewayPassword = new System.Windows.Forms.TextBox();
             this._tbxSmsGatewayUser = new System.Windows.Forms.TextBox();
-            this._tbxSmsGatewayAddress = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this._btnSendTestSms = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this._cbxBxSmsAlertingEnabled = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this._tbxMobileNumbers = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this._gbxEmailSettings = new System.Windows.Forms.GroupBox();
@@ -65,22 +65,28 @@
             this._chkBxAlertingEnabled = new System.Windows.Forms.CheckBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageGeneralSettings = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this._chkBxDailySummeryEnabled = new System.Windows.Forms.CheckBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this._dtpSendSummeryTime = new System.Windows.Forms.DateTimePicker();
             this.tabPageAlertingService = new System.Windows.Forms.TabPage();
             this.tabPageBatchIO = new System.Windows.Forms.TabPage();
+            this._lnkLblCopyHeader = new System.Windows.Forms.LinkLabel();
+            this._rtbxCsvHeader = new System.Windows.Forms.RichTextBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this._tbxBatchlistCsvPath = new System.Windows.Forms.TextBox();
             this._chkBxEnableAutoImportBatchlist = new System.Windows.Forms.CheckBox();
             this._btnSelectBatchlistCsv = new System.Windows.Forms.Button();
-            this._rtbxCsvHeader = new System.Windows.Forms.RichTextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this._lnkLblCopyHeader = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this._gbxSmsSettings.SuspendLayout();
             this._gbxEmailSettings.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPageGeneralSettings.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.tabPageAlertingService.SuspendLayout();
             this.tabPageBatchIO.SuspendLayout();
             this.SuspendLayout();
@@ -183,15 +189,15 @@
             // 
             // _gbxSmsSettings
             // 
+            this._gbxSmsSettings.Controls.Add(this._tbxAccountRef);
             this._gbxSmsSettings.Controls.Add(this._tbxSmsGatewayPassword);
             this._gbxSmsSettings.Controls.Add(this._tbxSmsGatewayUser);
-            this._gbxSmsSettings.Controls.Add(this._tbxSmsGatewayAddress);
+            this._gbxSmsSettings.Controls.Add(this.label7);
             this._gbxSmsSettings.Controls.Add(this._btnSendTestSms);
             this._gbxSmsSettings.Controls.Add(this.label9);
             this._gbxSmsSettings.Controls.Add(this._cbxBxSmsAlertingEnabled);
             this._gbxSmsSettings.Controls.Add(this.label8);
             this._gbxSmsSettings.Controls.Add(this._tbxMobileNumbers);
-            this._gbxSmsSettings.Controls.Add(this.label7);
             this._gbxSmsSettings.Controls.Add(this.label3);
             this._gbxSmsSettings.Controls.Add(this.label6);
             this._gbxSmsSettings.Location = new System.Drawing.Point(8, 39);
@@ -201,9 +207,16 @@
             this._gbxSmsSettings.TabStop = false;
             this._gbxSmsSettings.Text = "SMS";
             // 
+            // _tbxAccountRef
+            // 
+            this._tbxAccountRef.Location = new System.Drawing.Point(158, 109);
+            this._tbxAccountRef.Name = "_tbxAccountRef";
+            this._tbxAccountRef.Size = new System.Drawing.Size(356, 25);
+            this._tbxAccountRef.TabIndex = 100;
+            // 
             // _tbxSmsGatewayPassword
             // 
-            this._tbxSmsGatewayPassword.Location = new System.Drawing.Point(158, 113);
+            this._tbxSmsGatewayPassword.Location = new System.Drawing.Point(158, 78);
             this._tbxSmsGatewayPassword.Name = "_tbxSmsGatewayPassword";
             this._tbxSmsGatewayPassword.PasswordChar = '#';
             this._tbxSmsGatewayPassword.Size = new System.Drawing.Size(356, 25);
@@ -211,17 +224,21 @@
             // 
             // _tbxSmsGatewayUser
             // 
-            this._tbxSmsGatewayUser.Location = new System.Drawing.Point(158, 82);
+            this._tbxSmsGatewayUser.Location = new System.Drawing.Point(158, 47);
             this._tbxSmsGatewayUser.Name = "_tbxSmsGatewayUser";
             this._tbxSmsGatewayUser.Size = new System.Drawing.Size(356, 25);
             this._tbxSmsGatewayUser.TabIndex = 90;
             // 
-            // _tbxSmsGatewayAddress
+            // label7
             // 
-            this._tbxSmsGatewayAddress.Location = new System.Drawing.Point(158, 51);
-            this._tbxSmsGatewayAddress.Name = "_tbxSmsGatewayAddress";
-            this._tbxSmsGatewayAddress.Size = new System.Drawing.Size(356, 25);
-            this._tbxSmsGatewayAddress.TabIndex = 80;
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(1, 109);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(139, 21);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "Account Reference";
             // 
             // _btnSendTestSms
             // 
@@ -237,12 +254,12 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(2, 113);
+            this.label9.Location = new System.Drawing.Point(2, 78);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(141, 21);
+            this.label9.Size = new System.Drawing.Size(76, 21);
             this.label9.TabIndex = 2;
-            this.label9.Text = "Gateway password";
+            this.label9.Text = "Password";
             // 
             // _cbxBxSmsAlertingEnabled
             // 
@@ -258,41 +275,30 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(2, 82);
+            this.label8.Location = new System.Drawing.Point(2, 47);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(104, 21);
+            this.label8.Size = new System.Drawing.Size(81, 21);
             this.label8.TabIndex = 2;
-            this.label8.Text = "Gateway user";
+            this.label8.Text = "Username";
             // 
             // _tbxMobileNumbers
             // 
             this._tbxMobileNumbers.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._tbxMobileNumbers.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._tbxMobileNumbers.Location = new System.Drawing.Point(158, 144);
+            this._tbxMobileNumbers.Location = new System.Drawing.Point(158, 140);
             this._tbxMobileNumbers.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._tbxMobileNumbers.Multiline = true;
             this._tbxMobileNumbers.Name = "_tbxMobileNumbers";
             this._tbxMobileNumbers.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this._tbxMobileNumbers.Size = new System.Drawing.Size(357, 100);
+            this._tbxMobileNumbers.Size = new System.Drawing.Size(356, 100);
             this._tbxMobileNumbers.TabIndex = 110;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(2, 51);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(128, 21);
-            this.label7.TabIndex = 2;
-            this.label7.Text = "Gateway address";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(2, 146);
+            this.label3.Location = new System.Drawing.Point(2, 140);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(118, 21);
@@ -303,7 +309,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.Color.DimGray;
-            this.label6.Location = new System.Drawing.Point(3, 170);
+            this.label6.Location = new System.Drawing.Point(3, 164);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(129, 17);
             this.label6.TabIndex = 7;
@@ -484,6 +490,7 @@
             // 
             // tabPageGeneralSettings
             // 
+            this.tabPageGeneralSettings.Controls.Add(this.groupBox3);
             this.tabPageGeneralSettings.Controls.Add(this.groupBox2);
             this.tabPageGeneralSettings.Controls.Add(this.groupBox1);
             this.tabPageGeneralSettings.Location = new System.Drawing.Point(4, 26);
@@ -493,6 +500,61 @@
             this.tabPageGeneralSettings.TabIndex = 0;
             this.tabPageGeneralSettings.Text = "General Settings";
             this.tabPageGeneralSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label18);
+            this.groupBox3.Controls.Add(this._chkBxDailySummeryEnabled);
+            this.groupBox3.Controls.Add(this.label17);
+            this.groupBox3.Controls.Add(this._dtpSendSummeryTime);
+            this.groupBox3.Location = new System.Drawing.Point(8, 91);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(701, 100);
+            this.groupBox3.TabIndex = 9;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Daily Summery";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label18.Location = new System.Drawing.Point(137, 25);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(538, 17);
+            this.label18.TabIndex = 15;
+            this.label18.Text = "NOTE: To send daily reports you need to configure mail service in the alerting se" +
+    "rvice area.";
+            // 
+            // _chkBxDailySummeryEnabled
+            // 
+            this._chkBxDailySummeryEnabled.AutoSize = true;
+            this._chkBxDailySummeryEnabled.Location = new System.Drawing.Point(13, 24);
+            this._chkBxDailySummeryEnabled.Name = "_chkBxDailySummeryEnabled";
+            this._chkBxDailySummeryEnabled.Size = new System.Drawing.Size(74, 21);
+            this._chkBxDailySummeryEnabled.TabIndex = 3;
+            this._chkBxDailySummeryEnabled.Text = "Enabled";
+            this._chkBxDailySummeryEnabled.UseVisualStyleBackColor = true;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(9, 48);
+            this.label17.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(44, 21);
+            this.label17.TabIndex = 2;
+            this.label17.Text = "Time";
+            // 
+            // _dtpSendSummeryTime
+            // 
+            this._dtpSendSummeryTime.DropDownAlign = System.Windows.Forms.LeftRightAlignment.Right;
+            this._dtpSendSummeryTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this._dtpSendSummeryTime.Location = new System.Drawing.Point(140, 45);
+            this._dtpSendSummeryTime.Name = "_dtpSendSummeryTime";
+            this._dtpSendSummeryTime.ShowUpDown = true;
+            this._dtpSendSummeryTime.Size = new System.Drawing.Size(103, 25);
+            this._dtpSendSummeryTime.TabIndex = 0;
             // 
             // tabPageAlertingService
             // 
@@ -523,6 +585,40 @@
             this.tabPageBatchIO.TabIndex = 2;
             this.tabPageBatchIO.Text = "Batchlist I/O";
             this.tabPageBatchIO.UseVisualStyleBackColor = true;
+            // 
+            // _lnkLblCopyHeader
+            // 
+            this._lnkLblCopyHeader.AutoSize = true;
+            this._lnkLblCopyHeader.Location = new System.Drawing.Point(596, 208);
+            this._lnkLblCopyHeader.Name = "_lnkLblCopyHeader";
+            this._lnkLblCopyHeader.Size = new System.Drawing.Size(38, 17);
+            this._lnkLblCopyHeader.TabIndex = 43;
+            this._lnkLblCopyHeader.TabStop = true;
+            this._lnkLblCopyHeader.Text = "Copy";
+            this._lnkLblCopyHeader.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this._lnkLblCopyHeader_LinkClicked);
+            // 
+            // _rtbxCsvHeader
+            // 
+            this._rtbxCsvHeader.BackColor = System.Drawing.Color.WhiteSmoke;
+            this._rtbxCsvHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this._rtbxCsvHeader.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._rtbxCsvHeader.Location = new System.Drawing.Point(86, 139);
+            this._rtbxCsvHeader.Name = "_rtbxCsvHeader";
+            this._rtbxCsvHeader.Size = new System.Drawing.Size(548, 66);
+            this._rtbxCsvHeader.TabIndex = 42;
+            this._rtbxCsvHeader.Text = "BatchName;BatchDescription;HostnameOrAddress;HostDescription;Building;Cabinet;Rac" +
+    "k;PhysicalAddress;Maintenance;AutoFetchPhysicalAddress";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.Color.Red;
+            this.label16.Location = new System.Drawing.Point(83, 119);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(540, 17);
+            this.label16.TabIndex = 14;
+            this.label16.Text = "ATTENTION: It is required that csv file contains the header line that shown in th" +
+    "e box below.";
             // 
             // label15
             // 
@@ -581,40 +677,6 @@
             this._btnSelectBatchlistCsv.UseVisualStyleBackColor = false;
             this._btnSelectBatchlistCsv.Click += new System.EventHandler(this._btnSelectBatchlistCsv_Click);
             // 
-            // _rtbxCsvHeader
-            // 
-            this._rtbxCsvHeader.BackColor = System.Drawing.Color.WhiteSmoke;
-            this._rtbxCsvHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this._rtbxCsvHeader.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._rtbxCsvHeader.Location = new System.Drawing.Point(86, 139);
-            this._rtbxCsvHeader.Name = "_rtbxCsvHeader";
-            this._rtbxCsvHeader.Size = new System.Drawing.Size(548, 66);
-            this._rtbxCsvHeader.TabIndex = 42;
-            this._rtbxCsvHeader.Text = "BatchName;BatchDescription;HostnameOrAddress;HostDescription;Building;Cabinet;Rac" +
-    "k;PhysicalAddress;Maintenance;AutoFetchPhysicalAddress";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.ForeColor = System.Drawing.Color.Red;
-            this.label16.Location = new System.Drawing.Point(83, 119);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(540, 17);
-            this.label16.TabIndex = 14;
-            this.label16.Text = "ATTENTION: It is required that csv file contains the header line that shown in th" +
-    "e box below.";
-            // 
-            // _lnkLblCopyHeader
-            // 
-            this._lnkLblCopyHeader.AutoSize = true;
-            this._lnkLblCopyHeader.Location = new System.Drawing.Point(596, 208);
-            this._lnkLblCopyHeader.Name = "_lnkLblCopyHeader";
-            this._lnkLblCopyHeader.Size = new System.Drawing.Size(38, 17);
-            this._lnkLblCopyHeader.TabIndex = 43;
-            this._lnkLblCopyHeader.TabStop = true;
-            this._lnkLblCopyHeader.Text = "Copy";
-            this._lnkLblCopyHeader.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this._lnkLblCopyHeader_LinkClicked);
-            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -637,6 +699,8 @@
             this._gbxEmailSettings.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.tabPageGeneralSettings.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.tabPageAlertingService.ResumeLayout(false);
             this.tabPageAlertingService.PerformLayout();
             this.tabPageBatchIO.ResumeLayout(false);
@@ -667,8 +731,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button _btnSendTestSms;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox _tbxSmsGatewayAddress;
         private System.Windows.Forms.TextBox _tbxSmsGatewayPassword;
         private System.Windows.Forms.TextBox _tbxSmsGatewayUser;
         private System.Windows.Forms.Label label9;
@@ -694,5 +756,12 @@
         private System.Windows.Forms.RichTextBox _rtbxCsvHeader;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.LinkLabel _lnkLblCopyHeader;
+        private System.Windows.Forms.TextBox _tbxAccountRef;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.DateTimePicker _dtpSendSummeryTime;
+        private System.Windows.Forms.CheckBox _chkBxDailySummeryEnabled;
+        private System.Windows.Forms.Label label18;
     }
 }

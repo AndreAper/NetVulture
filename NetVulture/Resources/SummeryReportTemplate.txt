@@ -1,0 +1,133 @@
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg .tg-lkh3{background-color:#9aff99}
+.tg .tg-urui{font-weight:bold;background-color:#e3e3e3}
+.tg .tg-kza0{font-weight:bold;font-size:12px;font-family:"Lucida Console", Monaco, monospace !important;;background-color:#f6f6f6;vertical-align:top}
+.tg .tg-es9i{font-weight:bold;font-size:18px;background-color:#00324b;color:#ffffff;text-align:center;vertical-align:top}
+.tg .tg-i6eq{background-color:#ffccc9;vertical-align:top}
+.tg .tg-aqa8{font-size:10px;background-color:#ffffff;vertical-align:top}
+.tg .tg-ksyb{font-weight:bold;background-color:#e3e3e3;vertical-align:top}
+.tg .tg-a080{background-color:#9aff99;vertical-align:top}
+</style>
+<table class="tg">
+  <tr>
+    <th class="tg-es9i" colspan="21">IOB MONITORING DAILY REPORT</th>
+  </tr>
+  <tr>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+    <td class="tg-aqa8"></td>
+  </tr>
+  <tr>
+    <td class="tg-urui">Batch</td>
+    <td class="tg-urui">{0}</td>
+    <td class="tg-urui"></td>
+    <td class="tg-urui">Description</td>
+    <td class="tg-urui">{1}</td>
+    <td class="tg-urui"></td>
+	<td class="tg-urui">Hosts Count</td>
+	<td class="tg-urui">{2}</td>
+    <td class="tg-urui">Hosts Online</td>
+    <td class="tg-ksyb">{3}</td>
+    <td class="tg-ksyb">Hosts Offline</td>
+    <td class="tg-ksyb">{4}</td>
+    <td class="tg-ksyb"></td>
+    <td class="tg-ksyb"></td>
+    <td class="tg-ksyb"></td>
+    <td class="tg-ksyb"></td>
+    <td class="tg-ksyb"></td>
+    <td class="tg-ksyb"></td>
+    <td class="tg-ksyb"></td>
+    <td class="tg-ksyb"></td>
+    <td class="tg-ksyb"></td>
+  </tr>
+  <tr>
+    <td class="tg-kza0">Hostname or <br>Address</td>
+    <td class="tg-kza0">Alternative<br>Address</td>
+    <td class="tg-kza0">Priority<br>Level</td>
+    <td class="tg-kza0">Is Static<br>Address</td>
+    <td class="tg-kza0">Description</td>
+    <td class="tg-kza0">Device<br>Vendor</td>
+    <td class="tg-kza0">Device<br>Model</td>
+    <td class="tg-kza0">Device<br>Serial</td>
+    <td class="tg-kza0">Building</td>
+    <td class="tg-kza0">Cabinet</td>
+    <td class="tg-kza0">Rack</td>
+    <td class="tg-kza0">Panel</td>
+    <td class="tg-kza0">Cennected to</td>
+    <td class="tg-kza0">Vlan ID</td>
+    <td class="tg-kza0">Physical<br>Address</td>
+    <td class="tg-kza0">Maintenance<br>Mode</td>
+    <td class="tg-kza0">Auto Fetch<br>Physical<br>Address</td>
+    <td class="tg-kza0">Comment</td>
+    <td class="tg-kza0">Last<br>Availability</td>
+    <td class="tg-kza0">Ping<br>Attempts</td>
+    <td class="tg-kza0">Status</td>
+  </tr>
+  <tr>
+    <td class="tg-lkh3">{0}</td>
+    <td class="tg-lkh3">{1}</td>
+    <td class="tg-lkh3">{2}</td>
+    <td class="tg-lkh3">{3}</td>
+    <td class="tg-lkh3">{4}</td>
+    <td class="tg-lkh3">{5}</td>
+    <td class="tg-lkh3">{6}</td>
+    <td class="tg-a080">{7}</td>
+    <td class="tg-a080">{8}</td>
+    <td class="tg-a080">{9}</td>
+    <td class="tg-a080">{10}</td>
+    <td class="tg-a080">{11}</td>
+    <td class="tg-a080">{12}</td>
+    <td class="tg-a080">{13}</td>
+    <td class="tg-a080">{14}</td>
+    <td class="tg-a080">{15}</td>
+    <td class="tg-a080">{16}</td>
+    <td class="tg-a080">{17}</td>
+    <td class="tg-a080">{18}</td>
+    <td class="tg-a080">{19}</td>
+    <td class="tg-a080">{20}</td>
+  </tr>
+  <tr>
+    <td class="tg-i6eq">{0}</td>
+    <td class="tg-i6eq">{1}</td>
+    <td class="tg-i6eq">{2}</td>
+    <td class="tg-i6eq">{3}</td>
+    <td class="tg-i6eq">{4}</td>
+    <td class="tg-i6eq">{5}</td>
+    <td class="tg-i6eq">{6}</td>
+    <td class="tg-i6eq">{7}</td>
+    <td class="tg-i6eq">{8}</td>
+    <td class="tg-i6eq">{9}</td>
+    <td class="tg-i6eq">{10}</td>
+    <td class="tg-i6eq">{11}</td>
+    <td class="tg-i6eq">{12}</td>
+    <td class="tg-i6eq">{13}</td>
+    <td class="tg-i6eq">{14}</td>
+    <td class="tg-i6eq">{15}</td>
+    <td class="tg-i6eq">{16}</td>
+    <td class="tg-i6eq">{17}</td>
+    <td class="tg-i6eq">{18}</td>
+    <td class="tg-i6eq">{19}</td>
+    <td class="tg-i6eq">{20}</td>
+  </tr>
+</table>
