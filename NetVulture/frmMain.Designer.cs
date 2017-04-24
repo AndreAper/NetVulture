@@ -29,12 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this._tlpBody = new System.Windows.Forms.TableLayoutPanel();
             this._chkBtnTimerEnabled = new System.Windows.Forms.CheckBox();
-            this._btnCollect = new System.Windows.Forms.Button();
             this._btnAddBatch = new System.Windows.Forms.Button();
             this._dgvResults = new System.Windows.Forms.DataGridView();
             this.HostnameOrAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -46,9 +45,7 @@
             this.Attempts = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Maintenance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label4 = new System.Windows.Forms.Label();
-            this._btnShowReport = new System.Windows.Forms.Button();
             this._lblAppTitle = new System.Windows.Forms.Label();
-            this._btnOpenSettings = new System.Windows.Forms.Button();
             this._tbxJobName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this._pnlUnderlineMainMenu = new System.Windows.Forms.Panel();
@@ -64,16 +61,18 @@
             this._btnRemoveSelectedBatch = new System.Windows.Forms.Button();
             this._pnlUnderlinSubmenuForBatch = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this._btnShowReport = new System.Windows.Forms.Button();
             this._lblCountOfFailedRequests = new System.Windows.Forms.Label();
             this._lblCountOfSuccessRequests = new System.Windows.Forms.Label();
             this._lblLastBatchExec = new System.Windows.Forms.Label();
             this._lblLastCollect = new System.Windows.Forms.Label();
             this._lblEmailAlertingStatus = new System.Windows.Forms.Label();
-            this._lblSmsAlertingStatus = new System.Windows.Forms.Label();
             this._lblClock = new System.Windows.Forms.Label();
             this._lblOutputDir = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this._tbxJobDescription = new System.Windows.Forms.TextBox();
+            this._btnCollect = new System.Windows.Forms.Button();
+            this._btnOpenSettings = new System.Windows.Forms.Button();
             this._collectTimer = new System.Windows.Forms.Timer(this.components);
             this._clock = new System.Windows.Forms.Timer(this.components);
             this._fsw = new System.IO.FileSystemWatcher();
@@ -113,7 +112,6 @@
             this._tlpBody.Controls.Add(this._lblLastBatchExec, 2, 8);
             this._tlpBody.Controls.Add(this._lblLastCollect, 1, 9);
             this._tlpBody.Controls.Add(this._lblEmailAlertingStatus, 2, 9);
-            this._tlpBody.Controls.Add(this._lblSmsAlertingStatus, 3, 9);
             this._tlpBody.Controls.Add(this._lblClock, 4, 9);
             this._tlpBody.Controls.Add(this._lblOutputDir, 6, 9);
             this._tlpBody.Controls.Add(this.label2, 4, 4);
@@ -163,29 +161,6 @@
             this._chkBtnTimerEnabled.UseVisualStyleBackColor = false;
             this._chkBtnTimerEnabled.CheckedChanged += new System.EventHandler(this._chkBtnTimerEnabled_CheckedChanged);
             // 
-            // _btnCollect
-            // 
-            this._btnCollect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._btnCollect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this._btnCollect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this._btnCollect.FlatAppearance.BorderSize = 0;
-            this._btnCollect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnCollect.Font = new System.Drawing.Font("Segoe UI Light", 12F);
-            this._btnCollect.ForeColor = System.Drawing.Color.White;
-            this._btnCollect.Image = global::NetVulture.Properties.Resources.Collect_32;
-            this._btnCollect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnCollect.Location = new System.Drawing.Point(464, 0);
-            this._btnCollect.Margin = new System.Windows.Forms.Padding(0);
-            this._btnCollect.Name = "_btnCollect";
-            this._btnCollect.Size = new System.Drawing.Size(150, 40);
-            this._btnCollect.TabIndex = 5;
-            this._btnCollect.Text = "Collect";
-            this._btnCollect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this._btnCollect.UseVisualStyleBackColor = false;
-            this._btnCollect.Click += new System.EventHandler(this._btnCollect_Click);
-            // 
             // _btnAddBatch
             // 
             this._btnAddBatch.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -215,14 +190,14 @@
             this._dgvResults.AllowUserToDeleteRows = false;
             this._dgvResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this._dgvResults.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this._dgvResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this._dgvResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this._dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this._dgvResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.HostnameOrAddress,
@@ -234,27 +209,27 @@
             this.Attempts,
             this.Maintenance});
             this._tlpBody.SetColumnSpan(this._dgvResults, 5);
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(90)))), ((int)(((byte)(110)))));
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this._dgvResults.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(90)))), ((int)(((byte)(110)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this._dgvResults.DefaultCellStyle = dataGridViewCellStyle5;
             this._dgvResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this._dgvResults.Location = new System.Drawing.Point(317, 148);
             this._dgvResults.Margin = new System.Windows.Forms.Padding(3, 3, 20, 3);
             this._dgvResults.Name = "_dgvResults";
             this._dgvResults.ReadOnly = true;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this._dgvResults.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this._dgvResults.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this._tlpBody.SetRowSpan(this._dgvResults, 3);
             this._dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this._dgvResults.Size = new System.Drawing.Size(1071, 443);
@@ -320,30 +295,6 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Output";
             // 
-            // _btnShowReport
-            // 
-            this._btnShowReport.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._btnShowReport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this._btnShowReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this._btnShowReport.FlatAppearance.BorderSize = 0;
-            this._btnShowReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnShowReport.Font = new System.Drawing.Font("Segoe UI Light", 12F);
-            this._btnShowReport.ForeColor = System.Drawing.Color.White;
-            this._btnShowReport.Image = global::NetVulture.Properties.Resources.Details_32;
-            this._btnShowReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnShowReport.Location = new System.Drawing.Point(0, 0);
-            this._btnShowReport.Margin = new System.Windows.Forms.Padding(0);
-            this._btnShowReport.Name = "_btnShowReport";
-            this._btnShowReport.Size = new System.Drawing.Size(150, 40);
-            this._btnShowReport.TabIndex = 5;
-            this._btnShowReport.Text = "Report";
-            this._btnShowReport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this._btnShowReport.UseVisualStyleBackColor = false;
-            this._btnShowReport.Visible = false;
-            this._btnShowReport.Click += new System.EventHandler(this._btnShowReport_Click);
-            // 
             // _lblAppTitle
             // 
             this._lblAppTitle.AutoSize = true;
@@ -359,29 +310,6 @@
             this._lblAppTitle.TabIndex = 2;
             this._lblAppTitle.Text = "NetVulture 1.3";
             this._lblAppTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // _btnOpenSettings
-            // 
-            this._btnOpenSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._btnOpenSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this._btnOpenSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this._btnOpenSettings.FlatAppearance.BorderSize = 0;
-            this._btnOpenSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._btnOpenSettings.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this._btnOpenSettings.ForeColor = System.Drawing.Color.White;
-            this._btnOpenSettings.Image = global::NetVulture.Properties.Resources.Settings_32;
-            this._btnOpenSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this._btnOpenSettings.Location = new System.Drawing.Point(614, 0);
-            this._btnOpenSettings.Margin = new System.Windows.Forms.Padding(0);
-            this._btnOpenSettings.Name = "_btnOpenSettings";
-            this._btnOpenSettings.Size = new System.Drawing.Size(150, 40);
-            this._btnOpenSettings.TabIndex = 5;
-            this._btnOpenSettings.Text = "Settings";
-            this._btnOpenSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this._btnOpenSettings.UseVisualStyleBackColor = false;
-            this._btnOpenSettings.Click += new System.EventHandler(this._btnOpenSettings_Click);
             // 
             // _tbxJobName
             // 
@@ -598,6 +526,30 @@
             this.panel1.Size = new System.Drawing.Size(644, 40);
             this.panel1.TabIndex = 65;
             // 
+            // _btnShowReport
+            // 
+            this._btnShowReport.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._btnShowReport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._btnShowReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this._btnShowReport.FlatAppearance.BorderSize = 0;
+            this._btnShowReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnShowReport.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._btnShowReport.ForeColor = System.Drawing.Color.White;
+            this._btnShowReport.Image = global::NetVulture.Properties.Resources.Details_32;
+            this._btnShowReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnShowReport.Location = new System.Drawing.Point(0, 0);
+            this._btnShowReport.Margin = new System.Windows.Forms.Padding(0);
+            this._btnShowReport.Name = "_btnShowReport";
+            this._btnShowReport.Size = new System.Drawing.Size(150, 40);
+            this._btnShowReport.TabIndex = 5;
+            this._btnShowReport.Text = "Report";
+            this._btnShowReport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._btnShowReport.UseVisualStyleBackColor = false;
+            this._btnShowReport.Visible = false;
+            this._btnShowReport.Click += new System.EventHandler(this._btnShowReport_Click);
+            // 
             // _lblCountOfFailedRequests
             // 
             this._lblCountOfFailedRequests.AutoSize = true;
@@ -664,21 +616,6 @@
             this._lblEmailAlertingStatus.TabIndex = 0;
             this._lblEmailAlertingStatus.Text = "Email Alerting Status:";
             // 
-            // _lblSmsAlertingStatus
-            // 
-            this._lblSmsAlertingStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._lblSmsAlertingStatus.AutoSize = true;
-            this._lblSmsAlertingStatus.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lblSmsAlertingStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this._lblSmsAlertingStatus.Location = new System.Drawing.Point(466, 669);
-            this._lblSmsAlertingStatus.Margin = new System.Windows.Forms.Padding(2);
-            this._lblSmsAlertingStatus.Name = "_lblSmsAlertingStatus";
-            this._lblSmsAlertingStatus.Size = new System.Drawing.Size(146, 38);
-            this._lblSmsAlertingStatus.TabIndex = 0;
-            this._lblSmsAlertingStatus.Text = "SMS Alerting Status:";
-            // 
             // _lblClock
             // 
             this._lblClock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -739,6 +676,52 @@
             this._tbxJobDescription.TabIndex = 20;
             this._tbxJobDescription.TextChanged += new System.EventHandler(this._tbxJobDescription_TextChanged);
             this._tbxJobDescription.Leave += new System.EventHandler(this._tbxJobDescription_Leave);
+            // 
+            // _btnCollect
+            // 
+            this._btnCollect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._btnCollect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._btnCollect.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this._btnCollect.FlatAppearance.BorderSize = 0;
+            this._btnCollect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnCollect.Font = new System.Drawing.Font("Segoe UI Light", 12F);
+            this._btnCollect.ForeColor = System.Drawing.Color.White;
+            this._btnCollect.Image = global::NetVulture.Properties.Resources.Collect_32;
+            this._btnCollect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnCollect.Location = new System.Drawing.Point(464, 0);
+            this._btnCollect.Margin = new System.Windows.Forms.Padding(0);
+            this._btnCollect.Name = "_btnCollect";
+            this._btnCollect.Size = new System.Drawing.Size(150, 40);
+            this._btnCollect.TabIndex = 5;
+            this._btnCollect.Text = "Collect";
+            this._btnCollect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._btnCollect.UseVisualStyleBackColor = false;
+            this._btnCollect.Click += new System.EventHandler(this._btnCollect_Click);
+            // 
+            // _btnOpenSettings
+            // 
+            this._btnOpenSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._btnOpenSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._btnOpenSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this._btnOpenSettings.FlatAppearance.BorderSize = 0;
+            this._btnOpenSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._btnOpenSettings.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this._btnOpenSettings.ForeColor = System.Drawing.Color.White;
+            this._btnOpenSettings.Image = global::NetVulture.Properties.Resources.Settings_32;
+            this._btnOpenSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this._btnOpenSettings.Location = new System.Drawing.Point(614, 0);
+            this._btnOpenSettings.Margin = new System.Windows.Forms.Padding(0);
+            this._btnOpenSettings.Name = "_btnOpenSettings";
+            this._btnOpenSettings.Size = new System.Drawing.Size(150, 40);
+            this._btnOpenSettings.TabIndex = 5;
+            this._btnOpenSettings.Text = "Settings";
+            this._btnOpenSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this._btnOpenSettings.UseVisualStyleBackColor = false;
+            this._btnOpenSettings.Click += new System.EventHandler(this._btnOpenSettings_Click);
             // 
             // _collectTimer
             // 
@@ -803,7 +786,6 @@
         private System.Windows.Forms.Label _lblClock;
         private System.Windows.Forms.Timer _clock;
         private System.Windows.Forms.Label _lblCountOfFailedRequests;
-        private System.Windows.Forms.Label _lblSmsAlertingStatus;
         private System.Windows.Forms.Label _lblEmailAlertingStatus;
         private System.Windows.Forms.Label _lblCountOfSuccessRequests;
         private System.Windows.Forms.Button _btnShowReport;

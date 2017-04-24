@@ -4,22 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.NetworkInformation;
-using Renci.SshNet;
 using System.IO;
-using com.esendex.sdk.messaging;
 using System.Net.Mail;
 using System.ComponentModel;
 using System.Net.Sockets;
 using System.Net.Security;
+using Microsoft.Office.Interop.Outlook;
+using OutlookApp = Microsoft.Office.Interop.Outlook.Application;
 
 namespace NetVulture
 {
     public static class NVManagementClass
     {
-        const string username = "andre.aper@buhlergroup.com";
-        const string password = "tsDhd3XNCyqhspJVKGiL";
-        const string accountRef = "EX0226254";
-
         /// <summary>
         /// Read and deserialize a csv file to an batch list.
         /// </summary>
@@ -103,7 +99,7 @@ namespace NetVulture
                     }
                 }
             }
-            catch (Exception)
+            catch (System.Exception)
             {
                 throw;
             }
@@ -194,6 +190,7 @@ namespace NetVulture
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
+        [Obsolete()]
         public static async Task SendMailAsync(string msg, params string[] to)
         {
             if (to.Length > 0)
@@ -207,7 +204,7 @@ namespace NetVulture
 
                         if (pr.Status != IPStatus.Success)
                         {
-                            throw new Exception("Mail server: " + Properties.Settings.Default.MailServer + " not available!", null);
+                            throw new System.Exception("Mail server: " + Properties.Settings.Default.MailServer + " not available!", null);
                         }
 
                         SmtpClient client = new SmtpClient();
@@ -220,7 +217,7 @@ namespace NetVulture
                         client.Credentials = new System.Net.NetworkCredential(Properties.Settings.Default.MailUser, Properties.Settings.Default.MailPassword);
                         await client.SendMailAsync(Properties.Settings.Default.MailUser, recipient, "IOB Monitoring Test Messsage", msg);
                     }
-                    catch (Exception)
+                    catch (System.Exception)
                     {
                         throw;
                     }
@@ -251,34 +248,40 @@ namespace NetVulture
             smtpClient.Send(message);
         }
 
-        public static void SendShortMessage(string recipient, string msg)
+        public static bool SendOutlookMail(string msg, params string[] recipients)
         {
+            bool sendSucess = false;
+
+            Application app = new OutlookApp();
+            MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
+            mailItem.Subject = "IOB Monitoring Messaging Service";
+
+            Recipients oRecips = (Recipients)mailItem.Recipients;
+
+            foreach (string to in recipients)
+            {
+                //mailItem.Recipients.Add(to);
+
+                Recipient oRecip = (Recipient)oRecips.Add("jawed.ace@gmail.com");
+                oRecip.Resolve();
+            }
+
+            mailItem.Body = msg;
+            mailItem.Display(false);
+            mailItem.Importance = OlImportance.olImportanceHigh;
+
             try
             {
-                MessagingService messagingService = new MessagingService(Properties.Settings.Default.GatewayUser, Properties.Settings.Default.GatewayPassword);
-                messagingService.SendMessage(new SmsMessage(recipient, msg, Properties.Settings.Default.GatewayAccountRef));
+                mailItem.Send();
+                
             }
-            catch (Exception)
+            catch (System.Exception)
             {
+                sendSucess = false;
                 throw;
             }
-        }
 
-        public static void SendMultipleShortMessage(string msg, params string[] recipients)
-        {
-            try
-            {
-                MessagingService messagingService = new MessagingService(Properties.Settings.Default.GatewayUser, Properties.Settings.Default.GatewayPassword);
-
-                foreach (string r in recipients)
-                {
-                    messagingService.SendMessage(new SmsMessage(r, msg, Properties.Settings.Default.GatewayAccountRef));
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return sendSucess;
         }
     }
 

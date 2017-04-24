@@ -92,13 +92,22 @@ namespace NetVulture
                             
                             try
                             {
-                                PingReply pr = await p.SendPingAsync(_hostList[j].HostnameOrAddress, _timeOut, new byte[_bufferSize]);
+                                PingReply prPrimaray = await p.SendPingAsync(_hostList[j].HostnameOrAddress, _timeOut, new byte[_bufferSize]);
+                                PingReply prSecondary = await p.SendPingAsync(_hostList[j].AlternativeAddress, _timeOut, new byte[_bufferSize]);
 
-                                _hostList[j].ReplyData = pr;
+                                _hostList[j].ReplyData = prPrimaray;
 
-                                if (pr == null || pr.Status != IPStatus.Success)
+                                if (prPrimaray == null || prPrimaray.Status != IPStatus.Success)
                                 {
-                                    _hostList[j].PingAttempts++;
+                                    if (prSecondary == null || prSecondary.Status != IPStatus.Success)
+                                    {
+                                        _hostList[j].PingAttempts++;
+                                    }
+                                    else
+                                    {
+                                        _hostList[j].LastAvailability = DateTime.Now;
+                                        _hostList[j].PingAttempts = 0;
+                                    }
                                 }
                                 else
                                 {
@@ -121,7 +130,7 @@ namespace NetVulture
         }
 
         [DllImport("iphlpapi.dll", ExactSpelling = true)]
-        static extern int SendARP(int DestIP, int SrcIP, byte[] pMacAddr, ref uint PhyAddrLen);
+        static extern int SendARP(int destIp, int srcIp, byte[] pMacAddr, ref uint phyAddrLen);
         
         // *********************************************************************
         /// <summary>
@@ -131,7 +140,7 @@ namespace NetVulture
         /// remote host for which MAC address is desired.</param>
         /// <returns>A string containing MAC address; null if MAC address could
         /// not be found.</returns>
-        private string GetMACAddressFromARP(string hostNameOrAddress)
+        private string GetMacAddressFromArp(string hostNameOrAddress)
         {
             string mac = "00:00:00:00:00:00";
 
@@ -142,7 +151,10 @@ namespace NetVulture
                 if (hostEntry.AddressList.Length == 0) return null;
                 byte[] macAddr = new byte[6];
                 uint macAddrLen = (uint)macAddr.Length;
+
+#pragma warning disable 0618
                 if (SendARP((int)hostEntry.AddressList[0].Address, 0, macAddr, ref macAddrLen) != 0) return null;
+#pragma warning restore 0618
 
                 StringBuilder macAddressString = new StringBuilder();
                 for (int i = 0; i < macAddr.Length; i++)

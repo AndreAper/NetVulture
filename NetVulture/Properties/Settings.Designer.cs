@@ -61,18 +61,6 @@ namespace NetVulture.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AlertingEnabled {
-            get {
-                return ((bool)(this["AlertingEnabled"]));
-            }
-            set {
-                this["AlertingEnabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::System.Collections.Specialized.StringCollection TargetAddresses {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["TargetAddresses"]));
@@ -91,56 +79,6 @@ namespace NetVulture.Properties {
             }
             set {
                 this["EmailAlertingEnabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SmsAlertingEnabled {
-            get {
-                return ((bool)(this["SmsAlertingEnabled"]));
-            }
-            set {
-                this["SmsAlertingEnabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>015222687191</string>\r\n  <string>015771412853</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection MobileNumbers {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["MobileNumbers"]));
-            }
-            set {
-                this["MobileNumbers"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GatewayUser {
-            get {
-                return ((string)(this["GatewayUser"]));
-            }
-            set {
-                this["GatewayUser"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GatewayPassword {
-            get {
-                return ((string)(this["GatewayPassword"]));
-            }
-            set {
-                this["GatewayPassword"] = value;
             }
         }
         
@@ -218,18 +156,6 @@ namespace NetVulture.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string GatewayAccountRef {
-            get {
-                return ((string)(this["GatewayAccountRef"]));
-            }
-            set {
-                this["GatewayAccountRef"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool SendSummeryEnabled {
             get {
@@ -249,6 +175,18 @@ namespace NetVulture.Properties {
             }
             set {
                 this["SendSummeryTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MailDeliveryMethod {
+            get {
+                return ((string)(this["MailDeliveryMethod"]));
+            }
+            set {
+                this["MailDeliveryMethod"] = value;
             }
         }
     }

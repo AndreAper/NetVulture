@@ -1,7 +1,8 @@
 ﻿/*
- * TODO: PRIO 2: SMS/Mail wenn das betroffene Gerät wieder Online ist.
+ * TODO: PRIO 2: Mail wenn das betroffene Gerät wieder Online ist?
  * TODO: PRIO 3: Unter Settings im Alerting Service Reiter ein NumericUpDown Element einbauen zum dynamischen einstellen der Anzahl der Versuche bis Nachrichten gesendet werden.
- * TODO: SMS nur bei Prio 0 Devices?
+ * TODO: Priority Level Enum implementieren.
+ * TODO: DeviceTypes Enum implementieren.
  */
 
 using System;
@@ -25,12 +26,11 @@ namespace NetVulture
         private List<NVBatch> _batchList;
         private NVBatch _selectedBatch;
 
-        private string _outputDir, _smsGwUser, _smsGwPassword, _autoImportCsvPath;
+        private string _outputDir, _autoImportCsvPath, _deliveryMethod;
         private DateTime _lastExecutionTime, _sendSummaryTime;
         private BackgroundWorker _backWorker;
-        private System.Collections.Specialized.StringCollection _addressList, _mobileNumberList;
-        private bool _isEmailAlertingEnabled, _isSmsAlertingEnabled, _isAutoImportEnabled, _isSendSummaryEnabled, _firstCollectPassed;
-        private StringBuilder _sbMailAlertingProtocoll, _sbSmsAlertingProtocoll;
+        private System.Collections.Specialized.StringCollection _addressList;
+        private bool _isEmailAlertingEnabled, _isAutoImportEnabled, _isSendSummaryEnabled, _firstCollectPassed;
 
         /// <summary>
         /// Write a new line to the local log file.
@@ -119,23 +119,6 @@ namespace NetVulture
                             }
 
                             _allowSendingMail = true;
-
-                            //SMS
-                            //Nur senden wenn irgendeiner Prio 0 Device
-                            StringBuilder sbSms = new StringBuilder("ATTENTION ");
-
-                            if (failed.Count() > 0)
-                            {
-                                sbSms.Append(failed.Count() + " of " + batch.HostList.Count + " hosts from batch " + batch.Name + " are not available after 20 attemps to ping.");
-                            }
-
-                            await SendSms(sbSms.ToString());
-
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                WriteReport();
-                                AppendLineToLogfile("Message Dispatcher", "void CheckAlert()", "Sending SMS successfully");
-                            });
                         }
                     }
                 }
@@ -143,12 +126,27 @@ namespace NetVulture
 
             if (_allowSendingMail)
             {
-                await NVManagementClass.SendMailAsync(sbMail.ToString(), _addressList.Cast<string>().ToArray());
-
-                this.Invoke((MethodInvoker)delegate
+                if (_deliveryMethod == "SMTP")
                 {
-                    AppendLineToLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
-                });
+                    await NVManagementClass.SendMailAsync(sbMail.ToString(), _addressList.Cast<string>().ToArray());
+
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        AppendLineToLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
+                    });
+
+                }
+                else if (_deliveryMethod == "Outlook")
+                {
+                    NVManagementClass.SendOutlookMail(sbMail.ToString(), _addressList.Cast<string>().ToArray());
+
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        AppendLineToLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
+                    });
+                }
+
+
             }
         }
 
@@ -258,38 +256,6 @@ namespace NetVulture
                 _tbxJobDescription.Enabled = false;
 
                 _dgvResults.Rows.Clear();
-            }
-        }
-
-        /// <summary>
-        /// Sending short messages to each registered mobile number.
-        /// </summary>
-        private async Task SendSms(string msg)
-        {
-            if (_isSmsAlertingEnabled)
-            {
-                _sbSmsAlertingProtocoll = new StringBuilder();
-                _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Begin send sms messages.");
-
-                List<Task> taskList = new List<Task>();
-
-                Ping p = new Ping();
-                _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Ping esendex gateway");
-                PingReply pr = await p.SendPingAsync("www.esendex.com");
-
-                if (pr.Status != IPStatus.Success)
-                {
-                    MessageBox.Show("esendex gateway is not available.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): SendSms function canceled because esendex gateway is not available.!");
-                    return;
-                }
-
-                _sbSmsAlertingProtocoll.AppendLine(DateTime.Now.ToString() + " Method: SendSms(): Begin send messages to " + _mobileNumberList.Count + " participants");
-                string[] recipients = new string[_mobileNumberList.Count];
-                _mobileNumberList.CopyTo(recipients, 0);
-                NVManagementClass.SendMultipleShortMessage(msg, recipients);
-
-                WriteReport();
             }
         }
 
@@ -495,6 +461,7 @@ namespace NetVulture
             _autoImportCsvPath = Properties.Settings.Default.AutoloadCsvPath;
             _sendSummaryTime = Properties.Settings.Default.SendSummeryTime;
             _isSendSummaryEnabled = Properties.Settings.Default.SendSummeryEnabled;
+            _deliveryMethod = Properties.Settings.Default.MailDeliveryMethod;
 
             if (_isEmailAlertingEnabled)
             {
@@ -504,20 +471,6 @@ namespace NetVulture
             else
             {
                 _lblEmailAlertingStatus.Text = "Email Alerting Status:" + Environment.NewLine + "Disabled";
-            }
-
-            _isSmsAlertingEnabled = Properties.Settings.Default.SmsAlertingEnabled;
-
-            if (_isSmsAlertingEnabled)
-            {
-                _lblSmsAlertingStatus.Text = "SMS Alerting Status:" + Environment.NewLine + "Enabled";
-                _mobileNumberList = Properties.Settings.Default.MobileNumbers;
-                _smsGwUser = Properties.Settings.Default.GatewayUser;
-                _smsGwPassword = Properties.Settings.Default.GatewayPassword;
-            }
-            else
-            {
-                _lblSmsAlertingStatus.Text = "SMS Alerting Status:" + Environment.NewLine + "Disabled";
             }
 
             if (_isAutoImportEnabled)
@@ -593,36 +546,6 @@ namespace NetVulture
                 }
             }
 
-        }
-
-        /// <summary>
-        /// Write a report file after sending alerting messages.
-        /// </summary>
-        private async void WriteReport()
-        {
-            string fileMail = Path.Combine(Application.StartupPath, "logs", "MailAlertingProtocoll_" + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss") + ".log");
-            string fileSms = Path.Combine(Application.StartupPath, "logs", "SmsAlertingProtocoll_" + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss") + ".log");
-
-            if (!Directory.Exists(Path.Combine(Application.StartupPath, "logs")))
-            {
-                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "logs"));
-            }
-
-            if (_sbMailAlertingProtocoll != null)
-            {
-                using (StreamWriter sw = new StreamWriter(fileMail))
-                {
-                    await sw.WriteAsync(_sbMailAlertingProtocoll.ToString());
-                } 
-            }
-
-            if (_sbSmsAlertingProtocoll != null)
-            {
-                using (StreamWriter sw = new StreamWriter(fileSms))
-                {
-                    await sw.WriteAsync(_sbSmsAlertingProtocoll.ToString());
-                } 
-            }
         }
 
         public frmMain()
@@ -740,8 +663,17 @@ namespace NetVulture
 
         private void _btnAddBatch_Click(object sender, EventArgs e)
         {
+            if (_batchList.Any(x => x.Name == "New Batch"))
+            {
+                DialogResult res = MessageBox.Show($"Batchlist contains a batch with name of >> New Batch <<.\r\nPlease change the name to a unique name.", "Add Batch", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
             _batchList.Add(new NVBatch());
+            _selectedBatch = _batchList.Last();
             UpdateBatchList();
+
+            BatchList_Click((Button)_flpBatchList.Controls[_flpBatchList.Controls.Count - 1], null);
         }
 
         private void _tbxJobName_TextChanged(object sender, EventArgs e)
@@ -749,7 +681,7 @@ namespace NetVulture
             _selectedBatch.Name = _tbxJobName.Text;
         }
 
-        private void _tbxJobDescription_Leave(object sender, EventArgs e)
+        private void _tbxJobDescription_Leave(object ender, EventArgs e)
         {
             TransferBatch();
             UpdateBatchList();
@@ -757,7 +689,7 @@ namespace NetVulture
 
         private void _RemoveSelectedBatch_Click(object sender, EventArgs e)
         {
-            DialogResult res = MessageBox.Show("Do you want to remove this batch?", "Remove Batch", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult res = MessageBox.Show($"Do you want to remove batch >> {_selectedBatch.Name} << ?", "Remove Batch", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (res == DialogResult.Yes)
             {
@@ -867,16 +799,17 @@ namespace NetVulture
 
         private void _btnSendSummery_Click(object sender, EventArgs e)
         {
-            StringBuilder sbSelftestMessage = new StringBuilder("IOB MONITORING DAILY SELFTEST PASSED.");
+            //TODO: Entfernen
+            //StringBuilder sbSelftestMessage = new StringBuilder("IOB MONITORING DAILY SELFTEST PASSED.");
 
-            foreach (NVBatch b in _batchList)
-            {
-                sbSelftestMessage.AppendLine("Batch Name: " + b.Name + " Devices Online/Offline: " + b.HostList.Count(x => x.ReplyData.Status == IPStatus.Success) + "/" + b.HostList.Count(x => x.ReplyData.Status != IPStatus.Success));
-            }
+            //foreach (NVBatch b in _batchList)
+            //{
+            //    sbSelftestMessage.AppendLine("Batch Name: " + b.Name + " Devices Online/Offline: " + b.HostList.Count(x => x.ReplyData.Status == IPStatus.Success) + "/" + b.HostList.Count(x => x.ReplyData.Status != IPStatus.Success));
+            //}
 
-            string[] recipients = new string[_mobileNumberList.Count];
-            _mobileNumberList.CopyTo(recipients, 0);
-            Task.Run(() => NVManagementClass.SendMultipleShortMessage(sbSelftestMessage.ToString(), recipients));
+            //string[] recipients = new string[_mobileNumberList.Count];
+            //_mobileNumberList.CopyTo(recipients, 0);
+            //Task.Run(() => NVManagementClass.SendMultipleShortMessage(sbSelftestMessage.ToString(), recipients));
         }
 
         private void _tbxJobDescription_TextChanged(object sender, EventArgs e)
@@ -933,9 +866,12 @@ namespace NetVulture
 
         private void _tbxJobName_Leave(object sender, EventArgs e)
         {
-            TransferBatch();
-            UpdateForm();
-            
+            if (!String.IsNullOrEmpty(_tbxJobName.Text))
+            {
+                TransferBatch();
+                UpdateBatchList();
+                UpdateForm(); 
+            }
         }
 
         private void _clock_Tick(object sender, EventArgs e)
@@ -947,18 +883,6 @@ namespace NetVulture
                 if (_sendSummaryTime.ToString("HH:mm:ss") == DateTime.Now.ToString("HH:mm:ss"))
                 {
                     SendSummaryReport();
-
-                    StringBuilder sbSelftestMessage = new StringBuilder("IOB MONITORING DAILY SELFTEST PASSED.");
-
-                    foreach (NVBatch b in _batchList)
-                    {
-                        sbSelftestMessage.AppendLine("Batch Name: " + b.Name + " Devices Online/Offline: " + b.HostList.Count(x => x.ReplyData.Status == IPStatus.Success) + "/" + b.HostList.Count(x => x.ReplyData.Status != IPStatus.Success));
-                    }
-
-                    string[] recipients = new string[_mobileNumberList.Count];
-                    _mobileNumberList.CopyTo(recipients, 0);
-
-                    Task.Run(() => NVManagementClass.SendMultipleShortMessage(sbSelftestMessage.ToString(), recipients));
                 } 
             }
         }
