@@ -1,6 +1,6 @@
 ﻿namespace NetVulture
 {
-    partial class frmManageHosts
+    partial class FrmManageHosts
     {
         /// <summary>
         /// Required designer variable.
@@ -658,7 +658,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MinimumSize = new System.Drawing.Size(1050, 670);
-            this.Name = "frmManageHosts";
+            this.Name = "FrmManageHosts";
             this.Text = "Manage Batch Devices";
             this._gbxDeviceInfo.ResumeLayout(false);
             this._gbxDeviceInfo.PerformLayout();

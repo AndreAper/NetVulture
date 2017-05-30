@@ -7,11 +7,11 @@ using System.Collections.Specialized;
 
 namespace NetVulture
 {
-    public partial class frmSettings : Form
+    public partial class FrmSettings : Form
     {
-        string deliveryMethod;
+        string _deliveryMethod;
 
-        public frmSettings()
+        public FrmSettings()
         {
             InitializeComponent();
 
@@ -25,11 +25,11 @@ namespace NetVulture
 
             if (_chkBxEmailAlertingEnabled.Checked)
             {
-                deliveryMethod = Properties.Settings.Default.MailDeliveryMethod;
+                _deliveryMethod = Properties.Settings.Default.MailDeliveryMethod;
 
-                if (!string.IsNullOrEmpty(deliveryMethod))
+                if (!string.IsNullOrEmpty(_deliveryMethod))
                 {
-                    RadioButton rbtn = (RadioButton)_gbxEmailSettings.Controls["rBtn" + deliveryMethod];
+                    RadioButton rbtn = (RadioButton)_gbxEmailSettings.Controls["rBtn" + _deliveryMethod];
                     rbtn.Checked = true;
 
                     if (rbtn.Text == "SMTP")
@@ -41,9 +41,9 @@ namespace NetVulture
                     }
                 }
 
-                StringCollection _scTargetCollection = Properties.Settings.Default.TargetAddresses;
+                StringCollection scTargetCollection = Properties.Settings.Default.TargetAddresses;
 
-                if (_scTargetCollection != null && _scTargetCollection.Count > 0)
+                if (scTargetCollection != null && scTargetCollection.Count > 0)
                 {
                     _tbxTargetAddresses.Lines = Properties.Settings.Default.TargetAddresses.Cast<string>().ToArray();
                 }
@@ -77,7 +77,7 @@ namespace NetVulture
             Properties.Settings.Default.EmailAlertingEnabled = _chkBxEmailAlertingEnabled.Checked;
             Properties.Settings.Default.AutoloadCsvPath = _tbxBatchlistCsvPath.Text;
             Properties.Settings.Default.AutoloadCsvEnabled = _chkBxEnableAutoImportBatchlist.Checked;
-            Properties.Settings.Default.MailDeliveryMethod = deliveryMethod;
+            Properties.Settings.Default.MailDeliveryMethod = _deliveryMethod;
 
             if (_chkBxEmailAlertingEnabled.Checked)
             {
@@ -144,7 +144,7 @@ namespace NetVulture
 
                 if (rBtnSmtp.Checked)
                 {
-                    Task task = Task.Run(() => NVManagementClass.SendMailAsync("Test Message from IOB Monitoring successfull sended at " + DateTime.Now.ToString(), _tbxTargetAddresses.Lines));
+                    Task task = Task.Run(() => NvManagementClass.SendMailAsync("Test Message from IOB Monitoring successfull sended at " + DateTime.Now.ToString(), _tbxTargetAddresses.Lines));
 
                     task.ContinueWith((t) =>
                     {
@@ -158,7 +158,7 @@ namespace NetVulture
 
                 if (rBtnOutlook.Checked)
                 {
-                    Task task = Task.Run(() => NVManagementClass.SendOutlookMail("Test Message from IOB Monitoring successfull sended at " + DateTime.Now.ToString(), _tbxTargetAddresses.Lines));
+                    Task task = Task.Run(() => NvManagementClass.SendOutlookMail("Test Message from IOB Monitoring successfull sended at " + DateTime.Now.ToString(), _tbxTargetAddresses.Lines));
 
                     task.ContinueWith((t) =>
                     {
@@ -195,7 +195,7 @@ namespace NetVulture
 
         private void rBtnSmtp_CheckedChanged(object sender, EventArgs e)
         {
-            deliveryMethod = rBtnSmtp.Text;
+            _deliveryMethod = rBtnSmtp.Text;
 
             _tbxMailServer.Enabled = true;
             _tbxMailServerPort.Enabled = true;
@@ -205,7 +205,7 @@ namespace NetVulture
 
         private void rBtnOutlook_CheckedChanged(object sender, EventArgs e)
         {
-            deliveryMethod = rBtnOutlook.Text;
+            _deliveryMethod = rBtnOutlook.Text;
 
             _tbxMailServer.Enabled = false;
             _tbxMailServerPort.Enabled = false;
@@ -218,13 +218,13 @@ namespace NetVulture
             rBtnSmtp.Enabled = _chkBxEmailAlertingEnabled.Checked;
             rBtnOutlook.Enabled = _chkBxEmailAlertingEnabled.Checked;
 
-            if (!string.IsNullOrEmpty(deliveryMethod))
+            if (!string.IsNullOrEmpty(_deliveryMethod))
             {
-                RadioButton rbtn = (RadioButton)_gbxEmailSettings.Controls["rBtn" + deliveryMethod];
+                RadioButton rbtn = (RadioButton)_gbxEmailSettings.Controls["rBtn" + _deliveryMethod];
                 rbtn.Checked = true; 
             }
 
-            if (deliveryMethod == "SMTP")
+            if (_deliveryMethod == "SMTP")
             {
                 _tbxMailServer.Enabled = _chkBxEmailAlertingEnabled.Checked;
                 _tbxMailServerPort.Enabled = _chkBxEmailAlertingEnabled.Checked;

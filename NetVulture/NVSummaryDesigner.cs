@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 namespace NetVulture
 {
-    public class NVSummaryDesigner
+    public class NvSummaryDesigner
     {
-        protected StringBuilder sbOutput;
+        protected StringBuilder SbOutput;
 
         public string Output { get
             {
-                sbOutput.Append("</table></body></html>");
-                return this.sbOutput.ToString();
+                SbOutput.Append("</table></body></html>");
+                return this.SbOutput.ToString();
             }
         }
 
-        public NVSummaryDesigner()
+        public NvSummaryDesigner()
         {
-            sbOutput = new StringBuilder();
+            SbOutput = new StringBuilder();
 
             //Adding header information
-            sbOutput.Append(
+            SbOutput.Append(
                 "<!DOCTYPE html><html><head><style>" +
                 "h1 { font-family: arial, sans-serif;font-weight:normal;background-color:#00324b;color:#ffffff;text-align:center; }" +
                 "table {font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}" +
@@ -37,27 +37,27 @@ namespace NetVulture
                 );
         }
 
-        public void AddBatch(NVBatch batch)
+        public void AddBatch(NvBatch batch)
         {
             if (batch != null)
             {
                 if (batch.HostList != null && batch.HostList.Count > 0)
                 {
-                    IEnumerable<NVDevice> offlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status != System.Net.NetworkInformation.IPStatus.Success);
-                    IEnumerable<NVDevice> onlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status == System.Net.NetworkInformation.IPStatus.Success);
+                    IEnumerable<NvDevice> offlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status != System.Net.NetworkInformation.IPStatus.Success);
+                    IEnumerable<NvDevice> onlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status == System.Net.NetworkInformation.IPStatus.Success);
 
                     if (offlineDevices.Count() > 0)
                     {
                         if (offlineDevices.Any(x => x.PriorityLevel == 0))
                         {
-                            sbOutput.Append(
+                            SbOutput.Append(
                                 "<tr class='criticalAlert'>" +
                                 string.Format("<th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th><th>{5}</th><th>{6}</th>", batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count()) +
                                 "</tr>");
                         }
                         else
                         {
-                            sbOutput.Append(
+                            SbOutput.Append(
                                 "<tr class='alert'>" +
                                 string.Format("<th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th><th>{5}</th><th>{6}</th>", batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count()) +
                                 "</tr>");
@@ -65,7 +65,7 @@ namespace NetVulture
                     }
                     else
                     {
-                        sbOutput.Append(
+                        SbOutput.Append(
                             "<tr class='noneAlert'>" +
                             string.Format("<th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th><th>{5}</th><th>{6}</th>", batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count()) +
                             "</tr>");
@@ -73,7 +73,7 @@ namespace NetVulture
                 }
                 else
                 {
-                    sbOutput.Append(
+                    SbOutput.Append(
                         "<tr class='noneAlert'>" +
                         string.Format("<th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th><th>{5}</th><th>{6}</th>", batch.Name, batch.Description, batch.Maintenance, 0, 0, 0) +
                         "</tr>");

@@ -12,15 +12,15 @@ using System.Net.NetworkInformation;
 
 namespace NetVulture
 {
-    public partial class frmReport : Form
+    public partial class FrmReport : Form
     {
-        List<NVBatch> _batchList;
+        List<NvBatch> _batchList;
 
         private async Task<PingReply> PingRequest(int index)
         {
             DataGridViewRow newDataRow = dataGridView.Rows[index];
 
-            NVBatch batch = _batchList.Single(b => b.Name == dataGridView[0, index].Value.ToString());
+            NvBatch batch = _batchList.Single(b => b.Name == dataGridView[0, index].Value.ToString());
             string address = batch.HostList.FirstOrDefault(h => h.HostnameOrAddress == dataGridView[1, index].Value.ToString()).HostnameOrAddress;
 
             Ping p = new Ping();
@@ -77,7 +77,7 @@ namespace NetVulture
         }
 
         //TODO: Anpassen an die neue NVDevice-Klasse
-        private void UpdateDGV()
+        private void UpdateDgv()
         {
             dataGridView.Rows.Clear();
 
@@ -122,7 +122,7 @@ namespace NetVulture
 
         }
 
-        public frmReport(List<NVBatch> batchList)
+        public FrmReport(List<NvBatch> batchList)
         {
             InitializeComponent();
             _batchList = batchList;
@@ -131,7 +131,7 @@ namespace NetVulture
 
             if (_batchList != null)
             {
-                UpdateDGV(); 
+                UpdateDgv(); 
             }
         }
 
@@ -156,7 +156,7 @@ namespace NetVulture
                 });
 
                 Task.WhenAll(tasks);
-                UpdateDGV();
+                UpdateDgv();
             }
         }
 
@@ -170,7 +170,7 @@ namespace NetVulture
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                NVManagementClass.SerializeToCsv(sfd.FileName, _batchList);
+                NvManagementClass.SerializeToCsv(sfd.FileName, _batchList);
             }
         }
     }

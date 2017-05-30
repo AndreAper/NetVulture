@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -21,10 +20,10 @@ using System.Diagnostics;
 
 namespace NetVulture
 {
-    public partial class frmMain : Form
+    public partial class FrmMain : Form
     {
-        private List<NVBatch> _batchList;
-        private NVBatch _selectedBatch;
+        private List<NvBatch> _batchList;
+        private NvBatch _selectedBatch;
 
         private string _outputDir, _autoImportCsvPath, _deliveryMethod;
         private DateTime _lastExecutionTime, _sendSummaryTime;
@@ -38,26 +37,19 @@ namespace NetVulture
         /// <param name="type"></param>
         /// <param name="src"></param>
         /// <param name="msg"></param>
-        private async void AppendLineToLogfile(string type, string src, string msg)
+        public static async void AppendLineToLogfile(string type, string src, string msg)
         {
-            try
+            string file = "Log.log";
+
+            //Create file if not exists
+            if (!File.Exists(file)) File.Create(file);
+
+            using (StreamWriter sw = new StreamWriter(file, true))
             {
-                string file = "Log.log";
-
-                //Create file if not exists
-                if (!File.Exists(file)) File.Create(file);
-
-                using (StreamWriter sw = new StreamWriter(file, true))
-                {
-                    await sw.WriteLineAsync("Type: " + type + " # Soruce: " + src + " # Time: " + DateTime.Now.ToString() + " # Message: " + msg);
-                }
-
-                Debug.Print("Type: " + type + " # Soruce: " + src + " # Time: " + DateTime.Now.ToString() + " # Message: " + msg);
+                await sw.WriteLineAsync("Type: " + type + " # Soruce: " + src + " # Time: " + DateTime.Now + " # Message: " + msg);
             }
-            catch (Exception)
-            {
-                throw;
-            }
+
+            Debug.Print("Type: " + type + " # Soruce: " + src + " # Time: " + DateTime.Now + " # Message: " + msg);
         }
 
         /// <summary>
@@ -86,67 +78,56 @@ namespace NetVulture
         /// <summary>
         /// Checking response send alerting messages
         /// </summary>
-        private async Task CheckAlert()
+        protected async Task CheckAlertAsync()
         {
-            StringBuilder sbMail = new StringBuilder();
-            bool _allowSendingMail = false;
-
-            foreach (NVBatch batch in _batchList)
+            if (_deliveryMethod == "SMTP")
             {
-                if (!batch.Maintenance)
+                StringBuilder sbMail = new StringBuilder();
+
+                foreach (NvBatch batch in _batchList)
                 {
-                    if (batch.HostList.Any(x => x.ReplyData != null))
+                    if (!batch.Maintenance)
                     {
-                        IEnumerable<NVDevice> failed = batch.HostList.Where(x => (x.ReplyData == null || x.ReplyData.Status != IPStatus.Success) && x.PingAttempts == 10);
-
-                        if (failed.Count() > 0)
+                        if (batch.HostList.Any(x => x.ReplyData != null))
                         {
-                            //Mail
-                            //Auch als HTML mit Table versenden.
-                            sbMail.AppendLine("NetNulture has detect that hosts are not available from Batch: " + batch.Name);
-                            sbMail.AppendLine(Environment.NewLine);
-                            sbMail.AppendLine("Batch Name: " + batch.Name);
-                            sbMail.AppendLine("Batch Description: " + batch.Description);
-                            //TODO: Löst eventuelle eine NullReferenceException aus!!!
-                            sbMail.AppendLine("Hosts Online: " + batch.HostList.Count(x => x.ReplyData.Status == IPStatus.Success).ToString());
-                            sbMail.AppendLine("Hosts Offline: " + failed.Count().ToString());
-                            sbMail.AppendLine("Last Execution: " + batch.LastExecution.ToString());
-                            sbMail.AppendLine(Environment.NewLine);
+                            IEnumerable<NvDevice> failed = batch.HostList.Where(x => (x.ReplyData == null || x.ReplyData.Status != IPStatus.Success) && x.PingAttempts == 10);
 
-                            foreach (NVDevice device in failed)
+                            if (failed.Count() > 0)
                             {
-                                sbMail.AppendLine("Host: " + device.HostnameOrAddress + "\t\tDescription: " + device.Description + "\t\tBuilding: " + device.Building + "\t\tCabinet: " + device.Cabinet + "\t\tRack: " + device.Rack + "\t\tLast Availability: " + device.LastAvailability.ToString() + "\t\tStatus: " + device.ReplyData.Status.ToString());
-                            }
+                                sbMail.AppendLine("NetNulture has detect that hosts are not available from Batch: " + batch.Name);
+                                sbMail.AppendLine(Environment.NewLine);
+                                sbMail.AppendLine("Batch Name: " + batch.Name);
+                                sbMail.AppendLine("Batch Description: " + batch.Description);
+                                sbMail.AppendLine("Hosts Online: " + batch.HostList.Count(x => x.ReplyData.Status == IPStatus.Success));
+                                sbMail.AppendLine("Hosts Offline: " + failed.Count());
+                                sbMail.AppendLine("Last Execution: " + batch.LastExecution);
+                                sbMail.AppendLine(Environment.NewLine);
 
-                            _allowSendingMail = true;
+                                foreach (NvDevice device in failed)
+                                {
+                                    sbMail.AppendLine("Host: " + device.HostnameOrAddress + "\t\tDescription: " + device.Description + "\t\tBuilding: " + device.Building + "\t\tCabinet: " + device.Cabinet + "\t\tRack: " + device.Rack + "\t\tLast Availability: " + device.LastAvailability.ToString() + "\t\tStatus: " + device.ReplyData.Status.ToString());
+                                }
+                            }
                         }
                     }
                 }
+
+                await NvManagementClass.SendMailAsync(sbMail.ToString(), _addressList.Cast<string>().ToArray());
+
+                this.Invoke((MethodInvoker)delegate
+                {
+                    AppendLineToLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
+                });
+
             }
-
-            if (_allowSendingMail)
+            else if (_deliveryMethod == "Outlook")
             {
-                if (_deliveryMethod == "SMTP")
+                SendSummaryReport();
+
+                this.Invoke((MethodInvoker)delegate
                 {
-                    await NVManagementClass.SendMailAsync(sbMail.ToString(), _addressList.Cast<string>().ToArray());
-
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        AppendLineToLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
-                    });
-
-                }
-                else if (_deliveryMethod == "Outlook")
-                {
-                    NVManagementClass.SendOutlookMail(sbMail.ToString(), _addressList.Cast<string>().ToArray());
-
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        AppendLineToLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
-                    });
-                }
-
-
+                    AppendLineToLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
+                });
             }
         }
 
@@ -154,16 +135,16 @@ namespace NetVulture
         /// Load local stored batchlist. 
         /// </summary>
         /// <returns></returns>
-        private List<NVBatch> Deserialize()
+        private List<NvBatch> Deserialize()
         {
             if (File.Exists(@"batchlist.xml"))
             {
                 try
                 {
-                    XmlSerializer deserializer = new XmlSerializer(typeof(List<NVBatch>));
+                    XmlSerializer deserializer = new XmlSerializer(typeof(List<NvBatch>));
                     TextReader reader = new StreamReader(@"batchlist.xml");
                     object obj = deserializer.Deserialize(reader);
-                    List<NVBatch> lst = (List<NVBatch>)obj;
+                    List<NvBatch> lst = (List<NvBatch>)obj;
                     reader.Close();
 
                     return lst;
@@ -175,7 +156,7 @@ namespace NetVulture
             }
             else
             {
-                return new List<NVBatch>();
+                return new List<NvBatch>();
             }
         }
 
@@ -282,18 +263,18 @@ namespace NetVulture
                 "<tr class='header'><th>Batch Name</th><th>Description</th><th>Maintenance</th><th>Hosts Count</th><th>Hosts Online</th><th>Hosts Offline</th><th style='width: 40%'>Information</th></tr>"
                 );
 
-            foreach (NVBatch batch in _batchList)
+            foreach (NvBatch batch in _batchList)
             {
                 if (batch.HostList != null && batch.HostList.Count > 0)
                 {
-                    IEnumerable<NVDevice> offlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status != IPStatus.Success);
-                    IEnumerable<NVDevice> onlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status == IPStatus.Success);
+                    IEnumerable<NvDevice> offlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status != IPStatus.Success);
+                    IEnumerable<NvDevice> onlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status == IPStatus.Success);
 
                     if (offlineDevices.Count() > 0)
                     {
                         StringBuilder sbInfo = new StringBuilder();
 
-                        foreach (NVDevice d in offlineDevices)
+                        foreach (NvDevice d in offlineDevices)
                         {
                             sbInfo.Append(string.Format("<p>Hostname: {0}; Last Availability: {1};<br/>Building: {2}; Cabinet {3}; Rack: {4}</p>", d.HostnameOrAddress, d.LastAvailability, d.Building, d.Cabinet, d.Rack));
                         }
@@ -324,13 +305,22 @@ namespace NetVulture
 
             sbOutput.Append("</table></body></html>");
 
-            NVManagementClass.SendHtmlEmail(sbOutput.ToString(), _addressList.Cast<string>().ToArray());
-
-            this.Invoke((MethodInvoker)delegate
+            if (_addressList.Count > 0)
             {
-                AppendLineToLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail successfully");
-            });
-            
+                NvManagementClass.SendOutlookMail(Microsoft.Office.Interop.Outlook.OlBodyFormat.olFormatHTML, sbOutput.ToString(), _addressList.Cast<string>().ToArray());
+
+                this.Invoke((MethodInvoker)delegate
+                {
+                    AppendLineToLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail successfully");
+                });
+            }
+            else
+            {
+                this.Invoke((MethodInvoker)delegate
+                {
+                    AppendLineToLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail failed because no recipients added to address list.");
+                });
+            }
         }
 
         /// <summary>
@@ -342,7 +332,7 @@ namespace NetVulture
             {
                 try
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<NVBatch>));
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<NvBatch>));
                     using (TextWriter writer = new StreamWriter(@"batchlist.xml"))
                     {
                         serializer.Serialize(writer, _batchList);
@@ -377,7 +367,7 @@ namespace NetVulture
             {
                 _flpBatchList.Controls.Clear();
 
-                foreach (NVBatch job in _batchList)
+                foreach (NvBatch job in _batchList)
                 {
                     Button b = new Button();
                     b.BackColor = Color.Transparent;
@@ -453,6 +443,9 @@ namespace NetVulture
         /// </summary>
         private void UpdateForm()
         {
+            _lblAppTitle.Text = $"NetVulture v{Application.ProductVersion}";
+            this.Text = $"NetVulture v{Application.ProductVersion}";
+
             //Get the saved settings from configuration file
             _outputDir = Properties.Settings.Default.OutputDir;
             _lblOutputDir.Text = "Output: " + Environment.NewLine + _outputDir;
@@ -508,7 +501,7 @@ namespace NetVulture
                     Directory.CreateDirectory(_outputDir);
                 }
 
-                foreach (NVBatch batch in _batchList)
+                foreach (NvBatch batch in _batchList)
                 {
                     if (!batch.Maintenance)
                     {
@@ -539,7 +532,7 @@ namespace NetVulture
                             // Live JS output
                             using (StreamWriter swJs = new StreamWriter(jsFile))
                             {
-                                await swJs.WriteAsync(NVManagementClass.ConvertToJsArray(batch));
+                                await swJs.WriteAsync(NvManagementClass.ConvertToJsArray(batch));
                             }
                         }  
                     }                  
@@ -548,9 +541,10 @@ namespace NetVulture
 
         }
 
-        public frmMain()
+        public FrmMain()
         {
             InitializeComponent();
+
             _batchList = Deserialize();
 
             _backWorker = new BackgroundWorker();
@@ -566,7 +560,7 @@ namespace NetVulture
         private async void _backWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             await WriteOutput();
-            await CheckAlert();
+            await CheckAlertAsync();
 
             _lblLastCollect.Text = "Last Overall Execution: " + Environment.NewLine + _lastExecutionTime.ToString();
             _btnCollect.Enabled = true;
@@ -653,7 +647,7 @@ namespace NetVulture
 
         private void _btnOpenSettings_Click(object sender, EventArgs e)
         {
-            frmSettings frm = new frmSettings();
+            FrmSettings frm = new FrmSettings();
 
             if (frm.ShowDialog() == DialogResult.OK)
             {
@@ -669,7 +663,7 @@ namespace NetVulture
                 return;
             }
 
-            _batchList.Add(new NVBatch());
+            _batchList.Add(new NvBatch());
             _selectedBatch = _batchList.Last();
             UpdateBatchList();
 
@@ -742,7 +736,7 @@ namespace NetVulture
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                _batchList = NVManagementClass.DeserializeFromCsv(ofd.FileName);
+                _batchList = NvManagementClass.DeserializeFromCsv(ofd.FileName);
                 UpdateBatchList();
             }
         }
@@ -751,7 +745,7 @@ namespace NetVulture
         {
             if (_isAutoImportEnabled)
             {
-                _batchList = NVManagementClass.DeserializeFromCsv(_autoImportCsvPath);
+                _batchList = NvManagementClass.DeserializeFromCsv(_autoImportCsvPath);
                 UpdateBatchList();
             }
         }
@@ -766,7 +760,7 @@ namespace NetVulture
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                NVManagementClass.SerializeToCsv(sfd.FileName, _batchList);
+                NvManagementClass.SerializeToCsv(sfd.FileName, _batchList);
             }
 
         }
@@ -778,15 +772,15 @@ namespace NetVulture
 
         private void _btnEditHostList_Click(object sender, EventArgs e)
         {
-            frmManageHosts frm = null;
+            FrmManageHosts frm = null;
 
             if (_selectedBatch.HostList != null)
             {
-                frm = new frmManageHosts(_selectedBatch.HostList);
+                frm = new FrmManageHosts(_selectedBatch.HostList);
             }
             else
             {
-                frm = new frmManageHosts();
+                frm = new FrmManageHosts();
             }
 
             if (frm.ShowDialog() == DialogResult.OK)
@@ -819,7 +813,7 @@ namespace NetVulture
 
         private void _btnShowReport_Click(object sender, EventArgs e)
         {
-            frmReport frm = new frmReport(_batchList);
+            FrmReport frm = new FrmReport(_batchList);
 
             if (frm.ShowDialog() == DialogResult.OK)
             {

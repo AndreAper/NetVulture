@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NetVulture
 {
-    public class NVDevice
+    public class NvDevice
     {
         /// <summary>
         /// Get or set the dns name or ipv4 address of the device.

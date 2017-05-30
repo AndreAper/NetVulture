@@ -11,29 +11,29 @@ using System.Net.NetworkInformation;
 
 namespace NetVulture
 {
-    public partial class frmManageHosts : Form
+    public partial class FrmManageHosts : Form
     {
 
-        public List<NVDevice> HostList { get { return _lst; } }
-        private List<NVDevice> _lst = null;
+        public List<NvDevice> HostList { get { return _lst; } }
+        private List<NvDevice> _lst = null;
 
         private void UpdateLbx()
         {
             _lbxHIs.Items.Clear();
 
-            foreach (NVDevice hi in _lst)
+            foreach (NvDevice hi in _lst)
             {
                 _lbxHIs.Items.Add(hi.HostnameOrAddress);
             }
         }
 
-        public frmManageHosts()
+        public FrmManageHosts()
         {
             InitializeComponent();
-            _lst = new List<NVDevice>();
+            _lst = new List<NvDevice>();
         }
 
-        public frmManageHosts(List<NVDevice> lst)
+        public FrmManageHosts(List<NvDevice> lst)
         {
             InitializeComponent();
             _lst = lst;
@@ -58,7 +58,7 @@ namespace NetVulture
                     return;
                 }
 
-                NVDevice hi = new NVDevice();
+                NvDevice hi = new NvDevice();
                 hi.HostnameOrAddress = _tbxDnsEntry.Text;
                 hi.AlternativeAddress = _tbxAlternativeAddress.Text;
                 hi.PriorityLevel = Convert.ToInt32(_nudPrioriyLevel.Value);
@@ -106,7 +106,7 @@ namespace NetVulture
         {
             if (_lbxHIs.SelectedIndex != -1)
             {
-                NVDevice hi = _lst.ElementAt(_lbxHIs.SelectedIndex);
+                NvDevice hi = _lst.ElementAt(_lbxHIs.SelectedIndex);
 
                 _tbxDnsEntry.Text = hi.HostnameOrAddress;
                 _tbxAlternativeAddress.Text = hi.AlternativeAddress;
@@ -188,13 +188,13 @@ namespace NetVulture
                     lines.RemoveAt(0); 
                 }
 
-                _lst = new List<NVDevice>();
+                _lst = new List<NvDevice>();
 
                 foreach (string line in lines)
                 {
                     string[] elements = line.Split(';');
 
-                    NVDevice hi = new NVDevice();
+                    NvDevice hi = new NvDevice();
                     hi.HostnameOrAddress = elements[0];
                     hi.AlternativeAddress = elements[1];
                     hi.PriorityLevel = int.Parse(elements[2]);

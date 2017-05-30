@@ -10,11 +10,11 @@ using System.Runtime.InteropServices;
 namespace NetVulture
 {
     [XmlRoot(ElementName = "NetVultureBatch")]
-    public class NVBatch
+    public class NvBatch
     {
         private string _name;
         private string _description;
-        private List<NVDevice> _hostList = null;
+        private List<NvDevice> _hostList;
         private DateTime _lastExec;
         private int _timeOut;
         private int _bufferSize;
@@ -36,7 +36,7 @@ namespace NetVulture
         /// Get or set the list that contains all hosts to send the icmp echo messages.
         /// </summary>
         [XmlElement(ElementName = "HostList")]
-        public List<NVDevice> HostList { get { return _hostList; } set { _hostList = value; } }
+        public List<NvDevice> HostList { get { return _hostList; } set { _hostList = value; } }
 
         /// <summary>
         /// Get the last execution of icmp echo request.
@@ -65,7 +65,7 @@ namespace NetVulture
         /// <summary>
         /// Create a new instance of NetVultureBatch.
         /// </summary>
-        public NVBatch()
+        public NvBatch()
         {
             _name = "New Batch";
             _timeOut = 1000;
@@ -93,12 +93,13 @@ namespace NetVulture
                             try
                             {
                                 PingReply prPrimaray = await p.SendPingAsync(_hostList[j].HostnameOrAddress, _timeOut, new byte[_bufferSize]);
-                                PingReply prSecondary = await p.SendPingAsync(_hostList[j].AlternativeAddress, _timeOut, new byte[_bufferSize]);
 
                                 _hostList[j].ReplyData = prPrimaray;
 
                                 if (prPrimaray == null || prPrimaray.Status != IPStatus.Success)
                                 {
+                                    PingReply prSecondary = await p.SendPingAsync(_hostList[j].AlternativeAddress, _timeOut, new byte[_bufferSize]);
+
                                     if (prSecondary == null || prSecondary.Status != IPStatus.Success)
                                     {
                                         _hostList[j].PingAttempts++;
@@ -144,32 +145,25 @@ namespace NetVulture
         {
             string mac = "00:00:00:00:00:00";
 
-            try
-            {
-                IPHostEntry hostEntry = Dns.GetHostEntry(hostNameOrAddress);
+            IPHostEntry hostEntry = Dns.GetHostEntry(hostNameOrAddress);
 
-                if (hostEntry.AddressList.Length == 0) return null;
-                byte[] macAddr = new byte[6];
-                uint macAddrLen = (uint)macAddr.Length;
+            if (hostEntry.AddressList.Length == 0) return null;
+            byte[] macAddr = new byte[6];
+            uint macAddrLen = (uint)macAddr.Length;
 
 #pragma warning disable 0618
-                if (SendARP((int)hostEntry.AddressList[0].Address, 0, macAddr, ref macAddrLen) != 0) return null;
+            if (SendARP((int)hostEntry.AddressList[0].Address, 0, macAddr, ref macAddrLen) != 0) return null;
 #pragma warning restore 0618
 
-                StringBuilder macAddressString = new StringBuilder();
-                for (int i = 0; i < macAddr.Length; i++)
-                {
-                    if (macAddressString.Length > 0)
-                        macAddressString.Append(":");
-                    macAddressString.AppendFormat("{0:x2}", macAddr[i]);
-                }
-
-                mac = macAddressString.ToString();
-            }
-            catch (Exception)
+            StringBuilder macAddressString = new StringBuilder();
+            for (int i = 0; i < macAddr.Length; i++)
             {
-                throw;
+                if (macAddressString.Length > 0)
+                    macAddressString.Append(":");
+                macAddressString.AppendFormat("{0:x2}", macAddr[i]);
             }
+
+            mac = macAddressString.ToString();
 
             return mac;
         }

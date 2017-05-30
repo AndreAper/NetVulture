@@ -1,6 +1,6 @@
 ﻿namespace NetVulture
 {
-    partial class frmReport
+    partial class FrmReport
     {
         /// <summary>
         /// Required designer variable.
@@ -202,7 +202,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "frmReport";
+            this.Name = "FrmReport";
             this.Text = "NetVulture";
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();

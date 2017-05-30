@@ -11,19 +11,20 @@ using System.Net.Sockets;
 using System.Net.Security;
 using Microsoft.Office.Interop.Outlook;
 using OutlookApp = Microsoft.Office.Interop.Outlook.Application;
+using System.Runtime.InteropServices;
 
 namespace NetVulture
 {
-    public static class NVManagementClass
+    public static class NvManagementClass
     {
         /// <summary>
         /// Read and deserialize a csv file to an batch list.
         /// </summary>
         /// <param name="file"></param>
         /// <returns>A list of batches.</returns>
-        public static List<NVBatch> DeserializeFromCsv(string file)
+        public static List<NvBatch> DeserializeFromCsv(string file)
         {
-            List<NVBatch> lst = new List<NVBatch>();
+            List<NvBatch> lst = new List<NvBatch>();
             List<string> lines = new List<string>(File.ReadAllLines(file));
 
             if (lines.First().Contains("BatchName"))
@@ -35,7 +36,7 @@ namespace NetVulture
             {
                 string[] line = lines[i].Split(';');
 
-                NVDevice hi = new NVDevice();
+                NvDevice hi = new NvDevice();
                 hi.HostnameOrAddress = line[2];
                 hi.AlternativeAddress = line[3];
                 hi.PriorityLevel = int.Parse(line[4]);
@@ -64,10 +65,10 @@ namespace NetVulture
                 }
                 else //Wenn Batch mit Name NICHT vorhanden ist.
                 {
-                    NVBatch batch = new NVBatch();
+                    NvBatch batch = new NvBatch();
                     batch.Name = line[0];
                     batch.Description = line[1];
-                    batch.HostList = new List<NVDevice>();
+                    batch.HostList = new List<NvDevice>();
                     lst.Add(batch);
 
                     lst[lst.IndexOf(batch)].HostList.Add(hi);
@@ -82,7 +83,7 @@ namespace NetVulture
         /// </summary>
         /// <param name="file">The destination file to write.</param>
         /// <param name="batchList">The batch list to write.</param>
-        public static void SerializeToCsv(string file, List<NVBatch> batchList)
+        public static void SerializeToCsv(string file, List<NvBatch> batchList)
         {
             try
             {
@@ -90,9 +91,9 @@ namespace NetVulture
                 {
                     sw.WriteLine("BatchName;BatchDescription;HostnameOrAddress;AlternativeAddress;PriorityLevel;IsStaticIp;Description;DeviceVendor;DeviceModel;DeviceSerial;Building;Cabinet;Rack;Panel;ConnectedTo;VlanId;PhysicalAddress;MaintenanceActivated;AutoFetchPhysicalAddress;Comment;LastAvailability;PingAttempts");
 
-                    foreach (NVBatch batch in batchList)
+                    foreach (NvBatch batch in batchList)
                     {
-                        foreach (NVDevice hi in batch.HostList)
+                        foreach (NvDevice hi in batch.HostList)
                         {
                             sw.WriteLine(string.Join(";", batch.Name, batch.Description, hi.HostnameOrAddress, hi.AlternativeAddress, hi.PriorityLevel, hi.IsStaticIp, hi.Description, hi.DeviceVendor, hi.DeviceModel, hi.DeviceSerial, hi.Building, hi.Cabinet, hi.Rack, hi.Panel, hi.ConnectedTo, hi.VlanId, hi.PhysicalAddress, hi.MaintenanceActivated, hi.AutoFetchPhysicalAddress, hi.Comment, hi.LastAvailability, hi.PingAttempts));
                         }
@@ -110,7 +111,7 @@ namespace NetVulture
         /// </summary>
         /// <param name="batchList">The target batch to convert.</param>
         /// <returns>A string that contains all current information about a batch.</returns>
-        public static string ConvertToJsArray(NVBatch batch)
+        public static string ConvertToJsArray(NvBatch batch)
         {
             string[] jsArrayElements = new string[batch.HostList.Count];
 
@@ -248,12 +249,21 @@ namespace NetVulture
             smtpClient.Send(message);
         }
 
-        public static bool SendOutlookMail(string msg, params string[] recipients)
+        /// <summary>
+        /// Send text mail using microsoft outlook
+        /// </summary>
+        /// <param name="msg">The body text of the message.</param>
+        /// <param name="recipients">The receivers of the message.</param>
+        /// <returns>Return true if message successfully sent.</returns>
+        public static async Task<bool> SendOutlookMail(string msg, params string[] recipients)
         {
             bool sendSucess = false;
 
             Application app = new OutlookApp();
             MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
+            Inspector inspector = mailItem.GetInspector;
+
+            mailItem.BodyFormat = OlBodyFormat.olFormatHTML;
             mailItem.Subject = "IOB Monitoring Messaging Service";
 
             Recipients oRecips = (Recipients)mailItem.Recipients;
@@ -262,7 +272,7 @@ namespace NetVulture
             {
                 //mailItem.Recipients.Add(to);
 
-                Recipient oRecip = (Recipient)oRecips.Add("jawed.ace@gmail.com");
+                Recipient oRecip = (Recipient)oRecips.Add(to);
                 oRecip.Resolve();
             }
 
@@ -273,7 +283,53 @@ namespace NetVulture
             try
             {
                 mailItem.Send();
-                
+                await Task.Delay(10000);
+            }
+            catch (System.Exception)
+            {
+                sendSucess = false;
+                throw;
+            }
+
+            return sendSucess;
+        }
+
+        /// <summary>
+        /// Send mail using microsoft outlook with specific body format.
+        /// </summary>
+        /// <param name="format">Specifies the format of the body text.</param>
+        /// <param name="msg">The body text of the message.</param>
+        /// <param name="recipients">The receivers of the message.</param>
+        /// <returns>Return true if message successfully sent.</returns>
+        public static async Task<bool> SendOutlookMail(OlBodyFormat format, string msg, params string[] recipients)
+        {
+            bool sendSucess = false;
+
+            Application app = new OutlookApp();
+            MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
+            Inspector inspector = mailItem.GetInspector;
+
+            mailItem.BodyFormat = format;
+            mailItem.Subject = "IOB Monitoring Messaging Service";
+
+            Recipients oRecips = (Recipients)mailItem.Recipients;
+
+            foreach (string to in recipients)
+            {
+                //mailItem.Recipients.Add(to);
+
+                Recipient oRecip = (Recipient)oRecips.Add(to);
+                oRecip.Resolve();
+            }
+
+            mailItem.HTMLBody = msg;
+            mailItem.Display(false);
+            mailItem.Importance = OlImportance.olImportanceHigh;
+
+            try
+            {
+                mailItem.Send();
+                await Task.Delay(10000);
             }
             catch (System.Exception)
             {

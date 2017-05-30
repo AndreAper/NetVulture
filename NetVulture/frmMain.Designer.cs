@@ -1,6 +1,6 @@
 ﻿namespace NetVulture
 {
-    partial class frmMain
+    partial class FrmMain
     {
         /// <summary>
         /// Erforderliche Designervariable.
@@ -300,7 +300,7 @@
             this._lblAppTitle.AutoSize = true;
             this._lblAppTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
             this._lblAppTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._lblAppTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lblAppTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._lblAppTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
             this._lblAppTitle.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this._lblAppTitle.Location = new System.Drawing.Point(0, 0);
@@ -308,7 +308,7 @@
             this._lblAppTitle.Name = "_lblAppTitle";
             this._lblAppTitle.Size = new System.Drawing.Size(164, 40);
             this._lblAppTitle.TabIndex = 2;
-            this._lblAppTitle.Text = "NetVulture 1.3";
+            this._lblAppTitle.Text = "NetVulture";
             this._lblAppTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // _tbxJobName
@@ -749,7 +749,7 @@
             this.ClientSize = new System.Drawing.Size(1408, 709);
             this.Controls.Add(this._tlpBody);
             this.MinimumSize = new System.Drawing.Size(1000, 575);
-            this.Name = "frmMain";
+            this.Name = "FrmMain";
             this.Text = "NetVulture";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Resize += new System.EventHandler(this.frmMain_Resize);
