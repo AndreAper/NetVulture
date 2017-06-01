@@ -158,7 +158,7 @@ namespace NetVulture
 
                 if (rBtnOutlook.Checked)
                 {
-                    Task task = Task.Run(() => NvManagementClass.SendOutlookMail("Test Message from IOB Monitoring successfull sended at " + DateTime.Now.ToString(), _tbxTargetAddresses.Lines));
+                    Task task = Task.Run(() => NvManagementClass.SendOutlookMailAsync("Test Message from IOB Monitoring successfull sended at " + DateTime.Now.ToString(), _tbxTargetAddresses.Lines));
 
                     task.ContinueWith((t) =>
                     {
@@ -234,6 +234,11 @@ namespace NetVulture
 
             _tbxTargetAddresses.Enabled = _chkBxEmailAlertingEnabled.Checked;
             _btnSendTestMail.Enabled = _chkBxEmailAlertingEnabled.Checked;
+        }
+
+        private void btnSendSummary_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

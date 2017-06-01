@@ -1,13 +1,7 @@
-﻿/*
- * TODO: PRIO 2: Mail wenn das betroffene Gerät wieder Online ist?
- * TODO: PRIO 3: Unter Settings im Alerting Service Reiter ein NumericUpDown Element einbauen zum dynamischen einstellen der Anzahl der Versuche bis Nachrichten gesendet werden.
- * TODO: Priority Level Enum implementieren.
- * TODO: DeviceTypes Enum implementieren.
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -17,6 +11,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace NetVulture
 {
@@ -30,6 +25,7 @@ namespace NetVulture
         private BackgroundWorker _backWorker;
         private System.Collections.Specialized.StringCollection _addressList;
         private bool _isEmailAlertingEnabled, _isAutoImportEnabled, _isSendSummaryEnabled, _firstCollectPassed;
+        private const string LogFile = "Log.log";
 
         /// <summary>
         /// Write a new line to the local log file.
@@ -37,19 +33,24 @@ namespace NetVulture
         /// <param name="type"></param>
         /// <param name="src"></param>
         /// <param name="msg"></param>
-        public static async void AppendLineToLogfile(string type, string src, string msg)
+        public static async void UpdateLogfile(string type, string src, string msg)
         {
-            string file = "Log.log";
+            if (!File.Exists(LogFile)) File.Create(LogFile);
 
-            //Create file if not exists
-            if (!File.Exists(file)) File.Create(file);
-
-            using (StreamWriter sw = new StreamWriter(file, true))
+            try
             {
-                await sw.WriteLineAsync("Type: " + type + " # Soruce: " + src + " # Time: " + DateTime.Now + " # Message: " + msg);
+                using (FileStream aFile = new FileStream(LogFile, FileMode.Append, FileAccess.Write))
+                {
+                    using (StreamWriter sw = new StreamWriter(aFile))
+                    {
+                        await sw.WriteLineAsync("Type: " + type + " # Soruce: " + src + " # Time: " + DateTime.Now + " # Message: " + msg);
+                    }
+                }
             }
-
-            Debug.Print("Type: " + type + " # Soruce: " + src + " # Time: " + DateTime.Now + " # Message: " + msg);
+            catch (IOException ioEx)
+            {
+                // The file is locked
+            }
         }
 
         /// <summary>
@@ -80,54 +81,30 @@ namespace NetVulture
         /// </summary>
         protected async Task CheckAlertAsync()
         {
-            if (_deliveryMethod == "SMTP")
-            {
-                StringBuilder sbMail = new StringBuilder();
+            IEnumerable<NvDevice> failed = _batchList.SelectMany(batch => batch.HostList)
+                .Where(device => device.ReplyData != null && device.ReplyData.Status != IPStatus.Success && device.PingAttempts == 10);
 
-                foreach (NvBatch batch in _batchList)
+            if (failed.Count() > 0)
+            {
+                if (_deliveryMethod == "SMTP")
                 {
-                    if (!batch.Maintenance)
+                    await NvManagementClass.SendMailAsync(NvManagementClass.GetSummaryReport(_batchList), _addressList.Cast<string>().ToArray());
+
+                    this.Invoke((MethodInvoker)delegate
                     {
-                        if (batch.HostList.Any(x => x.ReplyData != null))
-                        {
-                            IEnumerable<NvDevice> failed = batch.HostList.Where(x => (x.ReplyData == null || x.ReplyData.Status != IPStatus.Success) && x.PingAttempts == 10);
+                        UpdateLogfile("Message Dispatcher", "void CheckAlert()", "Sending SMTP E-Mail successfully");
+                    });
 
-                            if (failed.Count() > 0)
-                            {
-                                sbMail.AppendLine("NetNulture has detect that hosts are not available from Batch: " + batch.Name);
-                                sbMail.AppendLine(Environment.NewLine);
-                                sbMail.AppendLine("Batch Name: " + batch.Name);
-                                sbMail.AppendLine("Batch Description: " + batch.Description);
-                                sbMail.AppendLine("Hosts Online: " + batch.HostList.Count(x => x.ReplyData.Status == IPStatus.Success));
-                                sbMail.AppendLine("Hosts Offline: " + failed.Count());
-                                sbMail.AppendLine("Last Execution: " + batch.LastExecution);
-                                sbMail.AppendLine(Environment.NewLine);
-
-                                foreach (NvDevice device in failed)
-                                {
-                                    sbMail.AppendLine("Host: " + device.HostnameOrAddress + "\t\tDescription: " + device.Description + "\t\tBuilding: " + device.Building + "\t\tCabinet: " + device.Cabinet + "\t\tRack: " + device.Rack + "\t\tLast Availability: " + device.LastAvailability.ToString() + "\t\tStatus: " + device.ReplyData.Status.ToString());
-                                }
-                            }
-                        }
-                    }
                 }
-
-                await NvManagementClass.SendMailAsync(sbMail.ToString(), _addressList.Cast<string>().ToArray());
-
-                this.Invoke((MethodInvoker)delegate
+                else if (_deliveryMethod == "Outlook")
                 {
-                    AppendLineToLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
-                });
+                    await NvManagementClass.SendOutlookMailAsync(Microsoft.Office.Interop.Outlook.OlBodyFormat.olFormatHTML, NvManagementClass.GetSummaryReport(_batchList), _addressList.Cast<string>().ToArray());
 
-            }
-            else if (_deliveryMethod == "Outlook")
-            {
-                SendSummaryReport();
-
-                this.Invoke((MethodInvoker)delegate
-                {
-                    AppendLineToLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
-                });
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        UpdateLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
+                    });
+                }
             }
         }
 
@@ -135,7 +112,7 @@ namespace NetVulture
         /// Load local stored batchlist. 
         /// </summary>
         /// <returns></returns>
-        private List<NvBatch> Deserialize()
+        private static List<NvBatch> Deserialize()
         {
             if (File.Exists(@"batchlist.xml"))
             {
@@ -169,7 +146,7 @@ namespace NetVulture
             {
                 _tbxJobName.Text = _selectedBatch.Name;
                 _tbxJobDescription.Text = _selectedBatch.Description;
-                _lblLastBatchExec.Text = "Last batch run:\r\n" + _selectedBatch.LastExecution.ToString();
+                _lblLastBatchExec.Text = "Last batch run:\r\n" + _selectedBatch.LastExecution;
                 _chkBtnBatchMaintenanceSwitch.Checked = _selectedBatch.Maintenance;
 
                 if (_selectedBatch.HostList != null && _selectedBatch.HostList.Count > 0)
@@ -206,8 +183,8 @@ namespace NetVulture
                         _dgvResults.Rows.Add(data);
                     }
 
-                    _lblCountOfFailedRequests.Text = "Failed Requests:\r\n" + failedRequests.ToString();
-                    _lblCountOfSuccessRequests.Text = "Success Requests:\r\n" + successRequests.ToString();
+                    _lblCountOfFailedRequests.Text = "Failed Requests:\r\n" + failedRequests;
+                    _lblCountOfSuccessRequests.Text = "Success Requests:\r\n" + successRequests;
                 }
                 else
                 {
@@ -292,14 +269,22 @@ namespace NetVulture
                     }
                     else
                     {
-                        sbOutput.Append(string.Format("<tr class='noneAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
-                            batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), ""));
+                        if (batch.HostList.Count - onlineDevices.Count() > 0)
+                        {
+                            sbOutput.Append(string.Format("<tr class='warning'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+                                batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), "Warning: Batch contains unknown hosts!"));
+                        }
+                        else
+                        {
+                            sbOutput.Append(string.Format("<tr class='noneAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+                                batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), ""));
+                        }
                     }
                 }
                 else
                 {
                     sbOutput.Append(string.Format("<tr class='noneAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
-                        batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), "", "", ""));
+                        batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), "", "", "No hosts are added to this batch."));
                 }
             }
 
@@ -307,18 +292,18 @@ namespace NetVulture
 
             if (_addressList.Count > 0)
             {
-                NvManagementClass.SendOutlookMail(Microsoft.Office.Interop.Outlook.OlBodyFormat.olFormatHTML, sbOutput.ToString(), _addressList.Cast<string>().ToArray());
+                NvManagementClass.SendOutlookMailAsync(Microsoft.Office.Interop.Outlook.OlBodyFormat.olFormatHTML, sbOutput.ToString(), _addressList.Cast<string>().ToArray());
 
                 this.Invoke((MethodInvoker)delegate
                 {
-                    AppendLineToLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail successfully");
+                    UpdateLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail successfully");
                 });
             }
             else
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    AppendLineToLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail failed because no recipients added to address list.");
+                    UpdateLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail failed because no recipients added to address list.");
                 });
             }
         }
@@ -566,7 +551,6 @@ namespace NetVulture
             _btnCollect.Enabled = true;
             _btnCollect.BackColor = Color.FromArgb(0, 50, 75);
             _lastExecutionTime = DateTime.Now;
-            _btnShowReport.Enabled = true;
             _pnlSubMenuBatch.Enabled = true;
 
             if (_firstCollectPassed == false)
@@ -588,7 +572,6 @@ namespace NetVulture
                 this.Invoke((MethodInvoker)delegate
                 {
                     _btnCollect.BackColor = Color.FromArgb(255, 155, 50);
-                    _btnShowReport.Enabled = false;
                 });
             }
 
@@ -607,7 +590,7 @@ namespace NetVulture
                 }
                 catch (Exception ex)
                 {
-                    AppendLineToLogfile("BackgroundWorker", "DoWork()", ex.Message);
+                    UpdateLogfile("BackgroundWorker", "DoWork()", ex.Message);
                 }
             }
 
@@ -620,7 +603,7 @@ namespace NetVulture
                 }
                 catch (Exception ex)
                 {
-                    AppendLineToLogfile("BackgroundWorker", "DoWork()", ex.Message);
+                    UpdateLogfile("BackgroundWorker", "DoWork()", ex.Message);
                 }
             }
         }
@@ -791,34 +774,9 @@ namespace NetVulture
             }
         }
 
-        private void _btnSendSummery_Click(object sender, EventArgs e)
-        {
-            //TODO: Entfernen
-            //StringBuilder sbSelftestMessage = new StringBuilder("IOB MONITORING DAILY SELFTEST PASSED.");
-
-            //foreach (NVBatch b in _batchList)
-            //{
-            //    sbSelftestMessage.AppendLine("Batch Name: " + b.Name + " Devices Online/Offline: " + b.HostList.Count(x => x.ReplyData.Status == IPStatus.Success) + "/" + b.HostList.Count(x => x.ReplyData.Status != IPStatus.Success));
-            //}
-
-            //string[] recipients = new string[_mobileNumberList.Count];
-            //_mobileNumberList.CopyTo(recipients, 0);
-            //Task.Run(() => NVManagementClass.SendMultipleShortMessage(sbSelftestMessage.ToString(), recipients));
-        }
-
         private void _tbxJobDescription_TextChanged(object sender, EventArgs e)
         {
             _selectedBatch.Description = _tbxJobDescription.Text;
-        }
-
-        private void _btnShowReport_Click(object sender, EventArgs e)
-        {
-            FrmReport frm = new FrmReport(_batchList);
-
-            if (frm.ShowDialog() == DialogResult.OK)
-            {
-
-            }
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)

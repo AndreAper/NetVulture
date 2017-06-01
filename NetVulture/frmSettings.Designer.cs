@@ -36,7 +36,10 @@
             this._tbxInterval = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
             this._gbxEmailSettings = new System.Windows.Forms.GroupBox();
+            this.rBtnOutlook = new System.Windows.Forms.RadioButton();
+            this.rBtnSmtp = new System.Windows.Forms.RadioButton();
             this._chkBxEmailAlertingEnabled = new System.Windows.Forms.CheckBox();
             this._tbxMailServerPort = new System.Windows.Forms.TextBox();
             this._tbxMailPassword = new System.Windows.Forms.TextBox();
@@ -44,6 +47,7 @@
             this._tbxMailServer = new System.Windows.Forms.TextBox();
             this._btnSendTestMail = new System.Windows.Forms.Button();
             this._tbxMailUser = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -63,16 +67,16 @@
             this._tbxBatchlistCsvPath = new System.Windows.Forms.TextBox();
             this._chkBxEnableAutoImportBatchlist = new System.Windows.Forms.CheckBox();
             this._btnSelectBatchlistCsv = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.rBtnSmtp = new System.Windows.Forms.RadioButton();
-            this.rBtnOutlook = new System.Windows.Forms.RadioButton();
-            this.label6 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuTools = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSendSummary = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this._gbxEmailSettings.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // _tbxOutputDir
@@ -112,7 +116,7 @@
             // _btnClose
             // 
             this._btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this._btnClose.Location = new System.Drawing.Point(630, 593);
+            this._btnClose.Location = new System.Drawing.Point(630, 608);
             this._btnClose.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this._btnClose.Name = "_btnClose";
             this._btnClose.Size = new System.Drawing.Size(113, 30);
@@ -149,7 +153,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this._tbxOutputDir);
             this.groupBox1.Controls.Add(this._btnSelectDir);
-            this.groupBox1.Location = new System.Drawing.Point(12, 13);
+            this.groupBox1.Location = new System.Drawing.Point(12, 28);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -163,7 +167,7 @@
             this.groupBox2.Controls.Add(this._tbxInterval);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Location = new System.Drawing.Point(525, 13);
+            this.groupBox2.Location = new System.Drawing.Point(525, 28);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -171,6 +175,17 @@
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Timer";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.label3.Location = new System.Drawing.Point(187, 22);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(25, 17);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "ms";
             // 
             // _gbxEmailSettings
             // 
@@ -190,12 +205,38 @@
             this._gbxEmailSettings.Controls.Add(this.label4);
             this._gbxEmailSettings.Controls.Add(this.label10);
             this._gbxEmailSettings.Controls.Add(this.label11);
-            this._gbxEmailSettings.Location = new System.Drawing.Point(12, 167);
+            this._gbxEmailSettings.Location = new System.Drawing.Point(12, 182);
             this._gbxEmailSettings.Name = "_gbxEmailSettings";
             this._gbxEmailSettings.Size = new System.Drawing.Size(731, 221);
             this._gbxEmailSettings.TabIndex = 8;
             this._gbxEmailSettings.TabStop = false;
             this._gbxEmailSettings.Text = "E-mail Alerting";
+            // 
+            // rBtnOutlook
+            // 
+            this.rBtnOutlook.AutoSize = true;
+            this.rBtnOutlook.Enabled = false;
+            this.rBtnOutlook.Location = new System.Drawing.Point(222, 49);
+            this.rBtnOutlook.Name = "rBtnOutlook";
+            this.rBtnOutlook.Size = new System.Drawing.Size(72, 21);
+            this.rBtnOutlook.TabIndex = 121;
+            this.rBtnOutlook.TabStop = true;
+            this.rBtnOutlook.Text = "Outlook";
+            this.rBtnOutlook.UseVisualStyleBackColor = true;
+            this.rBtnOutlook.CheckedChanged += new System.EventHandler(this.rBtnOutlook_CheckedChanged);
+            // 
+            // rBtnSmtp
+            // 
+            this.rBtnSmtp.AutoSize = true;
+            this.rBtnSmtp.Enabled = false;
+            this.rBtnSmtp.Location = new System.Drawing.Point(157, 49);
+            this.rBtnSmtp.Name = "rBtnSmtp";
+            this.rBtnSmtp.Size = new System.Drawing.Size(59, 21);
+            this.rBtnSmtp.TabIndex = 121;
+            this.rBtnSmtp.TabStop = true;
+            this.rBtnSmtp.Text = "SMTP";
+            this.rBtnSmtp.UseVisualStyleBackColor = true;
+            this.rBtnSmtp.CheckedChanged += new System.EventHandler(this.rBtnSmtp_CheckedChanged);
             // 
             // _chkBxEmailAlertingEnabled
             // 
@@ -264,6 +305,17 @@
             this._tbxMailUser.Name = "_tbxMailUser";
             this._tbxMailUser.Size = new System.Drawing.Size(169, 25);
             this._tbxMailUser.TabIndex = 80;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.label6.Location = new System.Drawing.Point(8, 51);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(104, 17);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Delivery Method";
             // 
             // label12
             // 
@@ -336,7 +388,7 @@
             this.groupBox3.Controls.Add(this._chkBxDailySummeryEnabled);
             this.groupBox3.Controls.Add(this.label17);
             this.groupBox3.Controls.Add(this._dtpSendSummeryTime);
-            this.groupBox3.Location = new System.Drawing.Point(12, 77);
+            this.groupBox3.Location = new System.Drawing.Point(12, 92);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(731, 84);
             this.groupBox3.TabIndex = 9;
@@ -476,54 +528,6 @@
             this._btnSelectBatchlistCsv.UseVisualStyleBackColor = false;
             this._btnSelectBatchlistCsv.Click += new System.EventHandler(this._btnSelectBatchlistCsv_Click);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label3.Location = new System.Drawing.Point(187, 22);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(25, 17);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "ms";
-            // 
-            // rBtnSmtp
-            // 
-            this.rBtnSmtp.AutoSize = true;
-            this.rBtnSmtp.Enabled = false;
-            this.rBtnSmtp.Location = new System.Drawing.Point(157, 49);
-            this.rBtnSmtp.Name = "rBtnSmtp";
-            this.rBtnSmtp.Size = new System.Drawing.Size(59, 21);
-            this.rBtnSmtp.TabIndex = 121;
-            this.rBtnSmtp.TabStop = true;
-            this.rBtnSmtp.Text = "SMTP";
-            this.rBtnSmtp.UseVisualStyleBackColor = true;
-            this.rBtnSmtp.CheckedChanged += new System.EventHandler(this.rBtnSmtp_CheckedChanged);
-            // 
-            // rBtnOutlook
-            // 
-            this.rBtnOutlook.AutoSize = true;
-            this.rBtnOutlook.Enabled = false;
-            this.rBtnOutlook.Location = new System.Drawing.Point(222, 49);
-            this.rBtnOutlook.Name = "rBtnOutlook";
-            this.rBtnOutlook.Size = new System.Drawing.Size(72, 21);
-            this.rBtnOutlook.TabIndex = 121;
-            this.rBtnOutlook.TabStop = true;
-            this.rBtnOutlook.Text = "Outlook";
-            this.rBtnOutlook.UseVisualStyleBackColor = true;
-            this.rBtnOutlook.CheckedChanged += new System.EventHandler(this.rBtnOutlook_CheckedChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label6.Location = new System.Drawing.Point(8, 51);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(104, 17);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "Delivery Method";
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this._lnkLblCopyHeader);
@@ -535,27 +539,54 @@
             this.groupBox4.Controls.Add(this.label15);
             this.groupBox4.Controls.Add(this.label14);
             this.groupBox4.Enabled = false;
-            this.groupBox4.Location = new System.Drawing.Point(12, 394);
+            this.groupBox4.Location = new System.Drawing.Point(12, 409);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(731, 192);
             this.groupBox4.TabIndex = 10000001;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Auto Import Batchlist";
             // 
-            // frmSettings
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuTools});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(759, 24);
+            this.menuStrip1.TabIndex = 10000002;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // toolStripMenuTools
+            // 
+            this.toolStripMenuTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnSendSummary});
+            this.toolStripMenuTools.Name = "toolStripMenuTools";
+            this.toolStripMenuTools.Size = new System.Drawing.Size(47, 20);
+            this.toolStripMenuTools.Text = "Tools";
+            // 
+            // btnSendSummary
+            // 
+            this.btnSendSummary.Name = "btnSendSummary";
+            this.btnSendSummary.Size = new System.Drawing.Size(192, 22);
+            this.btnSendSummary.Text = "Send Summary Report";
+            this.btnSendSummary.Click += new System.EventHandler(this.btnSendSummary_Click);
+            // 
+            // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(751, 630);
+            this.ClientSize = new System.Drawing.Size(759, 652);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this._gbxEmailSettings);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this._btnClose);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FrmSettings";
             this.Text = "Settings";
@@ -569,7 +600,10 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -615,5 +649,8 @@
         private System.Windows.Forms.RadioButton rBtnSmtp;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuTools;
+        private System.Windows.Forms.ToolStripMenuItem btnSendSummary;
     }
 }

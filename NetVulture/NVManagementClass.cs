@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Net.NetworkInformation;
 using System.IO;
 using System.Net.Mail;
-using System.ComponentModel;
-using System.Net.Sockets;
-using System.Net.Security;
+using System.Text;
+using System.Windows.Forms;
 using Microsoft.Office.Interop.Outlook;
 using OutlookApp = Microsoft.Office.Interop.Outlook.Application;
-using System.Runtime.InteropServices;
 
 namespace NetVulture
 {
@@ -187,11 +184,10 @@ namespace NetVulture
         }
 
         /// <summary>
-        /// Sending mail message to registered address.
+        /// Sending html using smtp account.
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="msg">The body text of the message.</param>
         /// <returns></returns>
-        [Obsolete()]
         public static async Task SendMailAsync(string msg, params string[] to)
         {
             if (to.Length > 0)
@@ -218,14 +214,16 @@ namespace NetVulture
                         client.Credentials = new System.Net.NetworkCredential(Properties.Settings.Default.MailUser, Properties.Settings.Default.MailPassword);
                         await client.SendMailAsync(Properties.Settings.Default.MailUser, recipient, "IOB Monitoring Test Messsage", msg);
                     }
-                    catch (System.Exception)
-                    {
-                        throw;
-                    }
+                    catch {}
                 }
             }
         }
 
+        /// <summary>
+        /// Sending html using smtp account.
+        /// </summary>
+        /// <param name="body">The body text of the message.</param>
+        /// <param name="recipients">The receivers of the message.</param>
         public static void SendHtmlEmail(string body, params string[] recipients)
         {
             MailMessage message = new MailMessage();
@@ -255,11 +253,11 @@ namespace NetVulture
         /// <param name="msg">The body text of the message.</param>
         /// <param name="recipients">The receivers of the message.</param>
         /// <returns>Return true if message successfully sent.</returns>
-        public static async Task<bool> SendOutlookMail(string msg, params string[] recipients)
+        public static async Task<bool> SendOutlookMailAsync(string msg, params string[] recipients)
         {
             bool sendSucess = false;
 
-            Application app = new OutlookApp();
+            OutlookApp app = new OutlookApp();
             MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
             Inspector inspector = mailItem.GetInspector;
 
@@ -301,11 +299,11 @@ namespace NetVulture
         /// <param name="msg">The body text of the message.</param>
         /// <param name="recipients">The receivers of the message.</param>
         /// <returns>Return true if message successfully sent.</returns>
-        public static async Task<bool> SendOutlookMail(OlBodyFormat format, string msg, params string[] recipients)
+        public static async Task<bool> SendOutlookMailAsync(OlBodyFormat format, string msg, params string[] recipients)
         {
             bool sendSucess = false;
 
-            Application app = new OutlookApp();
+            OutlookApp app = new OutlookApp();
             MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
             Inspector inspector = mailItem.GetInspector;
 
@@ -339,12 +337,82 @@ namespace NetVulture
 
             return sendSucess;
         }
-    }
 
-    public enum PriorityLevel
-    {
-        High,
-        Medium,
-        Low
+        /// <summary>
+        /// Generate html based report of a batchlist
+        /// </summary>
+        /// <param name="batchList">The batchlist to generate the report.</param>
+        /// <returns>A stringthat contains html based report of the batchlist.</returns>
+        public static string GetSummaryReport(List<NvBatch> batchList)
+        {
+            StringBuilder sbOutput = new StringBuilder();
+
+            sbOutput.Append(
+                "<!DOCTYPE html><html><head><style>" +
+                "h1 { font-family: arial, sans-serif;font-weight:lighter;background-color:#00324b;color:#ffffff;text-align:center; padding:5px}" +
+                "table {font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}" +
+                "td, th {border: 1px solid; text-align: left; padding: 8px;}" +
+                ".header {background-color: #e3e3e3;}" +
+                ".noneAlert {background-color: #8DD454;}" +
+                ".warning {background-color: #FE9B33;}" +
+                ".alert {color: #ffffff;background-color: #EA0043;}" +
+                ".criticalAlert {color: #ffffff;background-color: #7330A4;}" +
+                "</style></head><body>" +
+                "<h1>IOB MONITORING DAILY SUMMARY</h1><table>" +
+                "<tr class='header'><th>Batch Name</th><th>Description</th><th>Maintenance</th><th>Hosts Count</th><th>Hosts Online</th><th>Hosts Offline</th><th style='width: 40%'>Information</th></tr>"
+            );
+
+            foreach (NvBatch batch in batchList)
+            {
+                if (batch.HostList != null && batch.HostList.Count > 0)
+                {
+                    IEnumerable<NvDevice> offlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status != IPStatus.Success);
+                    IEnumerable<NvDevice> onlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status == IPStatus.Success);
+
+                    if (offlineDevices.Count() > 0)
+                    {
+                        StringBuilder sbInfo = new StringBuilder();
+
+                        foreach (NvDevice d in offlineDevices)
+                        {
+                            sbInfo.Append(string.Format("<p>Hostname: {0}; Last Availability: {1};<br/>Building: {2}; Cabinet {3}; Rack: {4}</p>", d.HostnameOrAddress, d.LastAvailability, d.Building, d.Cabinet, d.Rack));
+                        }
+
+                        if (offlineDevices.Any(x => x.PriorityLevel == 0))
+                        {
+                            sbOutput.Append(string.Format("<tr class='criticalAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+                                batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), sbInfo.ToString()));
+                        }
+                        else
+                        {
+                            sbOutput.Append(string.Format("<tr class='alert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+                                batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), sbInfo.ToString()));
+                        }
+                    }
+                    else
+                    {
+                        if (batch.HostList.Count - onlineDevices.Count() > 0)
+                        {
+                            sbOutput.Append(string.Format("<tr class='warning'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+                                batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), ""));
+                        }
+                        else
+                        {
+                            sbOutput.Append(string.Format("<tr class='noneAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+                                batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), ""));
+                        }
+                    }
+                }
+                else
+                {
+                    sbOutput.Append(string.Format("<tr class='noneAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+                        batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), "", "", "No hosts are added to this batch."));
+                }
+            }
+
+            sbOutput.Append("</table></body></html>");
+
+            return sbOutput.ToString();
+        }
     }
 }
