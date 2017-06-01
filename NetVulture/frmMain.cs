@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Diagnostics;
+using System.Net;
 using System.Reflection;
 
 namespace NetVulture
@@ -223,89 +224,110 @@ namespace NetVulture
         /// <returns></returns>
         private void SendSummaryReport()
         {
-            StringBuilder sbOutput = new StringBuilder();
-
-            sbOutput.Append(
-                "<!DOCTYPE html><html><head><style>" +
-                "h1 { font-family: arial, sans-serif;font-weight:lighter;background-color:#00324b;color:#ffffff;text-align:center; padding:5px}" +
-                "table {font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}" +
-                "td, th {border: 1px solid; text-align: left; padding: 8px;}" +
-                ".header {background-color: #e3e3e3;}" +
-                ".noneAlert {background-color: #8DD454;}" +
-                ".warning {background-color: #FE9B33;}" +
-                ".alert {color: #ffffff;background-color: #EA0043;}" +
-                ".criticalAlert {color: #ffffff;background-color: #7330A4;}" +
-                "</style></head><body>" +
-                "<h1>IOB MONITORING DAILY SUMMARY</h1><table>" +
-                "<tr class='header'><th>Batch Name</th><th>Description</th><th>Maintenance</th><th>Hosts Count</th><th>Hosts Online</th><th>Hosts Offline</th><th style='width: 40%'>Information</th></tr>"
-                );
-
-            foreach (NvBatch batch in _batchList)
+            if (_deliveryMethod == "SMTP")
             {
-                if (batch.HostList != null && batch.HostList.Count > 0)
-                {
-                    IEnumerable<NvDevice> offlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status != IPStatus.Success);
-                    IEnumerable<NvDevice> onlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status == IPStatus.Success);
-
-                    if (offlineDevices.Count() > 0)
-                    {
-                        StringBuilder sbInfo = new StringBuilder();
-
-                        foreach (NvDevice d in offlineDevices)
-                        {
-                            sbInfo.Append(string.Format("<p>Hostname: {0}; Last Availability: {1};<br/>Building: {2}; Cabinet {3}; Rack: {4}</p>", d.HostnameOrAddress, d.LastAvailability, d.Building, d.Cabinet, d.Rack));
-                        }
-
-                        if (offlineDevices.Any(x => x.PriorityLevel == 0))
-                        {
-                            sbOutput.Append(string.Format("<tr class='criticalAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
-                                batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), sbInfo.ToString()));
-                        }
-                        else
-                        {
-                            sbOutput.Append(string.Format("<tr class='alert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
-                                batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), sbInfo.ToString()));
-                        }
-                    }
-                    else
-                    {
-                        if (batch.HostList.Count - onlineDevices.Count() > 0)
-                        {
-                            sbOutput.Append(string.Format("<tr class='warning'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
-                                batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), "Warning: Batch contains unknown hosts!"));
-                        }
-                        else
-                        {
-                            sbOutput.Append(string.Format("<tr class='noneAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
-                                batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), ""));
-                        }
-                    }
-                }
-                else
-                {
-                    sbOutput.Append(string.Format("<tr class='noneAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
-                        batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), "", "", "No hosts are added to this batch."));
-                }
-            }
-
-            sbOutput.Append("</table></body></html>");
-
-            if (_addressList.Count > 0)
-            {
-                NvManagementClass.SendOutlookMailAsync(Microsoft.Office.Interop.Outlook.OlBodyFormat.olFormatHTML, sbOutput.ToString(), _addressList.Cast<string>().ToArray());
+                NvManagementClass.SendMailAsync(NvManagementClass.GetSummaryReport(_batchList), _addressList.Cast<string>().ToArray());
 
                 this.Invoke((MethodInvoker)delegate
                 {
-                    UpdateLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail successfully");
+                    UpdateLogfile("Message Dispatcher", "void CheckAlert()", "Sending SMTP E-Mail successfully");
                 });
+
             }
-            else
+            else if (_deliveryMethod == "Outlook")
             {
+                NvManagementClass.SendOutlookMailAsync(Microsoft.Office.Interop.Outlook.OlBodyFormat.olFormatHTML, NvManagementClass.GetSummaryReport(_batchList), _addressList.Cast<string>().ToArray());
+
                 this.Invoke((MethodInvoker)delegate
                 {
-                    UpdateLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail failed because no recipients added to address list.");
+                    UpdateLogfile("Message Dispatcher", "void CheckAlert()", "Sending E-Mail successfully");
                 });
             }
+
+
+            //StringBuilder sbOutput = new StringBuilder();
+
+            //sbOutput.Append(
+            //    "<!DOCTYPE html><html><head><style>" +
+            //    "h1 { font-family: arial, sans-serif;font-weight:lighter;background-color:#00324b;color:#ffffff;text-align:center; padding:5px}" +
+            //    "table {font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}" +
+            //    "td, th {border: 1px solid; text-align: left; padding: 8px;}" +
+            //    ".header {background-color: #e3e3e3;}" +
+            //    ".noneAlert {background-color: #8DD454;}" +
+            //    ".warning {background-color: #FE9B33;}" +
+            //    ".alert {color: #ffffff;background-color: #EA0043;}" +
+            //    ".criticalAlert {color: #ffffff;background-color: #7330A4;}" +
+            //    "</style></head><body>" +
+            //    "<h1>IOB MONITORING DAILY SUMMARY</h1><table>" +
+            //    "<tr class='header'><th>Batch Name</th><th>Description</th><th>Maintenance</th><th>Hosts Count</th><th>Hosts Online</th><th>Hosts Offline</th><th style='width: 40%'>Information</th></tr>"
+            //    );
+
+            //foreach (NvBatch batch in _batchList)
+            //{
+            //    if (batch.HostList != null && batch.HostList.Count > 0)
+            //    {
+            //        IEnumerable<NvDevice> offlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status != IPStatus.Success);
+            //        IEnumerable<NvDevice> onlineDevices = batch.HostList.Where(x => x.ReplyData != null && x.ReplyData.Status == IPStatus.Success);
+
+            //        if (offlineDevices.Count() > 0)
+            //        {
+            //            StringBuilder sbInfo = new StringBuilder();
+
+            //            foreach (NvDevice d in offlineDevices)
+            //            {
+            //                sbInfo.Append(string.Format("<p>Hostname: {0}; Last Availability: {1};<br/>Building: {2}; Cabinet {3}; Rack: {4}</p>", d.HostnameOrAddress, d.LastAvailability, d.Building, d.Cabinet, d.Rack));
+            //            }
+
+            //            if (offlineDevices.Any(x => x.PriorityLevel == 0))
+            //            {
+            //                sbOutput.Append(string.Format("<tr class='criticalAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+            //                    batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), sbInfo.ToString()));
+            //            }
+            //            else
+            //            {
+            //                sbOutput.Append(string.Format("<tr class='alert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+            //                    batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), sbInfo.ToString()));
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if (batch.HostList.Count - onlineDevices.Count() > 0)
+            //            {
+            //                sbOutput.Append(string.Format("<tr class='warning'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+            //                    batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), "Warning: Batch contains unknown hosts!"));
+            //            }
+            //            else
+            //            {
+            //                sbOutput.Append(string.Format("<tr class='noneAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+            //                    batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), onlineDevices.Count(), offlineDevices.Count(), ""));
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        sbOutput.Append(string.Format("<tr class='noneAlert'><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td></tr>",
+            //            batch.Name, batch.Description, batch.Maintenance, batch.HostList.Count(), "", "", "No hosts are added to this batch."));
+            //    }
+            //}
+
+            //sbOutput.Append("</table></body></html>");
+
+            //if (_addressList.Count > 0)
+            //{
+            //    NvManagementClass.SendOutlookMailAsync(Microsoft.Office.Interop.Outlook.OlBodyFormat.olFormatHTML, sbOutput.ToString(), _addressList.Cast<string>().ToArray());
+
+            //    this.Invoke((MethodInvoker)delegate
+            //    {
+            //        UpdateLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail successfully");
+            //    });
+            //}
+            //else
+            //{
+            //    this.Invoke((MethodInvoker)delegate
+            //    {
+            //        UpdateLogfile("Message Dispatcher", "void SendSummery()", "Sending E-Mail failed because no recipients added to address list.");
+            //    });
+            //}
         }
 
         /// <summary>

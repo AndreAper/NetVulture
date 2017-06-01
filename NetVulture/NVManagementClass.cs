@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net.NetworkInformation;
 using System.IO;
+using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Windows.Forms;
@@ -445,6 +446,28 @@ namespace NetVulture
             sbOutput.Append("</table></body></html>");
 
             return sbOutput.ToString();
+        }
+
+        /// <summary>
+        /// Determine if connection to the internet is available.
+        /// </summary>
+        /// <returns>True if connection is available.</returns>
+        public static bool InternetConnectionAvailable()
+        {
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    using (var stream = client.OpenRead("http://www.google.com"))
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
