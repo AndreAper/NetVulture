@@ -163,7 +163,7 @@ namespace NetVulture
 
                         if (pr == null)
                         {
-                            data = new string[] { _selectedBatch.HostList[i].HostnameOrAddress, "", "", "", "", "", "", "" };
+                            data = new string[] { _selectedBatch.HostList[i].HostnameOrAddress, "", "", "", "", "Unknown Host", "", "" };
                             failedRequests++;
                         }
                         else

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.NetworkInformation;
@@ -256,37 +257,52 @@ namespace NetVulture
         public static async Task<bool> SendOutlookMailAsync(string msg, params string[] recipients)
         {
             bool sendSucess = false;
-
-            OutlookApp app = new OutlookApp();
-            MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
-            Inspector inspector = mailItem.GetInspector;
-
-            mailItem.BodyFormat = OlBodyFormat.olFormatHTML;
-            mailItem.Subject = "IOB Monitoring Messaging Service";
-
-            Recipients oRecips = (Recipients)mailItem.Recipients;
-
-            foreach (string to in recipients)
-            {
-                //mailItem.Recipients.Add(to);
-
-                Recipient oRecip = (Recipient)oRecips.Add(to);
-                oRecip.Resolve();
-            }
-
-            mailItem.Body = msg;
-            mailItem.Display(false);
-            mailItem.Importance = OlImportance.olImportanceHigh;
+            Process olProcess = null;
 
             try
             {
-                mailItem.Send();
-                await Task.Delay(10000);
+                olProcess = new Process();
+                olProcess.StartInfo.FileName = "OUTLOOK.EXE";
+                olProcess.StartInfo.Arguments = "";
+                olProcess.StartInfo.ErrorDialog = false;
+                olProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                olProcess.Start();
+
+                OutlookApp app = new OutlookApp();
+                MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
+
+                mailItem.BodyFormat = OlBodyFormat.olFormatHTML;
+                mailItem.Subject = "IOB Monitoring Messaging Service";
+
+                Recipients oRecips = (Recipients)mailItem.Recipients;
+
+                foreach (string to in recipients)
+                {
+                    Recipient oRecip = (Recipient)oRecips.Add(to);
+                    oRecip.Resolve();
+                }
+
+                mailItem.Body = msg;
+                mailItem.Display(false);
+                mailItem.Importance = OlImportance.olImportanceHigh;
+
+                if (olProcess.Responding)
+                {
+                    mailItem.Send();
+                }
             }
             catch (System.Exception)
             {
                 sendSucess = false;
                 throw;
+            }
+            finally
+            {
+                if (olProcess != null && !olProcess.HasExited)
+                {
+                    olProcess.Kill();
+                    sendSucess = true;
+                }
             }
 
             return sendSucess;
@@ -302,37 +318,53 @@ namespace NetVulture
         public static async Task<bool> SendOutlookMailAsync(OlBodyFormat format, string msg, params string[] recipients)
         {
             bool sendSucess = false;
-
-            OutlookApp app = new OutlookApp();
-            MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
-            Inspector inspector = mailItem.GetInspector;
-
-            mailItem.BodyFormat = format;
-            mailItem.Subject = "IOB Monitoring Messaging Service";
-
-            Recipients oRecips = (Recipients)mailItem.Recipients;
-
-            foreach (string to in recipients)
-            {
-                //mailItem.Recipients.Add(to);
-
-                Recipient oRecip = (Recipient)oRecips.Add(to);
-                oRecip.Resolve();
-            }
-
-            mailItem.HTMLBody = msg;
-            mailItem.Display(false);
-            mailItem.Importance = OlImportance.olImportanceHigh;
+            Process olProcess = null;
 
             try
             {
-                mailItem.Send();
-                await Task.Delay(10000);
+                olProcess = new Process();
+                olProcess.StartInfo.FileName = "OUTLOOK.EXE";
+                olProcess.StartInfo.Arguments = "";
+                olProcess.StartInfo.ErrorDialog = false;
+                olProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                olProcess.Start();
+
+                OutlookApp app = new OutlookApp();
+                MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
+
+                mailItem.BodyFormat = format;
+                mailItem.Subject = "IOB Monitoring Messaging Service";
+
+                Recipients oRecips = (Recipients)mailItem.Recipients;
+
+                foreach (string to in recipients)
+                {
+                    Recipient oRecip = (Recipient)oRecips.Add(to);
+                    oRecip.Resolve();
+                }
+
+                mailItem.HTMLBody = msg;
+                mailItem.Display(false);
+                mailItem.Importance = OlImportance.olImportanceHigh;
+
+                if (olProcess.Responding)
+                {
+                    mailItem.Send();
+                }
+
             }
             catch (System.Exception)
             {
                 sendSucess = false;
                 throw;
+            }
+            finally
+            {
+                if (olProcess != null && !olProcess.HasExited)
+                {
+                    olProcess.Kill();
+                    sendSucess = true;
+                }
             }
 
             return sendSucess;
