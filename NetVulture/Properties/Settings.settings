@@ -17,16 +17,16 @@
     <Setting Name="EmailAlertingEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="MailUser" Type="System.String" Scope="User">
+    <Setting Name="SmtpUser" Type="System.String" Scope="User">
       <Value Profile="(Default)">monitoring.bbs@gmail.com</Value>
     </Setting>
-    <Setting Name="MailPassword" Type="System.String" Scope="User">
+    <Setting Name="SmtpPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)">Moni2015@</Value>
     </Setting>
-    <Setting Name="MailServer" Type="System.String" Scope="User">
+    <Setting Name="SmtpServer" Type="System.String" Scope="User">
       <Value Profile="(Default)">smtp.gmail.com</Value>
     </Setting>
-    <Setting Name="MailServerPort" Type="System.Int32" Scope="User">
+    <Setting Name="SmtpPort" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">587</Value>
     </Setting>
     <Setting Name="AutoloadCsvPath" Type="System.String" Scope="User">
@@ -35,17 +35,11 @@
     <Setting Name="AutoloadCsvEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="SendSummeryEnabled" Type="System.Boolean" Scope="User">
+    <Setting Name="SendSummaryEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="SendSummeryTime" Type="System.DateTime" Scope="User">
+    <Setting Name="SendSummaryTime" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)">03/16/2017 21:44:00</Value>
-    </Setting>
-    <Setting Name="MailDeliveryMethod" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="SystemLog" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			h1 {font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, "sans-serif"; font-weight:bold; background-color:#00324b; color:#ffffff; text-align:center; padding:5px;}
+			table {font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, "sans-serif"; border-collapse:collapse; min-width: 100%; max-width: 100%; text-align:left;}
+			td, th {border: 1px solid; padding: 5px;}
+			.header {background-color: #e3e3e3; font-weight: bold; min-width: 25%; max-width: 25%;}
+			.noneAlert {background-color: #8DD454; font-weight: normal; min-width: 25%; max-width: 25%;}
+			.warning {background-color: #FE9B33; font-weight: normal; min-width: 25%; max-width: 25%;}
+			.alert {background-color: #EA0043; color: #ffffff; margin: 0px 0px 5px 0px; padding:10px; min-width: 25%; max-width: 25%;}
+			.criticalAlert {background-color: #7330A4; color: #ffffff; font-weight: normal; min-width: 25%; max-width: 25%;}
+			.batchHeader {color: #ffffff; background-color: #EA0043; font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, "sans-serif"; font-weight:normal; margin: 0px; padding:5px; font-size: 22px;}
+			.batchDescription {font-family: arial, sans-serif;font-weight:normal; margin: 0px; padding:5px; background-color: #e3e3e3;}
+		</style>
+	</head>
+<body>
+	<div style="min-width: 100%; max-width: 100%;">
+		<h1>IOB MONITORING ALERTING MESSAGE</h1>
+		<div style="border: thin; border-style: solid; min-width: 100%; max-width: 100%; margin-bottom: 10px">
+			<p class="batchHeader">An alarm was triggered by the batch: {0}</p>
+			<p class="batchDescription">Description: Some description of this batch.</p>
+			<p class="batchDescription">Hosts Count: {0}&emsp;Hosts Online: {1}&emsp;Hosts Offline {2}</p>
+		</div>
+		<div style="min-width: 100%; max-width: 100%;">
+			<table>
+				<tr class="header">
+					<th>Host Information</th>
+					<th>Device Information</th>
+					<th>Location</th>
+					<th>Status</th>
+				</tr>
+
+				<tr class="noneAlert">
+					<td>Host Information</td>
+					<td>Device Information</td>
+					<td>Location</td>
+					<td>Status</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace nvcore.Devices
+namespace nvcore
 {
     public enum DeviceTypes
     {

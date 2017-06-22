@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections.Specialized;
+using nvcore;
+using System.Net;
 
 namespace NetVulture
 {
     public partial class FrmSettings : Form
     {
-        string _deliveryMethod;
-
         public FrmSettings()
         {
             InitializeComponent();
@@ -20,26 +20,15 @@ namespace NetVulture
             _chkBxEmailAlertingEnabled.Checked = Properties.Settings.Default.EmailAlertingEnabled;
             _tbxBatchlistCsvPath.Text = Properties.Settings.Default.AutoloadCsvPath;
             _chkBxEnableAutoImportBatchlist.Checked = Properties.Settings.Default.AutoloadCsvEnabled;
-            _chkBxDailySummeryEnabled.Checked = Properties.Settings.Default.SendSummeryEnabled;
-            _dtpSendSummeryTime.Value = Properties.Settings.Default.SendSummeryTime;
+            _chkBxDailySummeryEnabled.Checked = Properties.Settings.Default.SendSummaryEnabled;
+            _dtpSendSummeryTime.Value = Properties.Settings.Default.SendSummaryTime;
 
             if (_chkBxEmailAlertingEnabled.Checked)
             {
-                _deliveryMethod = Properties.Settings.Default.MailDeliveryMethod;
-
-                if (!string.IsNullOrEmpty(_deliveryMethod))
-                {
-                    RadioButton rbtn = (RadioButton)_gbxEmailSettings.Controls["rBtn" + _deliveryMethod];
-                    rbtn.Checked = true;
-
-                    if (rbtn.Text == "SMTP")
-                    {
-                        _tbxMailServer.Enabled = true;
-                        _tbxMailServerPort.Enabled = true;
-                        _tbxMailUser.Enabled = true;
-                        _tbxMailPassword.Enabled = true;
-                    }
-                }
+                _tbxMailServer.Enabled = true;
+                _tbxMailServerPort.Enabled = true;
+                _tbxMailUser.Enabled = true;
+                _tbxMailPassword.Enabled = true;
 
                 StringCollection scTargetCollection = Properties.Settings.Default.TargetAddresses;
 
@@ -48,10 +37,10 @@ namespace NetVulture
                     _tbxTargetAddresses.Lines = Properties.Settings.Default.TargetAddresses.Cast<string>().ToArray();
                 }
 
-                _tbxMailUser.Text = Properties.Settings.Default.MailUser;
-                _tbxMailPassword.Text = Properties.Settings.Default.MailPassword;
-                _tbxMailServer.Text = Properties.Settings.Default.MailServer;
-                _tbxMailServerPort.Text = Properties.Settings.Default.MailServerPort.ToString();
+                _tbxMailUser.Text = Properties.Settings.Default.SmtpUser;
+                _tbxMailPassword.Text = Properties.Settings.Default.SmtpPassword;
+                _tbxMailServer.Text = Properties.Settings.Default.SmtpServer;
+                _tbxMailServerPort.Text = Properties.Settings.Default.SmtpPort.ToString();
             }
         }
 
@@ -71,13 +60,12 @@ namespace NetVulture
         private void _btnClose_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.OutputDir = _tbxOutputDir.Text;
-            Properties.Settings.Default.SendSummeryEnabled = _chkBxDailySummeryEnabled.Checked;
-            Properties.Settings.Default.SendSummeryTime = _dtpSendSummeryTime.Value;
+            Properties.Settings.Default.SendSummaryEnabled = _chkBxDailySummeryEnabled.Checked;
+            Properties.Settings.Default.SendSummaryTime = _dtpSendSummeryTime.Value;
             Properties.Settings.Default.Interval = Convert.ToInt32(_tbxInterval.Text);
             Properties.Settings.Default.EmailAlertingEnabled = _chkBxEmailAlertingEnabled.Checked;
             Properties.Settings.Default.AutoloadCsvPath = _tbxBatchlistCsvPath.Text;
             Properties.Settings.Default.AutoloadCsvEnabled = _chkBxEnableAutoImportBatchlist.Checked;
-            Properties.Settings.Default.MailDeliveryMethod = _deliveryMethod;
 
             if (_chkBxEmailAlertingEnabled.Checked)
             {
@@ -89,17 +77,17 @@ namespace NetVulture
                 }
 
                 Properties.Settings.Default.TargetAddresses = scEmail;
-                Properties.Settings.Default.MailUser = _tbxMailUser.Text;
-                Properties.Settings.Default.MailPassword = _tbxMailPassword.Text;
-                Properties.Settings.Default.MailServer = _tbxMailServer.Text;
+                Properties.Settings.Default.SmtpUser = _tbxMailUser.Text;
+                Properties.Settings.Default.SmtpPassword = _tbxMailPassword.Text;
+                Properties.Settings.Default.SmtpServer = _tbxMailServer.Text;
 
                 if (_tbxMailServerPort.Text.Length > 0)
                 {
-                    Properties.Settings.Default.MailServerPort = Convert.ToInt32(_tbxMailServerPort.Text); 
+                    Properties.Settings.Default.SmtpPort = Convert.ToInt32(_tbxMailServerPort.Text); 
                 }
                 else
                 {
-                    Properties.Settings.Default.MailServerPort = 0;
+                    Properties.Settings.Default.SmtpPort = 0;
                 }
             }
 
@@ -126,25 +114,30 @@ namespace NetVulture
                 }
 
                 Properties.Settings.Default.TargetAddresses = scEmail;
-                Properties.Settings.Default.MailUser = _tbxMailUser.Text;
-                Properties.Settings.Default.MailPassword = _tbxMailPassword.Text;
-                Properties.Settings.Default.MailServer = _tbxMailServer.Text;
+                Properties.Settings.Default.SmtpUser = _tbxMailUser.Text;
+                Properties.Settings.Default.SmtpPassword = _tbxMailPassword.Text;
+                Properties.Settings.Default.SmtpServer = _tbxMailServer.Text;
 
 
                 if (_tbxMailServerPort.Text.Length > 0)
                 {
-                    Properties.Settings.Default.MailServerPort = Convert.ToInt32(_tbxMailServerPort.Text);
+                    Properties.Settings.Default.SmtpPort = Convert.ToInt32(_tbxMailServerPort.Text);
                 }
                 else
                 {
-                    Properties.Settings.Default.MailServerPort = 0;
+                    Properties.Settings.Default.SmtpPort = 0;
                 }
 
                 Properties.Settings.Default.Save();
 
-                if (rBtnSmtp.Checked)
+                if (String.IsNullOrEmpty(_tbxMailPassword.Text))
                 {
-                    Task task = Task.Run(() => NvManagementClass.SendMailAsync("Test Message from IOB Monitoring successfull sended at " + DateTime.Now.ToString(), _tbxTargetAddresses.Lines));
+                    Task task = Task.Run(() => EMail.SendMail(
+                    Properties.Settings.Default.SmtpServer,
+                    Properties.Settings.Default.SmtpPort,
+                    "Hello World",
+                    Properties.Settings.Default.SmtpUser,
+                    _tbxTargetAddresses.Lines));
 
                     task.ContinueWith((t) =>
                     {
@@ -153,12 +146,18 @@ namespace NetVulture
                             _btnSendTestMail.Enabled = true;
                             _btnSendTestMail.Text = "Send Test Mail";
                         });
-                    });
+                    }); 
                 }
-
-                if (rBtnOutlook.Checked)
+                else
                 {
-                    Task task = Task.Run(() => NvManagementClass.SendOutlookMailAsync("Test Message from IOB Monitoring successfull sended at " + DateTime.Now.ToString(), _tbxTargetAddresses.Lines));
+                    Task task = Task.Run(() => EMail.SendMail(
+                        Properties.Settings.Default.SmtpServer,
+                        Properties.Settings.Default.SmtpPort,
+                        Properties.Settings.Default.SmtpUser,
+                        Properties.Settings.Default.SmtpPassword,
+                        "Hello World",
+                        Properties.Settings.Default.SmtpUser,
+                        _tbxTargetAddresses.Lines));
 
                     task.ContinueWith((t) =>
                     {
@@ -193,52 +192,47 @@ namespace NetVulture
             Clipboard.SetText(_rtbxCsvHeader.Text);
         }
 
-        private void rBtnSmtp_CheckedChanged(object sender, EventArgs e)
-        {
-            _deliveryMethod = rBtnSmtp.Text;
-
-            _tbxMailServer.Enabled = true;
-            _tbxMailServerPort.Enabled = true;
-            _tbxMailUser.Enabled = true;
-            _tbxMailPassword.Enabled = true;
-        }
-
-        private void rBtnOutlook_CheckedChanged(object sender, EventArgs e)
-        {
-            _deliveryMethod = rBtnOutlook.Text;
-
-            _tbxMailServer.Enabled = false;
-            _tbxMailServerPort.Enabled = false;
-            _tbxMailUser.Enabled = false;
-            _tbxMailPassword.Enabled = false;
-        }
-
         private void _chkBxEmailAlertingEnabled_CheckedChanged(object sender, EventArgs e)
         {
-            rBtnSmtp.Enabled = _chkBxEmailAlertingEnabled.Checked;
-            rBtnOutlook.Enabled = _chkBxEmailAlertingEnabled.Checked;
-
-            if (!string.IsNullOrEmpty(_deliveryMethod))
-            {
-                RadioButton rbtn = (RadioButton)_gbxEmailSettings.Controls["rBtn" + _deliveryMethod];
-                rbtn.Checked = true; 
-            }
-
-            if (_deliveryMethod == "SMTP")
-            {
-                _tbxMailServer.Enabled = _chkBxEmailAlertingEnabled.Checked;
-                _tbxMailServerPort.Enabled = _chkBxEmailAlertingEnabled.Checked;
-                _tbxMailUser.Enabled = _chkBxEmailAlertingEnabled.Checked;
-                _tbxMailPassword.Enabled = _chkBxEmailAlertingEnabled.Checked;
-            }
-
+            _tbxMailServer.Enabled = _chkBxEmailAlertingEnabled.Checked;
+            _tbxMailServerPort.Enabled = _chkBxEmailAlertingEnabled.Checked;
+            _tbxMailUser.Enabled = _chkBxEmailAlertingEnabled.Checked;
+            _tbxMailPassword.Enabled = _chkBxEmailAlertingEnabled.Checked;
             _tbxTargetAddresses.Enabled = _chkBxEmailAlertingEnabled.Checked;
             _btnSendTestMail.Enabled = _chkBxEmailAlertingEnabled.Checked;
         }
 
-        private void btnSendSummary_Click(object sender, EventArgs e)
+        private void linkLblSendSummaryNow_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            if (_tbxTargetAddresses.Lines.Count() > 0)
+            {
+                if (String.IsNullOrEmpty(_tbxMailPassword.Text))
+                {
+                    Task task = Task.Run(() => EMail.SendHtmlMail(
+                    Properties.Settings.Default.SmtpServer,
+                    Properties.Settings.Default.SmtpPort,
+                    Summary.Create(FileIO.XmlReader()),
+                    Properties.Settings.Default.SmtpUser,
+                    _tbxTargetAddresses.Lines));
+                    task.Wait();
+                }
+                else
+                {
+                    Task task = Task.Run(() => EMail.SendHtmlMail(
+                        Properties.Settings.Default.SmtpServer,
+                        Properties.Settings.Default.SmtpPort,
+                        Properties.Settings.Default.SmtpUser,
+                        Properties.Settings.Default.SmtpPassword,
+                        Summary.Create(FileIO.XmlReader()),
+                        Properties.Settings.Default.SmtpUser,
+                        _tbxTargetAddresses.Lines));
+                    task.Wait();
+                }
+            }
+            else
+            {
+                MessageBox.Show("No targets defined", "Send mail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

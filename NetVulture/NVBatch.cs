@@ -89,10 +89,11 @@ namespace NetVulture
                         if (_hostList[j].MaintenanceActivated == false)
                         {
                             Ping p = new Ping();
-                            
+
                             try
                             {
-                                PingReply prPrimaray = await p.SendPingAsync(_hostList[j].HostnameOrAddress, _timeOut, new byte[_bufferSize]);
+                                IPHostEntry host = Dns.GetHostEntry(_hostList[j].HostnameOrAddress);
+                                PingReply prPrimaray = await p.SendPingAsync(host.AddressList[0], _timeOut, new byte[_bufferSize]);
 
                                 _hostList[j].ReplyData = prPrimaray;
 

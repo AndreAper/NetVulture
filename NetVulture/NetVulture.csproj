@@ -71,7 +71,6 @@
     <Compile Include="frmSettings.Designer.cs">
       <DependentUpon>frmSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="IcmpPing.cs" />
     <Compile Include="NVDevice.cs" />
     <Compile Include="NVBatch.cs" />
     <Compile Include="NVManagementClass.cs" />
@@ -162,6 +161,12 @@
     <None Include="Resources\SummeryReportTemplate.txt" />
     <None Include="Resources\Template.txt" />
     <Content Include="table.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\nvcore\nvcore.csproj">
+      <Project>{22fd87b9-48f9-4d89-88c9-f07ca9cdfdfe}</Project>
+      <Name>nvcore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

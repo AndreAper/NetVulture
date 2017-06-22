@@ -8,32 +8,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.NetworkInformation;
+using nvcore;
 
 namespace NetVulture
 {
     public partial class FrmManageHosts : Form
     {
 
-        public List<NvDevice> HostList { get { return _lst; } }
-        private List<NvDevice> _lst = null;
+        public List<EndPoint> HostList { get { return _lst; } }
+        private List<EndPoint> _lst = null;
 
         private void UpdateLbx()
         {
             _lbxHIs.Items.Clear();
 
-            foreach (NvDevice hi in _lst)
+            foreach (EndPoint hi in _lst)
             {
-                _lbxHIs.Items.Add(hi.HostnameOrAddress);
+                _lbxHIs.Items.Add(hi.PrimaryAddress);
             }
         }
 
         public FrmManageHosts()
         {
             InitializeComponent();
-            _lst = new List<NvDevice>();
+            _lst = new List<EndPoint>();
         }
 
-        public FrmManageHosts(List<NvDevice> lst)
+        public FrmManageHosts(List<EndPoint> lst)
         {
             InitializeComponent();
             _lst = lst;
@@ -52,15 +53,15 @@ namespace NetVulture
             }
             else
             {
-                if (_lst.Any(x => x.HostnameOrAddress == _tbxDnsEntry.Text))
+                if (_lst.Any(x => x.PrimaryAddress == _tbxDnsEntry.Text))
                 {
                     MessageBox.Show("Hostname or address is already exist.");
                     return;
                 }
 
-                NvDevice hi = new NvDevice();
-                hi.HostnameOrAddress = _tbxDnsEntry.Text;
-                hi.AlternativeAddress = _tbxAlternativeAddress.Text;
+                EndPoint hi = new EndPoint();
+                hi.PrimaryAddress = _tbxDnsEntry.Text;
+                hi.SecondaryAddress = _tbxAlternativeAddress.Text;
                 hi.PriorityLevel = Convert.ToInt32(_nudPrioriyLevel.Value);
                 hi.IsStaticIp = _chkBxIsStatic.Checked;
                 hi.Description = _tbxHostDescription.Text;
@@ -106,10 +107,10 @@ namespace NetVulture
         {
             if (_lbxHIs.SelectedIndex != -1)
             {
-                NvDevice hi = _lst.ElementAt(_lbxHIs.SelectedIndex);
+                EndPoint hi = _lst.ElementAt(_lbxHIs.SelectedIndex);
 
-                _tbxDnsEntry.Text = hi.HostnameOrAddress;
-                _tbxAlternativeAddress.Text = hi.AlternativeAddress;
+                _tbxDnsEntry.Text = hi.PrimaryAddress;
+                _tbxAlternativeAddress.Text = hi.SecondaryAddress;
                 _nudPrioriyLevel.Value = hi.PriorityLevel;
                 _chkBxIsStatic.Checked = hi.IsStaticIp;
                 _tbxHostDescription.Text = hi.Description;
@@ -146,8 +147,8 @@ namespace NetVulture
         {
             if (_lbxHIs.SelectedIndex != -1)
             {
-                _lst[_lbxHIs.SelectedIndex].HostnameOrAddress = _tbxDnsEntry.Text;
-                _lst[_lbxHIs.SelectedIndex].AlternativeAddress = _tbxAlternativeAddress.Text;
+                _lst[_lbxHIs.SelectedIndex].PrimaryAddress = _tbxDnsEntry.Text;
+                _lst[_lbxHIs.SelectedIndex].SecondaryAddress = _tbxAlternativeAddress.Text;
                 _lst[_lbxHIs.SelectedIndex].PriorityLevel = Convert.ToInt32(_nudPrioriyLevel.Value);
                 _lst[_lbxHIs.SelectedIndex].IsStaticIp = _chkBxIsStatic.Checked;
                 _lst[_lbxHIs.SelectedIndex].Description = _tbxHostDescription.Text;
@@ -188,15 +189,15 @@ namespace NetVulture
                     lines.RemoveAt(0); 
                 }
 
-                _lst = new List<NvDevice>();
+                _lst = new List<EndPoint>();
 
                 foreach (string line in lines)
                 {
                     string[] elements = line.Split(';');
 
-                    NvDevice hi = new NvDevice();
-                    hi.HostnameOrAddress = elements[0];
-                    hi.AlternativeAddress = elements[1];
+                    EndPoint hi = new EndPoint();
+                    hi.PrimaryAddress = elements[0];
+                    hi.SecondaryAddress = elements[1];
                     hi.PriorityLevel = int.Parse(elements[2]);
                     hi.IsStaticIp = bool.Parse(elements[3]);
                     hi.Description = elements[4];

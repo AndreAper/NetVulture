@@ -11,6 +11,10 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.Office.Interop.Outlook;
 using OutlookApp = Microsoft.Office.Interop.Outlook.Application;
+using OlAccount = Microsoft.Office.Interop.Outlook.Account;
+using Outlook = Microsoft.Office.Interop.Outlook;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace NetVulture
 {
@@ -110,6 +114,7 @@ namespace NetVulture
         /// </summary>
         /// <param name="batchList">The target batch to convert.</param>
         /// <returns>A string that contains all current information about a batch.</returns>
+        [Obsolete("Implemented in nvcore.dll")]
         public static string ConvertToJsArray(NvBatch batch)
         {
             string[] jsArrayElements = new string[batch.HostList.Count];
@@ -190,6 +195,7 @@ namespace NetVulture
         /// </summary>
         /// <param name="msg">The body text of the message.</param>
         /// <returns></returns>
+        [Obsolete("Implemented in nvcore.dll")]
         public static async Task SendMailAsync(string msg, params string[] to)
         {
             if (to.Length > 0)
@@ -199,22 +205,22 @@ namespace NetVulture
                     try
                     {
                         Ping p = new Ping();
-                        PingReply pr = p.Send(Properties.Settings.Default.MailServer);
+                        PingReply pr = p.Send(Properties.Settings.Default.SmtpServer);
 
                         if (pr.Status != IPStatus.Success)
                         {
-                            throw new System.Exception("Mail server: " + Properties.Settings.Default.MailServer + " not available!", null);
+                            throw new System.Exception("Mail server: " + Properties.Settings.Default.SmtpServer + " not available!", null);
                         }
 
                         SmtpClient client = new SmtpClient();
-                        client.Port = Properties.Settings.Default.MailServerPort;
-                        client.Host = Properties.Settings.Default.MailServer;
+                        client.Port = Properties.Settings.Default.SmtpPort;
+                        client.Host = Properties.Settings.Default.SmtpServer;
                         client.EnableSsl = true;
                         client.Timeout = 10000;
                         client.DeliveryMethod = SmtpDeliveryMethod.Network;
                         client.UseDefaultCredentials = false;
-                        client.Credentials = new System.Net.NetworkCredential(Properties.Settings.Default.MailUser, Properties.Settings.Default.MailPassword);
-                        await client.SendMailAsync(Properties.Settings.Default.MailUser, recipient, "IOB Monitoring Test Messsage", msg);
+                        client.Credentials = new System.Net.NetworkCredential(Properties.Settings.Default.SmtpUser, Properties.Settings.Default.SmtpPassword);
+                        await client.SendMailAsync(Properties.Settings.Default.SmtpUser, recipient, "IOB Monitoring Test Messsage", msg);
                     }
                     catch {}
                 }
@@ -229,7 +235,7 @@ namespace NetVulture
         public static void SendHtmlEmail(string body, params string[] recipients)
         {
             MailMessage message = new MailMessage();
-            message.From = new MailAddress(Properties.Settings.Default.MailUser);
+            message.From = new MailAddress(Properties.Settings.Default.SmtpUser);
 
             foreach (string to in recipients)
             {
@@ -242,19 +248,20 @@ namespace NetVulture
 
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.UseDefaultCredentials = true;
-            smtpClient.Host = Properties.Settings.Default.MailServer;
-            smtpClient.Port = Properties.Settings.Default.MailServerPort;
+            smtpClient.Host = Properties.Settings.Default.SmtpServer;
+            smtpClient.Port = Properties.Settings.Default.SmtpPort;
             smtpClient.EnableSsl = true;
-            smtpClient.Credentials = new System.Net.NetworkCredential(Properties.Settings.Default.MailUser, Properties.Settings.Default.MailPassword);
+            smtpClient.Credentials = new System.Net.NetworkCredential(Properties.Settings.Default.SmtpUser, Properties.Settings.Default.SmtpPassword);
             smtpClient.Send(message);
         }
 
         /// <summary>
-        /// Send text mail using microsoft outlook
+        /// Send a mail using microsoft outlook with html body format
         /// </summary>
         /// <param name="msg">The body text of the message.</param>
         /// <param name="recipients">The receivers of the message.</param>
         /// <returns>Return true if message successfully sent.</returns>
+        [Obsolete("Implemented in nvcore.dll")]
         public static async Task<bool> SendOutlookMailAsync(string msg, params string[] recipients)
         {
             bool sendSucess = false;
@@ -262,78 +269,32 @@ namespace NetVulture
 
             try
             {
+                Process[] activeOlInstances = Process.GetProcessesByName("OUTLOOK");
+
+                // Check whether there is an Outlook process running.
+                if (activeOlInstances.Count() > 0)
+                {
+                    foreach (Process p in activeOlInstances)
+                    {
+                        p.Kill();
+                    }
+                }
+
                 olProcess = new Process();
                 olProcess.StartInfo.FileName = "OUTLOOK.EXE";
                 olProcess.StartInfo.Arguments = "";
                 olProcess.StartInfo.ErrorDialog = false;
-                olProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                olProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 olProcess.Start();
 
                 OutlookApp app = new OutlookApp();
-                MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
 
+                NameSpace nameSpace = app.GetNamespace("MAPI");
+                nameSpace.Logon(Properties.Settings.Default.SmtpUser, Properties.Settings.Default.SmtpPassword, Missing.Value, Missing.Value);
+                nameSpace = null;
+
+                MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
                 mailItem.BodyFormat = OlBodyFormat.olFormatHTML;
-                mailItem.Subject = "IOB Monitoring Messaging Service";
-
-                Recipients oRecips = (Recipients)mailItem.Recipients;
-
-                foreach (string to in recipients)
-                {
-                    Recipient oRecip = (Recipient)oRecips.Add(to);
-                    oRecip.Resolve();
-                }
-
-                mailItem.Body = msg;
-                mailItem.Display(false);
-                mailItem.Importance = OlImportance.olImportanceHigh;
-
-                if (olProcess.Responding)
-                {
-                    mailItem.Send();
-                }
-            }
-            catch (System.Exception)
-            {
-                sendSucess = false;
-                throw;
-            }
-            finally
-            {
-                if (olProcess != null && !olProcess.HasExited)
-                {
-                    olProcess.Kill();
-                    sendSucess = true;
-                }
-            }
-
-            return sendSucess;
-        }
-
-        /// <summary>
-        /// Send mail using microsoft outlook with specific body format.
-        /// </summary>
-        /// <param name="format">Specifies the format of the body text.</param>
-        /// <param name="msg">The body text of the message.</param>
-        /// <param name="recipients">The receivers of the message.</param>
-        /// <returns>Return true if message successfully sent.</returns>
-        public static async Task<bool> SendOutlookMailAsync(OlBodyFormat format, string msg, params string[] recipients)
-        {
-            bool sendSucess = false;
-            Process olProcess = null;
-
-            try
-            {
-                olProcess = new Process();
-                olProcess.StartInfo.FileName = "OUTLOOK.EXE";
-                olProcess.StartInfo.Arguments = "";
-                olProcess.StartInfo.ErrorDialog = false;
-                olProcess.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                olProcess.Start();
-
-                OutlookApp app = new OutlookApp();
-                MailItem mailItem = app.CreateItem(OlItemType.olMailItem);
-
-                mailItem.BodyFormat = format;
                 mailItem.Subject = "IOB Monitoring Messaging Service";
 
                 Recipients oRecips = (Recipients)mailItem.Recipients;
@@ -352,7 +313,6 @@ namespace NetVulture
                 {
                     mailItem.Send();
                 }
-
             }
             catch (System.Exception)
             {
@@ -361,6 +321,8 @@ namespace NetVulture
             }
             finally
             {
+                await Task.Delay(15000);
+
                 if (olProcess != null && !olProcess.HasExited)
                 {
                     olProcess.Kill();
@@ -376,6 +338,7 @@ namespace NetVulture
         /// </summary>
         /// <param name="batchList">The batchlist to generate the report.</param>
         /// <returns>A stringthat contains html based report of the batchlist.</returns>
+        [Obsolete("Implemented in nvcore.dll")]
         public static string GetSummaryReport(List<NvBatch> batchList)
         {
             StringBuilder sbOutput = new StringBuilder();
@@ -467,6 +430,64 @@ namespace NetVulture
             catch
             {
                 return false;
+            }
+        }
+
+        private static Account GetAccountForEmailAddress(Outlook.Application application, string smtpAddress)
+        {
+            // Loop over the Accounts collection of the current Outlook session.
+            Outlook.Accounts accounts = application.Session.Accounts;
+            foreach (Outlook.Account account in accounts)
+            {
+                // When the e-mail address matches, return the account.
+                if (account.SmtpAddress == smtpAddress)
+                {
+                    return account;
+                }
+            }
+            throw new System.Exception(string.Format("No Account with SmtpAddress: {0} exists!", smtpAddress));
+        }
+
+        private static string GetSenderSMTPAddress(Outlook.MailItem mail)
+        {
+            string PR_SMTP_ADDRESS = @"http://schemas.microsoft.com/mapi/proptag/0x39FE001E";
+
+            if (mail == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (mail.SenderEmailType == "EX")
+            {
+                Outlook.AddressEntry sender = mail.Sender;
+                if (sender != null)
+                {
+                    //Now we have an AddressEntry representing the Sender
+                    if (sender.AddressEntryUserType == Outlook.OlAddressEntryUserType.olExchangeUserAddressEntry || sender.AddressEntryUserType == Outlook.OlAddressEntryUserType.olExchangeRemoteUserAddressEntry)
+                    {
+                        //Use the ExchangeUser object PrimarySMTPAddress
+                        Outlook.ExchangeUser exchUser = sender.GetExchangeUser();
+                        if (exchUser != null)
+                        {
+                            return exchUser.PrimarySmtpAddress;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        return sender.PropertyAccessor.GetProperty(PR_SMTP_ADDRESS) as string;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return mail.SenderEmailAddress;
             }
         }
     }

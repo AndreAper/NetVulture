@@ -38,8 +38,6 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this._gbxEmailSettings = new System.Windows.Forms.GroupBox();
-            this.rBtnOutlook = new System.Windows.Forms.RadioButton();
-            this.rBtnSmtp = new System.Windows.Forms.RadioButton();
             this._chkBxEmailAlertingEnabled = new System.Windows.Forms.CheckBox();
             this._tbxMailServerPort = new System.Windows.Forms.TextBox();
             this._tbxMailPassword = new System.Windows.Forms.TextBox();
@@ -47,7 +45,6 @@
             this._tbxMailServer = new System.Windows.Forms.TextBox();
             this._btnSendTestMail = new System.Windows.Forms.Button();
             this._tbxMailUser = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -71,6 +68,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuTools = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSendSummary = new System.Windows.Forms.ToolStripMenuItem();
+            this.linkLblSendSummaryNow = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this._gbxEmailSettings.SuspendLayout();
@@ -83,7 +81,7 @@
             // 
             this._tbxOutputDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._tbxOutputDir.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this._tbxOutputDir.Location = new System.Drawing.Point(157, 22);
+            this._tbxOutputDir.Location = new System.Drawing.Point(140, 22);
             this._tbxOutputDir.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._tbxOutputDir.Name = "_tbxOutputDir";
             this._tbxOutputDir.Size = new System.Drawing.Size(302, 25);
@@ -104,7 +102,7 @@
             // 
             this._btnSelectDir.BackColor = System.Drawing.Color.Gainsboro;
             this._btnSelectDir.FlatAppearance.BorderSize = 0;
-            this._btnSelectDir.Location = new System.Drawing.Point(464, 21);
+            this._btnSelectDir.Location = new System.Drawing.Point(447, 22);
             this._btnSelectDir.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this._btnSelectDir.Name = "_btnSelectDir";
             this._btnSelectDir.Size = new System.Drawing.Size(34, 26);
@@ -189,8 +187,6 @@
             // 
             // _gbxEmailSettings
             // 
-            this._gbxEmailSettings.Controls.Add(this.rBtnOutlook);
-            this._gbxEmailSettings.Controls.Add(this.rBtnSmtp);
             this._gbxEmailSettings.Controls.Add(this._chkBxEmailAlertingEnabled);
             this._gbxEmailSettings.Controls.Add(this._tbxMailServerPort);
             this._gbxEmailSettings.Controls.Add(this._tbxMailPassword);
@@ -198,7 +194,6 @@
             this._gbxEmailSettings.Controls.Add(this._tbxMailServer);
             this._gbxEmailSettings.Controls.Add(this._btnSendTestMail);
             this._gbxEmailSettings.Controls.Add(this._tbxMailUser);
-            this._gbxEmailSettings.Controls.Add(this.label6);
             this._gbxEmailSettings.Controls.Add(this.label12);
             this._gbxEmailSettings.Controls.Add(this.label5);
             this._gbxEmailSettings.Controls.Add(this.label13);
@@ -211,32 +206,6 @@
             this._gbxEmailSettings.TabIndex = 8;
             this._gbxEmailSettings.TabStop = false;
             this._gbxEmailSettings.Text = "E-mail Alerting";
-            // 
-            // rBtnOutlook
-            // 
-            this.rBtnOutlook.AutoSize = true;
-            this.rBtnOutlook.Enabled = false;
-            this.rBtnOutlook.Location = new System.Drawing.Point(222, 49);
-            this.rBtnOutlook.Name = "rBtnOutlook";
-            this.rBtnOutlook.Size = new System.Drawing.Size(72, 21);
-            this.rBtnOutlook.TabIndex = 121;
-            this.rBtnOutlook.TabStop = true;
-            this.rBtnOutlook.Text = "Outlook";
-            this.rBtnOutlook.UseVisualStyleBackColor = true;
-            this.rBtnOutlook.CheckedChanged += new System.EventHandler(this.rBtnOutlook_CheckedChanged);
-            // 
-            // rBtnSmtp
-            // 
-            this.rBtnSmtp.AutoSize = true;
-            this.rBtnSmtp.Enabled = false;
-            this.rBtnSmtp.Location = new System.Drawing.Point(157, 49);
-            this.rBtnSmtp.Name = "rBtnSmtp";
-            this.rBtnSmtp.Size = new System.Drawing.Size(59, 21);
-            this.rBtnSmtp.TabIndex = 121;
-            this.rBtnSmtp.TabStop = true;
-            this.rBtnSmtp.Text = "SMTP";
-            this.rBtnSmtp.UseVisualStyleBackColor = true;
-            this.rBtnSmtp.CheckedChanged += new System.EventHandler(this.rBtnSmtp_CheckedChanged);
             // 
             // _chkBxEmailAlertingEnabled
             // 
@@ -252,7 +221,7 @@
             // _tbxMailServerPort
             // 
             this._tbxMailServerPort.Enabled = false;
-            this._tbxMailServerPort.Location = new System.Drawing.Point(418, 76);
+            this._tbxMailServerPort.Location = new System.Drawing.Point(395, 48);
             this._tbxMailServerPort.Name = "_tbxMailServerPort";
             this._tbxMailServerPort.Size = new System.Drawing.Size(63, 25);
             this._tbxMailServerPort.TabIndex = 100;
@@ -260,7 +229,7 @@
             // _tbxMailPassword
             // 
             this._tbxMailPassword.Enabled = false;
-            this._tbxMailPassword.Location = new System.Drawing.Point(418, 107);
+            this._tbxMailPassword.Location = new System.Drawing.Point(395, 79);
             this._tbxMailPassword.Name = "_tbxMailPassword";
             this._tbxMailPassword.PasswordChar = '#';
             this._tbxMailPassword.Size = new System.Drawing.Size(169, 25);
@@ -271,18 +240,18 @@
             this._tbxTargetAddresses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._tbxTargetAddresses.Enabled = false;
             this._tbxTargetAddresses.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this._tbxTargetAddresses.Location = new System.Drawing.Point(157, 138);
+            this._tbxTargetAddresses.Location = new System.Drawing.Point(140, 110);
             this._tbxTargetAddresses.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._tbxTargetAddresses.Multiline = true;
             this._tbxTargetAddresses.Name = "_tbxTargetAddresses";
             this._tbxTargetAddresses.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this._tbxTargetAddresses.Size = new System.Drawing.Size(250, 70);
+            this._tbxTargetAddresses.Size = new System.Drawing.Size(238, 70);
             this._tbxTargetAddresses.TabIndex = 60;
             // 
             // _tbxMailServer
             // 
             this._tbxMailServer.Enabled = false;
-            this._tbxMailServer.Location = new System.Drawing.Point(157, 76);
+            this._tbxMailServer.Location = new System.Drawing.Point(140, 48);
             this._tbxMailServer.Name = "_tbxMailServer";
             this._tbxMailServer.Size = new System.Drawing.Size(169, 25);
             this._tbxMailServer.TabIndex = 100;
@@ -290,7 +259,7 @@
             // _btnSendTestMail
             // 
             this._btnSendTestMail.Enabled = false;
-            this._btnSendTestMail.Location = new System.Drawing.Point(418, 138);
+            this._btnSendTestMail.Location = new System.Drawing.Point(395, 110);
             this._btnSendTestMail.Name = "_btnSendTestMail";
             this._btnSendTestMail.Size = new System.Drawing.Size(169, 32);
             this._btnSendTestMail.TabIndex = 120;
@@ -301,27 +270,16 @@
             // _tbxMailUser
             // 
             this._tbxMailUser.Enabled = false;
-            this._tbxMailUser.Location = new System.Drawing.Point(157, 107);
+            this._tbxMailUser.Location = new System.Drawing.Point(140, 79);
             this._tbxMailUser.Name = "_tbxMailUser";
             this._tbxMailUser.Size = new System.Drawing.Size(169, 25);
             this._tbxMailUser.TabIndex = 80;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label6.Location = new System.Drawing.Point(8, 51);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(104, 17);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "Delivery Method";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label12.Location = new System.Drawing.Point(8, 79);
+            this.label12.Location = new System.Drawing.Point(8, 51);
             this.label12.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(97, 17);
@@ -332,7 +290,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.DimGray;
-            this.label5.Location = new System.Drawing.Point(10, 162);
+            this.label5.Location = new System.Drawing.Point(10, 134);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(131, 17);
             this.label5.TabIndex = 7;
@@ -342,7 +300,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label13.Location = new System.Drawing.Point(337, 79);
+            this.label13.Location = new System.Drawing.Point(314, 51);
             this.label13.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(32, 17);
@@ -353,7 +311,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label4.Location = new System.Drawing.Point(8, 138);
+            this.label4.Location = new System.Drawing.Point(8, 110);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(109, 17);
@@ -364,7 +322,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label10.Location = new System.Drawing.Point(8, 110);
+            this.label10.Location = new System.Drawing.Point(8, 82);
             this.label10.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(35, 17);
@@ -375,7 +333,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label11.Location = new System.Drawing.Point(337, 110);
+            this.label11.Location = new System.Drawing.Point(314, 82);
             this.label11.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(64, 17);
@@ -384,6 +342,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.linkLblSendSummaryNow);
             this.groupBox3.Controls.Add(this.label18);
             this.groupBox3.Controls.Add(this._chkBxDailySummeryEnabled);
             this.groupBox3.Controls.Add(this.label17);
@@ -393,13 +352,13 @@
             this.groupBox3.Size = new System.Drawing.Size(731, 84);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Daily Summery";
+            this.groupBox3.Text = "Daily Summary";
             // 
             // label18
             // 
             this.label18.AutoSize = true;
             this.label18.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label18.Location = new System.Drawing.Point(154, 25);
+            this.label18.Location = new System.Drawing.Point(139, 25);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(538, 17);
             this.label18.TabIndex = 15;
@@ -431,7 +390,7 @@
             // 
             this._dtpSendSummeryTime.DropDownAlign = System.Windows.Forms.LeftRightAlignment.Right;
             this._dtpSendSummeryTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this._dtpSendSummeryTime.Location = new System.Drawing.Point(157, 49);
+            this._dtpSendSummeryTime.Location = new System.Drawing.Point(140, 49);
             this._dtpSendSummeryTime.Name = "_dtpSendSummeryTime";
             this._dtpSendSummeryTime.ShowUpDown = true;
             this._dtpSendSummeryTime.Size = new System.Drawing.Size(103, 25);
@@ -564,12 +523,16 @@
             this.toolStripMenuTools.Size = new System.Drawing.Size(47, 20);
             this.toolStripMenuTools.Text = "Tools";
             // 
-            // btnSendSummary
+            // linkLblSendSummaryNow
             // 
-            this.btnSendSummary.Name = "btnSendSummary";
-            this.btnSendSummary.Size = new System.Drawing.Size(192, 22);
-            this.btnSendSummary.Text = "Send Summary Report";
-            this.btnSendSummary.Click += new System.EventHandler(this.btnSendSummary_Click);
+            this.linkLblSendSummaryNow.AutoSize = true;
+            this.linkLblSendSummaryNow.Location = new System.Drawing.Point(554, 55);
+            this.linkLblSendSummaryNow.Name = "linkLblSendSummaryNow";
+            this.linkLblSendSummaryNow.Size = new System.Drawing.Size(123, 17);
+            this.linkLblSendSummaryNow.TabIndex = 16;
+            this.linkLblSendSummaryNow.TabStop = true;
+            this.linkLblSendSummaryNow.Text = "Send Summary now";
+            this.linkLblSendSummaryNow.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLblSendSummaryNow_LinkClicked);
             // 
             // FrmSettings
             // 
@@ -645,12 +608,10 @@
         private System.Windows.Forms.CheckBox _chkBxDailySummeryEnabled;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.RadioButton rBtnOutlook;
-        private System.Windows.Forms.RadioButton rBtnSmtp;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuTools;
         private System.Windows.Forms.ToolStripMenuItem btnSendSummary;
+        private System.Windows.Forms.LinkLabel linkLblSendSummaryNow;
     }
 }

@@ -85,48 +85,48 @@ namespace NetVulture.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("monitoring.bbs@gmail.com")]
-        public string MailUser {
+        public string SmtpUser {
             get {
-                return ((string)(this["MailUser"]));
+                return ((string)(this["SmtpUser"]));
             }
             set {
-                this["MailUser"] = value;
+                this["SmtpUser"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Moni2015@")]
-        public string MailPassword {
+        public string SmtpPassword {
             get {
-                return ((string)(this["MailPassword"]));
+                return ((string)(this["SmtpPassword"]));
             }
             set {
-                this["MailPassword"] = value;
+                this["SmtpPassword"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("smtp.gmail.com")]
-        public string MailServer {
+        public string SmtpServer {
             get {
-                return ((string)(this["MailServer"]));
+                return ((string)(this["SmtpServer"]));
             }
             set {
-                this["MailServer"] = value;
+                this["SmtpServer"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("587")]
-        public int MailServerPort {
+        public int SmtpPort {
             get {
-                return ((int)(this["MailServerPort"]));
+                return ((int)(this["SmtpPort"]));
             }
             set {
-                this["MailServerPort"] = value;
+                this["SmtpPort"] = value;
             }
         }
         
@@ -157,47 +157,24 @@ namespace NetVulture.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SendSummeryEnabled {
+        public bool SendSummaryEnabled {
             get {
-                return ((bool)(this["SendSummeryEnabled"]));
+                return ((bool)(this["SendSummaryEnabled"]));
             }
             set {
-                this["SendSummeryEnabled"] = value;
+                this["SendSummaryEnabled"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("03/16/2017 21:44:00")]
-        public global::System.DateTime SendSummeryTime {
+        public global::System.DateTime SendSummaryTime {
             get {
-                return ((global::System.DateTime)(this["SendSummeryTime"]));
+                return ((global::System.DateTime)(this["SendSummaryTime"]));
             }
             set {
-                this["SendSummeryTime"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string MailDeliveryMethod {
-            get {
-                return ((string)(this["MailDeliveryMethod"]));
-            }
-            set {
-                this["MailDeliveryMethod"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection SystemLog {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["SystemLog"]));
-            }
-            set {
-                this["SystemLog"] = value;
+                this["SendSummaryTime"] = value;
             }
         }
     }
