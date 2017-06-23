@@ -582,7 +582,5 @@ namespace nvcore
 
             return sendSucess;
         }
-
-        public const string TestMessageBody = "";
     }
 }
