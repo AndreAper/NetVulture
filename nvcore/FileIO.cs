@@ -41,7 +41,7 @@ namespace nvcore
                 //Split a line to an array
                 string[] line = lines[i].Split(';');
                 List<string> epLine = line.ToList();
-                epLine.RemoveRange(0,2);
+                epLine.RemoveRange(0,3);
 
                 for (int j = 0; j < fields.Length; j++)
                 {
@@ -99,6 +99,11 @@ namespace nvcore
                     Batch batch = new Batch();
                     batch.Name = line[0];
                     batch.Description = line[1];
+
+                    bool ea;
+                    bool.TryParse(line[2], out ea);
+                    batch.EnableAlerting = ea;
+
                     batch.EndPointList = new List<EndPoint>();
                     lst.Add(batch);
 
@@ -131,7 +136,7 @@ namespace nvcore
 
                     if (header)
                     {
-                        sw.WriteLine("BatchName;BatchDescription;" + string.Join(";", fields.Select(x => x.Name).ToArray()));
+                        sw.WriteLine("BatchName;BatchDescription;EnableAlerting" + string.Join(";", fields.Select(x => x.Name).ToArray()));
                     }
 
                     foreach (Batch batch in batchList)
@@ -152,7 +157,7 @@ namespace nvcore
                                 }
                             }
 
-                            sw.WriteLine(batch.Name + ";" + batch.Description + ";" + string.Join(";", data));
+                            sw.WriteLine(batch.Name + ";" + batch.Description + ";" + batch.EnableAlerting + ";" + string.Join(";", data));
                         } 
                     }
                 }

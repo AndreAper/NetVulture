@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this._tlpBody = new System.Windows.Forms.TableLayoutPanel();
             this._chkBtnTimerEnabled = new System.Windows.Forms.CheckBox();
             this._btnAddBatch = new System.Windows.Forms.Button();
@@ -53,6 +53,7 @@
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this._btnImportCsv = new System.Windows.Forms.ToolStripMenuItem();
             this._btnExportCsv = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnResetAllAttempts = new System.Windows.Forms.ToolStripMenuItem();
             this._pnlSubMenuBatch = new System.Windows.Forms.Panel();
             this._lblNoChangesPossible = new System.Windows.Forms.Label();
             this._chkBtnBatchMaintenanceSwitch = new System.Windows.Forms.CheckBox();
@@ -74,7 +75,7 @@
             this._btnOpenSettings = new System.Windows.Forms.Button();
             this._collectTimer = new System.Windows.Forms.Timer(this.components);
             this._clock = new System.Windows.Forms.Timer(this.components);
-            this.btnResetAllAttempts = new System.Windows.Forms.ToolStripMenuItem();
+            this._chkBxEnableAlerting = new System.Windows.Forms.CheckBox();
             this._tlpBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._dgvResults)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -94,8 +95,8 @@
             this._tlpBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
             this._tlpBody.Controls.Add(this._chkBtnTimerEnabled, 1, 0);
             this._tlpBody.Controls.Add(this._btnAddBatch, 2, 0);
-            this._tlpBody.Controls.Add(this._dgvResults, 2, 5);
-            this._tlpBody.Controls.Add(this.label4, 1, 5);
+            this._tlpBody.Controls.Add(this._dgvResults, 2, 6);
+            this._tlpBody.Controls.Add(this.label4, 1, 6);
             this._tlpBody.Controls.Add(this._lblAppTitle, 0, 0);
             this._tlpBody.Controls.Add(this._tbxJobName, 2, 4);
             this._tlpBody.Controls.Add(this.label1, 1, 4);
@@ -115,6 +116,7 @@
             this._tlpBody.Controls.Add(this._tbxJobDescription, 5, 4);
             this._tlpBody.Controls.Add(this._btnCollect, 3, 0);
             this._tlpBody.Controls.Add(this._btnOpenSettings, 4, 0);
+            this._tlpBody.Controls.Add(this._chkBxEnableAlerting, 2, 5);
             this._tlpBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this._tlpBody.Location = new System.Drawing.Point(0, 0);
             this._tlpBody.Name = "_tlpBody";
@@ -123,13 +125,12 @@
             this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.01295F));
-            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 59.45106F));
-            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.53599F));
             this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.98401F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65.97297F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.043024F));
+            this._tlpBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this._tlpBody.Size = new System.Drawing.Size(1408, 709);
             this._tlpBody.TabIndex = 0;
             // 
@@ -187,14 +188,14 @@
             this._dgvResults.AllowUserToDeleteRows = false;
             this._dgvResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this._dgvResults.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this._dgvResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this._dgvResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this._dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this._dgvResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.HostnameOrAddress,
@@ -206,30 +207,30 @@
             this.Attempts,
             this.Maintenance});
             this._tlpBody.SetColumnSpan(this._dgvResults, 5);
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(90)))), ((int)(((byte)(110)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this._dgvResults.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(90)))), ((int)(((byte)(110)))));
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this._dgvResults.DefaultCellStyle = dataGridViewCellStyle8;
             this._dgvResults.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._dgvResults.Location = new System.Drawing.Point(317, 148);
+            this._dgvResults.Location = new System.Drawing.Point(317, 178);
             this._dgvResults.Margin = new System.Windows.Forms.Padding(3, 3, 20, 3);
             this._dgvResults.Name = "_dgvResults";
             this._dgvResults.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this._dgvResults.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this._tlpBody.SetRowSpan(this._dgvResults, 3);
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this._dgvResults.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            this._tlpBody.SetRowSpan(this._dgvResults, 2);
             this._dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this._dgvResults.Size = new System.Drawing.Size(1071, 443);
+            this._dgvResults.Size = new System.Drawing.Size(1071, 442);
             this._dgvResults.TabIndex = 4;
             // 
             // HostnameOrAddress
@@ -285,12 +286,12 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this.label4.Location = new System.Drawing.Point(166, 147);
+            this.label4.Location = new System.Drawing.Point(166, 177);
             this.label4.Margin = new System.Windows.Forms.Padding(2);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(59, 21);
+            this.label4.Size = new System.Drawing.Size(60, 21);
             this.label4.TabIndex = 0;
-            this.label4.Text = "Output";
+            this.label4.Text = "Results";
             // 
             // _lblAppTitle
             // 
@@ -317,7 +318,7 @@
             this._tbxJobName.Enabled = false;
             this._tbxJobName.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._tbxJobName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this._tbxJobName.Location = new System.Drawing.Point(316, 105);
+            this._tbxJobName.Location = new System.Drawing.Point(316, 100);
             this._tbxJobName.Margin = new System.Windows.Forms.Padding(2);
             this._tbxJobName.Name = "_tbxJobName";
             this._tbxJobName.Size = new System.Drawing.Size(296, 29);
@@ -331,7 +332,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this.label1.Location = new System.Drawing.Point(166, 109);
+            this.label1.Location = new System.Drawing.Point(166, 104);
             this.label1.Margin = new System.Windows.Forms.Padding(2);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 21);
@@ -369,7 +370,7 @@
             this._btnExportCsv,
             this.btnResetAllAttempts});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(170, 92);
+            this.contextMenuStrip.Size = new System.Drawing.Size(170, 70);
             // 
             // _btnImportCsv
             // 
@@ -384,6 +385,13 @@
             this._btnExportCsv.Size = new System.Drawing.Size(169, 22);
             this._btnExportCsv.Text = "Export";
             this._btnExportCsv.Click += new System.EventHandler(this._btnExportCsv_Click);
+            // 
+            // btnResetAllAttempts
+            // 
+            this.btnResetAllAttempts.Name = "btnResetAllAttempts";
+            this.btnResetAllAttempts.Size = new System.Drawing.Size(169, 22);
+            this.btnResetAllAttempts.Text = "Reset all Attempts";
+            this.btnResetAllAttempts.Click += new System.EventHandler(this.btnResetAllAttempts_Click);
             // 
             // _pnlSubMenuBatch
             // 
@@ -528,7 +536,7 @@
             this._lblCountOfFailedRequests.AutoSize = true;
             this._lblCountOfFailedRequests.Font = new System.Drawing.Font("Segoe UI", 12F);
             this._lblCountOfFailedRequests.ForeColor = System.Drawing.Color.Crimson;
-            this._lblCountOfFailedRequests.Location = new System.Drawing.Point(616, 596);
+            this._lblCountOfFailedRequests.Location = new System.Drawing.Point(616, 625);
             this._lblCountOfFailedRequests.Margin = new System.Windows.Forms.Padding(2);
             this._lblCountOfFailedRequests.Name = "_lblCountOfFailedRequests";
             this._lblCountOfFailedRequests.Size = new System.Drawing.Size(120, 21);
@@ -540,19 +548,19 @@
             this._lblCountOfSuccessRequests.AutoSize = true;
             this._lblCountOfSuccessRequests.Font = new System.Drawing.Font("Segoe UI", 12F);
             this._lblCountOfSuccessRequests.ForeColor = System.Drawing.Color.OliveDrab;
-            this._lblCountOfSuccessRequests.Location = new System.Drawing.Point(466, 596);
+            this._lblCountOfSuccessRequests.Location = new System.Drawing.Point(466, 625);
             this._lblCountOfSuccessRequests.Margin = new System.Windows.Forms.Padding(2);
             this._lblCountOfSuccessRequests.Name = "_lblCountOfSuccessRequests";
             this._lblCountOfSuccessRequests.Size = new System.Drawing.Size(134, 21);
             this._lblCountOfSuccessRequests.TabIndex = 0;
-            this._lblCountOfSuccessRequests.Text = "Success Requests:";
+            this._lblCountOfSuccessRequests.Text = "Success Requests:\r";
             // 
             // _lblLastBatchExec
             // 
             this._lblLastBatchExec.AutoSize = true;
             this._lblLastBatchExec.Font = new System.Drawing.Font("Segoe UI", 12F);
             this._lblLastBatchExec.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this._lblLastBatchExec.Location = new System.Drawing.Point(316, 596);
+            this._lblLastBatchExec.Location = new System.Drawing.Point(316, 625);
             this._lblLastBatchExec.Margin = new System.Windows.Forms.Padding(2);
             this._lblLastBatchExec.Name = "_lblLastBatchExec";
             this._lblLastBatchExec.Size = new System.Drawing.Size(111, 21);
@@ -626,7 +634,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this.label2.Location = new System.Drawing.Point(616, 109);
+            this.label2.Location = new System.Drawing.Point(616, 104);
             this.label2.Margin = new System.Windows.Forms.Padding(2);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 21);
@@ -642,7 +650,7 @@
             this._tbxJobDescription.Enabled = false;
             this._tbxJobDescription.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._tbxJobDescription.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
-            this._tbxJobDescription.Location = new System.Drawing.Point(766, 105);
+            this._tbxJobDescription.Location = new System.Drawing.Point(766, 100);
             this._tbxJobDescription.Margin = new System.Windows.Forms.Padding(2, 2, 20, 2);
             this._tbxJobDescription.Name = "_tbxJobDescription";
             this._tbxJobDescription.Size = new System.Drawing.Size(622, 29);
@@ -707,12 +715,20 @@
             this._clock.Interval = 1000;
             this._clock.Tick += new System.EventHandler(this._clock_Tick);
             // 
-            // btnResetAllAttempts
+            // _chkBxEnableAlerting
             // 
-            this.btnResetAllAttempts.Name = "btnResetAllAttempts";
-            this.btnResetAllAttempts.Size = new System.Drawing.Size(169, 22);
-            this.btnResetAllAttempts.Text = "Reset all Attempts";
-            this.btnResetAllAttempts.Click += new System.EventHandler(this.btnResetAllAttempts_Click);
+            this._chkBxEnableAlerting.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this._chkBxEnableAlerting.AutoSize = true;
+            this._chkBxEnableAlerting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._chkBxEnableAlerting.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this._chkBxEnableAlerting.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(75)))));
+            this._chkBxEnableAlerting.Location = new System.Drawing.Point(317, 142);
+            this._chkBxEnableAlerting.Name = "_chkBxEnableAlerting";
+            this._chkBxEnableAlerting.Size = new System.Drawing.Size(131, 25);
+            this._chkBxEnableAlerting.TabIndex = 66;
+            this._chkBxEnableAlerting.Text = "Enable Alerting";
+            this._chkBxEnableAlerting.UseVisualStyleBackColor = true;
+            this._chkBxEnableAlerting.CheckedChanged += new System.EventHandler(this._chkBxEnableAlerting_CheckedChanged);
             // 
             // FrmMain
             // 
@@ -780,6 +796,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Attempts;
         private System.Windows.Forms.DataGridViewTextBoxColumn Maintenance;
         private System.Windows.Forms.ToolStripMenuItem btnResetAllAttempts;
+        private System.Windows.Forms.CheckBox _chkBxEnableAlerting;
     }
 }
 

@@ -62,7 +62,10 @@ namespace NetVulture
             {
                 foreach (Batch b in failedBatches)
                 {
-                    await EMail.SendHtmlMailAsync(Properties.Settings.Default.SmtpServer, Properties.Settings.Default.SmtpPort, Summary.CreateAlertingMessage(b), Properties.Settings.Default.SmtpUser, _addressList.Cast<string>().ToArray());
+                    if (b.EnableAlerting)
+                    {
+                        await EMail.SendHtmlMailAsync(Properties.Settings.Default.SmtpServer, Properties.Settings.Default.SmtpPort, Summary.CreateAlertingMessage(b), Properties.Settings.Default.SmtpUser, _addressList.Cast<string>().ToArray()); 
+                    }
                 }
 
                 this.Invoke((MethodInvoker)delegate
@@ -81,6 +84,7 @@ namespace NetVulture
             {
                 _tbxJobName.Text = _selectedBatch.Name;
                 _tbxJobDescription.Text = _selectedBatch.Description;
+                _chkBxEnableAlerting.Checked = _selectedBatch.EnableAlerting;
                 _lblLastBatchExec.Text = "Last batch run:\r\n" + _selectedBatch.LastExecution;
                 _chkBtnBatchMaintenanceSwitch.Checked = _selectedBatch.Maintenance;
 
@@ -382,26 +386,6 @@ namespace NetVulture
                     }
 
                     Task.WaitAll(workingBees);
-
-                    //List<Task> tasks = new List<Task>();
-
-                    //for (int i = 0; i < batchList.Count; i++)
-                    //{
-                    //    int index = i;
-
-                    //    tasks.Add(batchList[i].SendAll());
-                    //}
-
-                    //Task.WhenAll(tasks);
-
-                    //for (int i = 0; i < batchList.Count; i++)
-                    //{
-                    //    if (!batchList[i].Maintenance)
-                    //    {
-                    //        Task t = batchList[i].SendAll();
-                    //        t.Wait();
-                    //    }
-                    //}
                 }
                 catch (Exception ex)
                 {
@@ -598,6 +582,11 @@ namespace NetVulture
                     DisplayBatch();
                 }
             }
+        }
+
+        private void _chkBxEnableAlerting_CheckedChanged(object sender, EventArgs e)
+        {
+            _selectedBatch.EnableAlerting = _chkBxEnableAlerting.Checked;
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)

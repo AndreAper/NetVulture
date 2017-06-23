@@ -23,6 +23,7 @@ namespace nvcore
         private bool _maintenance;
         private int _maxNodes;
         private bool _dontFragment;
+        private bool _enableAlerting;
 
         /// <summary>
         /// Get or set the name of the batch
@@ -67,6 +68,12 @@ namespace nvcore
         public bool Maintenance { get { return _maintenance; } set { _maintenance = value; } }
 
         /// <summary>
+        /// True for enabling alerting messages.
+        /// </summary>
+        [XmlElement(ElementName = "EnableAlerting")]
+        public bool EnableAlerting { get { return _enableAlerting; } set { _enableAlerting = value; } }
+
+        /// <summary>
         /// Gets or sets the number of routing nodes that can forward the Ping data before it is discarded.
         /// </summary>
         [XmlElement(ElementName = "MaxNodes")]
@@ -89,6 +96,7 @@ namespace nvcore
             _maxNodes = 32;
             _dontFragment = true;
             _endPointList = new List<EndPoint>();
+            _enableAlerting = true;
         }
 
         /// <summary>
@@ -186,10 +194,10 @@ namespace nvcore
         /// </summary>
         public void SendAll()
         {
+            _lastExec = DateTime.Now;
+
             if (_endPointList.Count > 0)
             {
-                Ping ping = new Ping();
-
                 Task<EndPoint>[] workingBees = new Task<EndPoint>[_endPointList.Count];
 
                 for (int i = 0; i < _endPointList.Count; i++)
@@ -200,22 +208,11 @@ namespace nvcore
 
                 Task.WaitAll(workingBees);
 
+                //Updating Endpointlist
                 for (int i = 0; i < workingBees.Length; i++)
                 {
                     _endPointList[i] = workingBees[i].Result;
                 }
-
-
-                //List<Task> tasks = new List<Task>();
-
-                //for (int i = 0; i < _endPointList.Count; i++)
-                //{
-                //    int index = i;
-
-                //    tasks.Add(SendAsync(ping, _endPointList[index]));
-                //}
-
-                //await Task.WhenAll(tasks);
             }
         }
 
