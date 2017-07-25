@@ -79,6 +79,7 @@ namespace NetVulture
                 hi.AutoFetchPhysicalAddress = _chkBxAutoFetchMac.Checked;
                 hi.Comment = _tbxComment.Text;
 
+
                 _lst.Add(hi);
                 UpdateLbx();
 

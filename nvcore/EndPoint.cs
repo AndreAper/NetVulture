@@ -170,6 +170,9 @@ namespace nvcore
         public EndPoint()
         {
             this.Status = IPStatus.Unknown;
+            this.LastAvailability = new DateTime();
+            this.PingAttempts = 0;
+            this.ReplyMessage = "Not requested";
         }
 
         /// <summary>
